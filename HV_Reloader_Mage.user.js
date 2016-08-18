@@ -4,7 +4,7 @@
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @run-at      document-end
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version     1.3.3.3
+// @version     1.3.3.4
 // @grant       none
 // ==/UserScript==
 
@@ -3656,6 +3656,14 @@ if ( document.getElementById('togpane_log') ) {
 	//hv counter
 	if (settings.counterPlus) {
 		genAfterTurn();
+	}
+
+	if ((location.href + "").indexOf('s=Battle&ss=ba&encounter=') !== -1) {
+		if(document.querySelector('img[src*="/y/battle/nocurrentbattle.png"]')){
+			setTimeout(function() {
+				window.close();
+			}, (5*60*1000));
+		}
 	}
 
 }
