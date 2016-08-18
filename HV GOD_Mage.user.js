@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        HV GOD_Mage
 // @namespace    http://tampermonkey.net/
-// @version      0.1
+// @version      0.2
 // @description  try to take over the world!
 // @author       You hoo..lol
 // @match        http://hentaiverse.org/*
@@ -188,8 +188,7 @@ var bossNameEff = [
 ];
 
 var MODE_FIGHTING = "BG";
-var STYLE = 'dual'; //current valid entries are 'mage', 'twohand', and 'dual', though dual also works for sword/board and really means single target physical attacks
-//0=Mage , 1=1H , 2=2H, 3=DW, 4=Niten
+var STYLE = 'mage'; //current valid entries are 'mage', 'twohand', and 'dual', though dual also works for sword/board and really means single target physical attacks
 
 if (document.getElementById('2501')) {
     MODE_FIGHTING = "ST"; //Mage
