@@ -6,8 +6,8 @@
 // @author       BB-04
 // @match        http://hentaiverse.org/*
 // @icon           http://g.e-hentai.org/favicon.ico
-// @updateURL       https://github.com/axezor/Steam-Next-Queue/raw/master/THV/THV%20Show%20Potion.user.js
-// @downloadURL     https://github.com/axezor/Steam-Next-Queue/raw/master/THV/THV%20Show%20Potion.user.js
+// @updateURL       https://github.com/suvidev/hv/raw/master/hv_potion_log.user.js
+// @downloadURL     https://github.com/suvidev/hv/raw/master/hv_potion_log.user.js
 // @grant        none
 // ==/UserScript==
 
