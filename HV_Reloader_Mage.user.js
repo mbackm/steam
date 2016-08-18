@@ -5,6 +5,8 @@
 // @run-at      document-end
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
 // @version     1.3.3.1
+// @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
+// @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @grant       none
 // ==/UserScript==
 
