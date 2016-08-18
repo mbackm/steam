@@ -60,8 +60,8 @@ var settings = {
     skipToNextRound: false,      // Auto-advance to next round
     popupTime: 0,               // after `popupTime`ms
 
-    counterPlus: false,          // HV-Counter-Plus ; log and show turn/speed/time/exp/credits
-    counterPlusSave: false       // Store additional datas for Income Summary by Superlatanium
+    counterPlus: true,          // HV-Counter-Plus ; log and show turn/speed/time/exp/credits
+    counterPlusSave: true       // Store additional datas for Income Summary by Superlatanium
 };
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ *\
