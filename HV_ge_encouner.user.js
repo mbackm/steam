@@ -1,14 +1,14 @@
 // ==UserScript==
 // @name         GE encounter Countdown
-// @namespace    bb04
+// @namespace    BB-04
 // @version      0.1.34
 // @description  Enjoy :)
 // @author       BB-04
 // @match        http://g.e-hentai.org/g/*
 // @match        http://e-hentai.org/
 // @grant        none
-// @updateURL       https://
-// @downloadURL     https://
+// @updateURL       https://github.com/suvidev/hv/raw/master/HV_ge_encouner.user.js
+// @downloadURL     https://github.com/suvidev/hv/raw/master/HV_ge_encouner.user.js
 // @icon http://g.e-hentai.org/favicon.ico
 // ==/UserScript==
 //----------------------------------  [1576]   ----------------------------------
