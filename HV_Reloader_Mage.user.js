@@ -1745,9 +1745,9 @@ function cont() {
     if (ccon) {
         var oc = ccon.getAttribute("onclick");
         if (oc === "battle.battle_continue()") {
-            setTimeout(function() {
+            //setTimeout(function() {
                 ccon.click();
-            }, (0.5*1000));
+            //}, (0.5*1000));
             //ccon.click();
         } else {
             actionBeep(false,true);
