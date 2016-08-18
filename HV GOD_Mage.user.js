@@ -5,6 +5,8 @@
 // @description  try to take over the world!
 // @author       You hoo..lol
 // @match        http://hentaiverse.org/*
+// @updateURL       https://github.com/suvidev/hv/raw/master/hv_potion_log.user.js
+// @downloadURL     https://github.com/suvidev/hv/raw/master/hv_potion_log.user.js
 // @grant        none
 // ==/UserScript==
 
