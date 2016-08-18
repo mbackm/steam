@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         GE encounter Countdown
 // @namespace    BB-04
-// @version      0.1.34
+// @version      0.1.35
 // @description  Enjoy :)
 // @author       BB-04
 // @match        http://g.e-hentai.org/g/*
@@ -54,6 +54,18 @@ var goAutoFight = false;
 var enableNewTabBeep = false;
 var isBeepActive = false;
 var enableConfReload = false;
+
+var songURL = "https://dl.dropboxusercontent.com/u/10739586/Outkast%20-%20Hey%20Ya!%20(mp3cut.net).mp3";
+var audio;
+
+function playAudio() {
+  if (!audio) {
+	 audio = new Audio(songURL);
+	 audio.loop = "true";
+  }
+  audio.play();
+}
+
 
 if(document.querySelector('#rand img')){
     document.querySelector('#rand img').style.opacity = '0';
@@ -221,7 +233,7 @@ if ((location.href + "").indexOf('g.e-hentai.org/s/') === -1 && (location.href +
             
             //if(GM_getValue("lastFightUrl") !== xx){
             if(GM_getValue("lastFightUrl").indexOf(xx) === -1){
-                GM_setValue("lastFightUrl", xx+'&key=axezor');
+                GM_setValue("lastFightUrl", xx+'');
 
                 var today = new Date();
                 var dd = today.getDate();
@@ -2123,8 +2135,7 @@ if ((location.href + "").indexOf('g.e-hentai.org/s/') === -1 && (location.href +
                         //alert('End Timer  --> ' + hrx + ':' + mnx);
                         //var ddTime = new Date();
                         if(enableNewTabBeep){
-                            window.open('http://axezor.blogspot.com/p/beep.html','_blank');
-                            //window.open('file:///C:/THV_BEEP/beep.html','_blank');
+                            playAudio();
                         }
 
                         idGodX  = setInterval(function(){
@@ -2165,7 +2176,7 @@ if ((location.href + "").indexOf('g.e-hentai.org/s/') === -1 && (location.href +
                                         if(openConfirmReload){
                                             resultRLPage = confirm('Reload page or not.');
                                         }else{
-                                            window.open('http://axezor.blogspot.com/p/blog-page_24.html','_blank');
+                                            playAudio();
                                             resultRLPage = false;
                                         }
 
@@ -2451,7 +2462,7 @@ if ((location.href + "").indexOf('g.e-hentai.org/s/') === -1 && (location.href +
             document.getElementById('btnRunId').click();
 
             if(goAutoFight){
-                var gurlx1 = document.getElementById('lastBtnIdx').href+'';//'&key=axezor'
+                var gurlx1 = document.getElementById('lastBtnIdx').href+'';
                 window.open(gurlx1,'_blank');
                 if(document.getElementById('eventpane')){
                     document.getElementById('eventpane').style.display = 'none';
@@ -2480,7 +2491,7 @@ if ((location.href + "").indexOf('g.e-hentai.org/s/') === -1 && (location.href +
             document.getElementById('eventpane').style.display = 'none';
         }
 
-        var gurlx2 = document.getElementById('lastBtnIdx').href+'';//'&key=axezor'
+        var gurlx2 = document.getElementById('lastBtnIdx').href+'';
         window.open(gurlx2,'_blank');
         //window.open(this.href,'_blank');
     }); 
