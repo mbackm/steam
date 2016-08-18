@@ -4,9 +4,7 @@
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @run-at      document-end
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version     1.3.3.1
-// @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
-// @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
+// @version     1.3.3.2
 // @grant       none
 // ==/UserScript==
 
@@ -2611,58 +2609,6 @@ function verifyAnswer(vvSkipvv) {
     }
 
     return true;
-}
-
-var HVRound = function() {
-
-    var Round = function(cur, max) {
-        this.cur = cur;
-        this.max = max;
-    };
-    this.getRound = function() {
-        var line = document.getElementById("togpane_log").querySelector("tr:nth-last-child(2)");
-        if (/random encounter/.test(line.textContent)) {
-            return new Round(1, 1);
-        } else {
-            var match = line.textContent.match(/Round (\d*?) \/ (\d*)/);
-            return (match ? new Round(Number(match[1]), Number(match[2])) : new Round(0, 0));
-        }
-    };
-
-    this.syncRound = function(round) {
-        if (round.max === 0) {
-            round = JSON.parse(sessionStorage.HV_round || "{}");
-        } else {
-            sessionStorage.HV_round = JSON.stringify(round);
-        }
-        return round;
-    };
-
-    this.drawRound = function(round) {
-        var info_pane = document.querySelector(".clb");
-        var sample_css = info_pane.querySelector(".cit .fd4>div").style.cssText;
-        var round_table = info_pane.appendChild(document.createElement("table"));
-        round_table.classList.add("cit");
-        var round_div = round_table.appendChild(document.createElement("div"));
-        round_div.classList.add("fd4");
-        //      round_div.style.csstext = "text-align: right; padding-top: 10px; font: 10pt bolder; ";
-        round_div.style.cssText = sample_css;
-        round_div.style.fontSize = '12pt';
-        round_div.style.fontWeight = 'bold';
-        round_div.textContent = round.cur + " / " + round.max;
-
-    };
-
-
-    this.run = function() {
-        this.drawRound(this.syncRound(this.getRound()));
-    };
-
-};
-
-
-if (document.getElementById("battleform")){
-    new HVRound().run();
 }
 
 function chkMPforGG(){
