@@ -4,7 +4,7 @@
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @run-at      document-end
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version     1.3.3.2
+// @version     1.3.3.3
 // @grant       none
 // ==/UserScript==
 
@@ -104,6 +104,32 @@ function checkHaveOverchanrge(){
 		return false;
 	}
 
+}
+
+
+function genAfterTurn() {
+
+    var afterTT = 'Rounds: '+localStorage.getItem('lastData_rounds')+', Turn: '+localStorage.getItem('lastData_turn')+', Time: '+localStorage.getItem('lastData_time')+', Exp: '+localStorage.getItem('lastData_exp')+', Credit: '+localStorage.getItem('lastData_credit');
+    var divPSX = document.createElement("DIV");
+    var lbPS = document.createElement("LABEL");
+
+
+    divPSX.style.position = 'fixed';
+    divPSX.style.bottom = '5px';
+    divPSX.style.left = '66px';
+    divPSX.style.zIndex = '111';
+    divPSX.style.backgroundColor = '#E0D8C1';
+    divPSX.style.boxShadow = '-1px -1px 9px #888888';
+
+    divPSX.id = 'divPSX';
+
+    lbPS.appendChild(document.createTextNode(afterTT));
+
+    divPSX.appendChild(lbPS);
+
+    document.body.appendChild(divPSX);
+
+    console.log(afterTT);
 }
 
 /* ======================================== *\
@@ -323,6 +349,18 @@ function OnPageReload() {
                     }
                     num++;
                 }
+
+				try {
+					localStorage.setItem('lastData_turn',result.querySelectorAll('div')[0].textContent);
+					localStorage.setItem('lastData_time',result.querySelectorAll('div')[1].textContent);
+					localStorage.setItem('lastData_exp',result.querySelectorAll('div')[2].textContent);
+					localStorage.setItem('lastData_credit',result.querySelectorAll('div')[3].textContent);
+
+					localStorage.setItem('lastData_rounds',record.rounds);
+				}
+				catch(err) {
+					//
+				}
 
                 // Counter Plus Save for _Income Summary_ by superlatanium
                 if ( settings.counterPlusSave ) {
@@ -3576,6 +3614,7 @@ if ( document.getElementById('togpane_log') ) {
     OnPageReload();
 }else{
 
+	//show potion
 	if (settings.showUsePotion) {
 		if (!document.getElementById('quickbar') && !document.querySelector('#riddleform div img[src*="riddlemaster.php"]') && !checkHaveOverchanrge()) {
 
@@ -3612,6 +3651,11 @@ if ( document.getElementById('togpane_log') ) {
 			}
 
 		}
+	}
+
+	//hv counter
+	if (settings.counterPlus) {
+		genAfterTurn();
 	}
 
 }
