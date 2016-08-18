@@ -4,7 +4,7 @@
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @run-at      document-end
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version     1.3.3.5
+// @version     1.3.3.6
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @grant       none
@@ -932,7 +932,7 @@ function AI() {
     var MP_CHK_FLEE = 22;  // MP < less than ?
     var HP_CHK_FLEE = 40;  // and HP > more than ? exit fight.
 
-    if ((location.href + "").indexOf('s=Battle&ss=gr') !== -1) {
+    if ((location.href + "").indexOf('s=Battle&ss=gr') !== -1 && enableAutoJoinGrindfest) {
         MP_CHK_FLEE = 10;
         HP_CHK_FLEE = 40;
         ENABLE_FLEE = true;
