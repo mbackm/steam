@@ -4,7 +4,7 @@
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @run-at      document-end
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version     1.3.3.6
+// @version     1.3.3.7
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @grant       none
@@ -1747,7 +1747,7 @@ function cont() {
         if (oc === "battle.battle_continue()") {
             setTimeout(function() {
                 ccon.click();
-            }, (1.1*1000));
+            }, (0.5*1000));
             //ccon.click();
         } else {
             actionBeep(false,true);
