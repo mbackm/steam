@@ -4,7 +4,7 @@
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @run-at      document-end
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version     1.3.3.9
+// @version     1.3.3.10
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @grant       none
@@ -1354,11 +1354,11 @@ function AI() {
             return false;
         }
 
-		if(!isMonDead(1) && !isMonEffect(1,spellsEffect[(spellsEffect.indexOf(vNameSpell)+1)])){
-			if(castSpell(vNameSpell,1)){
-				return true;
-			}
-		}
+		//if(!isMonDead(1) && !isMonEffect(1,spellsEffect[(spellsEffect.indexOf(vNameSpell)+1)])){
+		//	if(castSpell(vNameSpell,1)){
+		//		return true;
+		//	}
+		//}
 
         for (var i=3;i>=1;i--) {
             var n = 0;
@@ -1383,19 +1383,19 @@ function AI() {
     //given we want to attack something, choose how we attack it and lock that action
     function bAttack(t) {
 
-	if(difficulty === 'PFUDOR' && enableUseImperil){
+		if(difficulty === 'PFUDOR' && enableUseImperil){
 
-		for (var sb in MAIN_SPELL_MONSTER) {
-			var tb = MAIN_SPELL_MONSTER[sb];
-			console.log('decided to cast ' + tb);
-			if(useSpellEffToMonster(tb)){
-				return;
+			for (var sb in MAIN_SPELL_MONSTER) {
+				var tb = MAIN_SPELL_MONSTER[sb];
+				console.log('decided to cast ' + tb);
+				if(useSpellEffToMonster(tb)){
+					return;
+				}
 			}
+
 		}
 
-	}
-
-	if (STYLE=='mage') {
+		if (STYLE=='mage') {
             //Magic
 
             //Fight boss
@@ -1512,7 +1512,7 @@ function AI() {
 
 
         }else if (getSelfMana() < MP_ITEM_D_CUTOFF) {
-            if (getGem()=='mana' && getSelfMana() < 70 && ROUND_GEM > 12) {
+            if (getGem()=='mana' && getSelfMana() < 70 && ROUND_GEM > 6) {
                 useGem();
                 return;
             }else if(getGem()=='mana'){
@@ -1526,7 +1526,7 @@ function AI() {
             }
         }
     }else if (getSelfMana() < MP_ITEM_D_CUTOFF){
-        if (getGem()=='mana' && getSelfMana() < 70 && ROUND_GEM > 12) {
+        if (getGem()=='mana' && getSelfMana() < 70 && ROUND_GEM > 6) {
             useGem();
             return;
         }else if(getGem()=='mana'){
@@ -1576,7 +1576,7 @@ function AI() {
 
 
         }else if (getSelfHealth() < HP_ITEM_D_CUTOFF) {
-            if (getGem()=='health' && getSelfHealth() < 65 && ROUND_GEM > 12) {
+            if (getGem()=='health' && getSelfHealth() < 65 && ROUND_GEM > 6) {
                 useGem();
                 return;
             }else if(getGem()=='health'){
@@ -1590,7 +1590,7 @@ function AI() {
             }
         }
     }else if(getSelfHealth() < HP_ITEM_D_CUTOFF){
-        if (getGem()=='health' && getSelfHealth() < 65 && ROUND_GEM > 12) {
+        if (getGem()=='health' && getSelfHealth() < 65 && ROUND_GEM > 6) {
             useGem();
             return;
         }else if(getGem()=='health'){
@@ -1629,7 +1629,7 @@ function AI() {
 
 
         }else if (getSelfSpirit() < SP_ITEM_D_CUTOFF) {
-            if (getGem()=='spirit' && getSelfSpirit() < 75 && ROUND_GEM > 12) {
+            if (getGem()=='spirit' && getSelfSpirit() < 75 && ROUND_GEM > 6) {
                 useGem();
                 return;
             }else if(getGem()=='spirit'){
@@ -1643,7 +1643,7 @@ function AI() {
             }
         }
     }else if (getSelfSpirit() < SP_ITEM_D_CUTOFF){
-        if (getGem()=='spirit' && getSelfSpirit() < 75 && ROUND_GEM > 12) {
+        if (getGem()=='spirit' && getSelfSpirit() < 75 && ROUND_GEM > 6) {
             useGem();
             return;
         }else if(getGem()=='spirit'){
