@@ -1657,6 +1657,15 @@ function AI() {
         }
     }
 
+	// HP GEM // SP GEM 
+	if(getGem()=='health' && getSelfHealth() < 90 && ROUND_GEM > 15){
+		useGem();
+	}else if(getGem()=='spirit' && ROUND_GEM > 10){
+		useGem();
+	}else{
+		GM_setValue('ROUND_GEM',(ROUND_GEM+1));
+	}
+
 
     if(getSelfHealth() < 15 && !isSOL){
         actionBeep(false,false);
