@@ -34,7 +34,7 @@
 \* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 var settings = {
 	godAuto: true,				// God Mode
-	showUsePotion: true,		// Show use poton
+	showUsePotion: true,		// Show use potion
 	enableCheckPony: true,		// enable check alert pony
 	enablePopupAlert: true,		// enable popup alert
 	enableGFslowGEM: true,		// enable Grindfest use GEM slow
