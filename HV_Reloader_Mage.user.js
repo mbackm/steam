@@ -4,7 +4,7 @@
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @run-at      document-end
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version     1.3.3.13
+// @version     1.3.3.14
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @grant       none
@@ -41,8 +41,8 @@ var settings = {
     effectDurations: true,      // Show buff/debuff durations
     gemIcon: true,              // Show gem/powerup, click on icon to use
     roundCounter: true,         // Show current round and rounds remaining
-    hvStateHP: true,            // Show enemy HP value
-    fluidHPBar: true,           // Shorten HP Bar width to easily see which monster has the most HP
+    hvStateHP: false,            // Show enemy HP value
+    fluidHPBar: false,           // Shorten HP Bar width to easily see which monster has the most HP
 
     defaultAction: 0,           // Change the default action to a T1 spell
     // |     0     |      1      |   2    |     3      |  4   |   5   |     6      |
@@ -1354,11 +1354,11 @@ function AI() {
             return false;
         }
 
-		//if(!isMonDead(1) && !isMonEffect(1,spellsEffect[(spellsEffect.indexOf(vNameSpell)+1)])){
-		//	if(castSpell(vNameSpell,1)){
-		//		return true;
-		//	}
-		//}
+		if(!isMonDead(1) && !isMonEffect(1,spellsEffect[(spellsEffect.indexOf(vNameSpell)+1)])){
+			if(castSpell(vNameSpell,1)){
+				return true;
+			}
+		}
 
         for (var i=3;i>=1;i--) {
             var n = 0;
