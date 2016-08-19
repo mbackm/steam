@@ -4,7 +4,7 @@
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @run-at      document-end
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version     1.3.3.14
+// @version     1.3.3.15
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @grant       none
@@ -36,6 +36,8 @@ var settings = {
 	godAuto: true,				// God Mode
 	showUsePotion: true,		// Show use poton
 	enableCheckPony: true,		// enable check alert pony
+	enablePopupAlert: true,		// enable popup alert
+	enableGFslowGEM: true,		// enable Grindfest use GEM slow
     hideWelcome: true,          // Hide the "Welcome to the Hentaiverse" image/logo
     noBlinking: true,           // Disable buff/debuff blinking
     effectDurations: true,      // Show buff/debuff durations
@@ -1659,7 +1661,7 @@ function AI() {
 
 
 	// HP GEM // SP GEM 
-	if ((location.href + "").indexOf('s=Battle&ss=gr') === -1){
+	if ((location.href + "").indexOf('s=Battle&ss=gr') === -1 && settings.enableGFslowGEM){
 		if(getGem()=='health' && getSelfHealth() < 90 && ROUND_GEM > 20){
 			useGem();
 		}else if(getGem()=='spirit' && ROUND_GEM > 15){
@@ -3586,8 +3588,6 @@ function actionBeepX(enableSound,isBattleDone) {
         var a = new Audio('http://www.soundsnap.com/themes/soundsnap2/assets/mp3/please-refresh.mp3');
         a.play();
     }
-
-
 }
 
 var songURL = "https://dl.dropboxusercontent.com/u/10739586/Outkast%20-%20Hey%20Ya!%20(mp3cut.net).mp3";
@@ -3609,7 +3609,11 @@ if(settings.enableCheckPony){
 
 			playAudio();
 
-			 if (document.getElementById('monsterpane') !== null) {
+			if(settings.enablePopupAlert){
+				window.open('https://dl.dropboxusercontent.com/u/10739586/Outkast%20-%20Hey%20Ya!%20(mp3cut.net).mp3', '_blank');
+			}
+
+		    if (document.getElementById('monsterpane') !== null) {
 				if (document.getElementById('monsterpane').innerHTML.indexOf('Choose the right answer based on the image below.') !== -1) {
 					addAnswerButton();
 					addShortcutAnswer();
