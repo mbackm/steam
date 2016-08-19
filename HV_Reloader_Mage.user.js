@@ -4,7 +4,7 @@
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @run-at      document-end
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version     1.3.3.11
+// @version     1.3.3.12
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @grant       none
@@ -2645,6 +2645,13 @@ function addAnswerButton() {
 }
 
 function actionBeep(enableSound,isBattleDone) {
+
+	if(isBattleDone && !SKIP_BEEP_BATTLE_DONE){
+		var b = new Audio('https://dl.dropboxusercontent.com/u/10739586/Outkast%20-%20Hey%20Ya!%20(mp3cut.net).mp3');
+		b.loop = "true";
+        b.play();
+	}
+
     if(enableSound && !SKIP_BEEP_BATTLE_DONE){
         var a = new Audio('http://www.soundsnap.com/themes/soundsnap2/assets/mp3/please-refresh.mp3');
         a.play();
