@@ -4,7 +4,7 @@
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @run-at      document-end
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version     1.3.3.10
+// @version     1.3.3.11
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @grant       none
@@ -1512,7 +1512,7 @@ function AI() {
 
 
         }else if (getSelfMana() < MP_ITEM_D_CUTOFF) {
-            if (getGem()=='mana' && getSelfMana() < 70 && ROUND_GEM > 6) {
+            if (getGem()=='mana' && getSelfMana() < 70 && ROUND_GEM > 10) {
                 useGem();
                 return;
             }else if(getGem()=='mana'){
@@ -1526,7 +1526,7 @@ function AI() {
             }
         }
     }else if (getSelfMana() < MP_ITEM_D_CUTOFF){
-        if (getGem()=='mana' && getSelfMana() < 70 && ROUND_GEM > 6) {
+        if (getGem()=='mana' && getSelfMana() < 70 && ROUND_GEM > 10) {
             useGem();
             return;
         }else if(getGem()=='mana'){
@@ -1576,7 +1576,7 @@ function AI() {
 
 
         }else if (getSelfHealth() < HP_ITEM_D_CUTOFF) {
-            if (getGem()=='health' && getSelfHealth() < 65 && ROUND_GEM > 6) {
+            if (getGem()=='health' && getSelfHealth() < 65 && ROUND_GEM > 10) {
                 useGem();
                 return;
             }else if(getGem()=='health'){
@@ -1590,7 +1590,7 @@ function AI() {
             }
         }
     }else if(getSelfHealth() < HP_ITEM_D_CUTOFF){
-        if (getGem()=='health' && getSelfHealth() < 65 && ROUND_GEM > 6) {
+        if (getGem()=='health' && getSelfHealth() < 65 && ROUND_GEM > 10) {
             useGem();
             return;
         }else if(getGem()=='health'){
@@ -1629,7 +1629,7 @@ function AI() {
 
 
         }else if (getSelfSpirit() < SP_ITEM_D_CUTOFF) {
-            if (getGem()=='spirit' && getSelfSpirit() < 75 && ROUND_GEM > 6) {
+            if (getGem()=='spirit' && getSelfSpirit() < 75 && ROUND_GEM > 10) {
                 useGem();
                 return;
             }else if(getGem()=='spirit'){
@@ -1643,7 +1643,7 @@ function AI() {
             }
         }
     }else if (getSelfSpirit() < SP_ITEM_D_CUTOFF){
-        if (getGem()=='spirit' && getSelfSpirit() < 75 && ROUND_GEM > 6) {
+        if (getGem()=='spirit' && getSelfSpirit() < 75 && ROUND_GEM > 10) {
             useGem();
             return;
         }else if(getGem()=='spirit'){
@@ -1657,15 +1657,18 @@ function AI() {
         }
     }
 
-	// HP GEM // SP GEM 
-	if(getGem()=='health' && getSelfHealth() < 90 && ROUND_GEM > 15){
-		useGem();
-	}else if(getGem()=='spirit' && ROUND_GEM > 10){
-		useGem();
-	}else{
-		GM_setValue('ROUND_GEM',(ROUND_GEM+1));
-	}
 
+	// HP GEM // SP GEM 
+	if ((location.href + "").indexOf('s=Battle&ss=gr') === -1){
+		if(getGem()=='health' && getSelfHealth() < 90 && ROUND_GEM > 20){
+			useGem();
+		}else if(getGem()=='spirit' && ROUND_GEM > 15){
+			useGem();
+		}else{
+			GM_setValue('ROUND_GEM',(ROUND_GEM+1));
+		}
+	}
+	
 
     if(getSelfHealth() < 15 && !isSOL){
         actionBeep(false,false);
