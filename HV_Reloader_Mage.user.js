@@ -1077,8 +1077,8 @@ function OnPageReload() {
         var divPS = document.createElement("DIV");
 
         divPS.style.position = 'fixed';
-        divPS.style.bottom = '5px';
-        divPS.style.right = '15px';
+        divPS.style.bottom = '0px';
+        divPS.style.right = '70px';
         divPS.style.backgroundColor = '#E0D8C1';
         divPS.style.boxShadow = '-1px -1px 9px #888888';
 
@@ -4476,7 +4476,7 @@ if ( document.getElementById('togpane_log') ) {
 			var divPS = document.createElement("DIV");
 
 			divPS.style.position = 'fixed';
-			divPS.style.bottom = '5px';
+			divPS.style.bottom = '0px';
 			divPS.style.right = '70px';
 			divPS.style.backgroundColor = '#E0D8C1';
 			divPS.style.boxShadow = '-1px -1px 9px #888888';
