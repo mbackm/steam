@@ -4485,18 +4485,21 @@ if ( document.getElementById('togpane_log') ) {
 
 			var lbPS = document.createElement("LABEL");
 			lbPS.appendChild(document.createTextNode(GM_getValue("lastPotionsUse") + ''));
-
-			var lbPS1 = document.createElement("LABEL");
-			lbPS1.appendChild(document.createTextNode(GM_getValue("lastPotionsUse1") + ''));
-
-			var lbPS2 = document.createElement("LABEL");
-			lbPS2.appendChild(document.createTextNode(GM_getValue("lastPotionsUse2") + ''));
-
 			divPS.appendChild(lbPS);
-			divPS.appendChild(document.createElement("BR"));
-			divPS.appendChild(lbPS1);
-			divPS.appendChild(document.createElement("BR"));
-			divPS.appendChild(lbPS2);
+			
+			if(GM_getValue("lastPotionsUse1") !== 'Sc-[ Swif(0) Pro(0) Ava(0) Abs(0) Sha(0) Life(0) Gods(0) ]'){
+				var lbPS1 = document.createElement("LABEL");
+				lbPS1.appendChild(document.createTextNode(GM_getValue("lastPotionsUse1") + ''));
+				divPS.appendChild(document.createElement("BR"));
+				divPS.appendChild(lbPS1);
+			}
+
+			if(GM_getValue("lastPotionsUse2") !== 'Inf-[ Fl(0) Fr(0) Li(0) St(0) Di(0) Da(0) ]'){
+				var lbPS2 = document.createElement("LABEL");
+				lbPS2.appendChild(document.createTextNode(GM_getValue("lastPotionsUse2") + ''));
+				divPS.appendChild(document.createElement("BR"));
+				divPS.appendChild(lbPS2);
+			}
 
 			document.body.appendChild(divPS);
 			
