@@ -932,7 +932,9 @@ function OnPageReload() {
     if (settings.showUsePotion) {
         (function(){
         
-    var POTION_LIST = ['Draught','Potion','Elixir','Gem','Swiftness'];
+    var POTION_LIST = ['Draught','Potion','Elixir','Gem',
+					   'Swiftness','Protection','Avatar','Absorption','Shadows','Life','Gods',
+					   'Flames','Frost','Lightning','Storms','Divinity','Darkness'];
 
     function clearCurrentLastTrack(){
 
@@ -947,6 +949,22 @@ function OnPageReload() {
         GM_setValue('SpiritElixir', 0);
         GM_setValue('LastElixir', 0);
         GM_setValue('Gem', 0);
+
+		GM_setValue('ScrollofSwiftness', 0);
+		GM_setValue('ScrollofProtection', 0);
+		GM_setValue('ScrollofAvatar', 0);
+		GM_setValue('ScrollofAbsorption', 0);
+		GM_setValue('ScrollofShadows', 0);
+		GM_setValue('ScrollofLife', 0);
+		GM_setValue('ScrolloftheGods', 0);
+
+		GM_setValue('InfusionofFlames', 0);
+		GM_setValue('InfusionofFrost', 0);
+		GM_setValue('InfusionofLightning', 0);
+		GM_setValue('InfusionofStorms', 0);
+		GM_setValue('InfusionofDivinity', 0);
+		GM_setValue('InfusionofDarkness', 0);
+		
 
     }
 
@@ -967,8 +985,10 @@ function OnPageReload() {
             if(arrayValue){
                 if(arrayValue.length === 3){
                     if(POTION_LIST.indexOf(arrayValue[2]) !== -1){
+						
                         var typePotion = arrayValue[1]+arrayValue[2];
 						typePotion = typePotion.replaceAll(' ','');
+
                         if('Gem' === arrayValue[2]){
                             typePotion = arrayValue[2];
                         }
@@ -987,36 +1007,63 @@ function OnPageReload() {
 
     }
 
-     function genSHowUsePotion(){
+
+
+    function genSHowUsePotion(){
 
 		var ttMMD = 'H-[ D(' + GM_getValue('HealthDraught') + ') P(' + GM_getValue('HealthPotion') + ') E(' + GM_getValue('HealthElixir') + ') ]'+ ' - ' + 'M-[ D(' + GM_getValue('ManaDraught') + ') P(' + GM_getValue('ManaPotion') + ') E(' + GM_getValue('ManaElixir') + ') ]' + ' - ' + 'S-[ D(' + GM_getValue('SpiritDraught') + ') P(' + GM_getValue('SpiritPotion') + ') E(' + GM_getValue('SpiritElixir') + ') ] L('+GM_getValue('LastElixir')+') G('+GM_getValue('Gem')+')'; // | Swif('+vSwift+')
 
+		var ttSc = 'Sc-[ Swif(' + GM_getValue('ScrollofSwiftness') + ') Pro(' + GM_getValue('ScrollofProtection') + ') Ava(' + GM_getValue('ScrollofAvatar') + ') Abs(' + GM_getValue('ScrollofAbsorption') + ') Sha(' + GM_getValue('ScrollofShadows') + ') Life(' + GM_getValue('ScrollofLife') + ') Gods(' + GM_getValue('ScrolloftheGods') + ') ]';
+		var ttInf = 'Inf-[ Fl(' + GM_getValue('InfusionofFlames') + ') Fr(' + GM_getValue('InfusionofFrost') + ') Li(' + GM_getValue('InfusionofLightning') + ') St(' + GM_getValue('InfusionofStorms') + ') Di(' + GM_getValue('InfusionofDivinity') + ') Da(' + GM_getValue('InfusionofDarkness') + ') ]';
+
+
 		if(document.getElementById('shUsPotionID')){
 			document.getElementById('shUsPotionID').textContent = ''+ttMMD;
+			document.getElementById('shUsPotionID2').textContent = ''+ttSc;
+			document.getElementById('shUsPotionID3').textContent = ''+ttInf;
 		}else{
 			var aDIUseR = document.createElement('DIV');
 			aDIUseR.style.position = "absolute";
-			aDIUseR.style.top = "32px";
-			aDIUseR.style.left = "540px";
+			aDIUseR.style.top = "8px";
+			aDIUseR.style.left = "650px";
 			aDIUseR.style.backgroundColor = '#EDEBDF';
 			aDIUseR.style.opacity = '0.9';
 			aDIUseR.style.width = '460px';
-			aDIUseR.style.height = '14px';
+			aDIUseR.style.height = '42px';
+			aDIUseR.style.zIndex = '202';
 
 			var lbIU = document.createElement("LABEL");
 			lbIU.id = "shUsPotionID";
 			lbIU.style.color = '#5C0D11';
 			lbIU.style.fontFamily = "'Verdana','sans-serif'";
-			
-			var tnIU = document.createTextNode(ttMMD);
+			lbIU.appendChild(document.createTextNode(ttMMD));
 
-			lbIU.appendChild(tnIU);
+			var lbIU2 = document.createElement("LABEL");
+			lbIU2.id = "shUsPotionID2";
+			lbIU2.style.color = '#5C0D11';
+			lbIU2.style.fontFamily = "'Verdana','sans-serif'";
+			lbIU2.appendChild(document.createTextNode(ttSc));
+
+			var lbIU3 = document.createElement("LABEL");
+			lbIU3.id = "shUsPotionID3";
+			lbIU3.style.color = '#5C0D11';
+			lbIU3.style.fontFamily = "'Verdana','sans-serif'";
+			lbIU3.appendChild(document.createTextNode(ttInf));
+
+
 			aDIUseR.appendChild(lbIU);
+			aDIUseR.appendChild(document.createElement("BR"));
+			aDIUseR.appendChild(lbIU2);
+			aDIUseR.appendChild(document.createElement("BR"));
+			aDIUseR.appendChild(lbIU3);
+
 			document.body.appendChild(aDIUseR);
 		}
 
 		if ((location.href + "").indexOf('s=Battle&ss=ba&encounter=') === -1) {
             GM_setValue("lastPotionsUse", ttMMD);
+			GM_setValue("lastPotionsUse1", ttSc);
+			GM_setValue("lastPotionsUse2", ttInf);
         }
 
     }
@@ -1028,8 +1075,6 @@ function OnPageReload() {
     }else if (!document.getElementById('quickbar') && !document.querySelector('#riddleform div img[src*="riddlemaster.php"]') && !checkHaveOverchanrge()) {
 
         var divPS = document.createElement("DIV");
-        var lbPS = document.createElement("LABEL");
-
 
         divPS.style.position = 'fixed';
         divPS.style.bottom = '5px';
@@ -1039,9 +1084,18 @@ function OnPageReload() {
 
         divPS.id = 'divPS';
 
+		var lbPS = document.createElement("LABEL");
         lbPS.appendChild(document.createTextNode(GM_getValue("lastPotionsUse") + ''));
 
+		var lbPS1 = document.createElement("LABEL");
+        lbPS1.appendChild(document.createTextNode(GM_getValue("lastPotionsUse1") + ''));
+
+		var lbPS2 = document.createElement("LABEL");
+        lbPS2.appendChild(document.createTextNode(GM_getValue("lastPotionsUse2") + ''));
+
         divPS.appendChild(lbPS);
+        divPS.appendChild(lbPS1);
+        divPS.appendChild(lbPS2);
 
         document.body.appendChild(divPS);
         if(!checkHaveOverchanrge()){
@@ -4420,20 +4474,29 @@ if ( document.getElementById('togpane_log') ) {
 		if (!document.getElementById('quickbar') && !document.querySelector('#riddleform div img[src*="riddlemaster.php"]') && !checkHaveOverchanrge()) {
 
 			var divPS = document.createElement("DIV");
-			var lbPS = document.createElement("LABEL");
-
 
 			divPS.style.position = 'fixed';
 			divPS.style.bottom = '5px';
-			divPS.style.right = '15px';
+			divPS.style.right = '70px';
 			divPS.style.backgroundColor = '#E0D8C1';
 			divPS.style.boxShadow = '-1px -1px 9px #888888';
 
 			divPS.id = 'divPS';
 
+			var lbPS = document.createElement("LABEL");
 			lbPS.appendChild(document.createTextNode(GM_getValue("lastPotionsUse") + ''));
 
+			var lbPS1 = document.createElement("LABEL");
+			lbPS1.appendChild(document.createTextNode(GM_getValue("lastPotionsUse1") + ''));
+
+			var lbPS2 = document.createElement("LABEL");
+			lbPS2.appendChild(document.createTextNode(GM_getValue("lastPotionsUse2") + ''));
+
 			divPS.appendChild(lbPS);
+			divPS.appendChild(document.createElement("BR"));
+			divPS.appendChild(lbPS1);
+			divPS.appendChild(document.createElement("BR"));
+			divPS.appendChild(lbPS2);
 
 			document.body.appendChild(divPS);
 			
@@ -4449,6 +4512,21 @@ if ( document.getElementById('togpane_log') ) {
 				GM_setValue('SpiritElixir', 0);
 				GM_setValue('LastElixir', 0);
 				GM_setValue('Gem', 0);
+
+				GM_setValue('ScrollofSwiftness', 0);
+				GM_setValue('ScrollofProtection', 0);
+				GM_setValue('ScrollofAvatar', 0);
+				GM_setValue('ScrollofAbsorption', 0);
+				GM_setValue('ScrollofShadows', 0);
+				GM_setValue('ScrollofLife', 0);
+				GM_setValue('ScrolloftheGods', 0);
+
+				GM_setValue('InfusionofFlames', 0);
+				GM_setValue('InfusionofFrost', 0);
+				GM_setValue('InfusionofLightning', 0);
+				GM_setValue('InfusionofStorms', 0);
+				GM_setValue('InfusionofDivinity', 0);
+				GM_setValue('InfusionofDarkness', 0);
 			}
 
 		}
