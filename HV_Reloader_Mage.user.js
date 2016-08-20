@@ -4,7 +4,7 @@
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @run-at      document-end
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version     1.3.3.17
+// @version     1.3.3.18
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @grant       none
@@ -2002,6 +2002,7 @@ function AI() {
 	if(GM_getValue('spellSelect') < 3){
 		// user scroll
 
+
 		if(GM_getValue('spellSelect') === 1){
 			//-swiftness/shadow/protection/absorption/life
 			var listUseEff = ['hastened','shadow veil','protection','absorbing ward','spark of life'];
@@ -2009,17 +2010,19 @@ function AI() {
 			for(var sc=0;sc<listUseEff.length;sc++){
 				var chkIndexScroll = -1;
 				var vEffn = listUseEff[sc];
-				if(!checkForBuff(vEffn)){
+				if(!checkForScrollBuff(vEffn)){
 
 					var nEffn = effScrollList.indexOf(vEffn);
-					chkIndexScroll = nextScroll(nEffn+1);
+					chkIndexScroll = nextScroll(effScrollList[nEffn+1]);
 					
 					if(chkIndexScroll !== -1){
-						useItem(chkIndexScroll);
+						useItemClick('ikey_s'+chkIndexScroll);
 						return;
 					}else{
-						if(castSpell(vEffn,0)){
-							return;
+						if(!checkForBuff(vEffn)){
+							if(castSpell(vEffn,0)){
+								return;
+							}
 						}
 					}
 				}
@@ -2029,42 +2032,53 @@ function AI() {
 
 			//-avatar	[ 'hastened', 'protection' ]
 			//-god		[ 'absorbing ward', 'shadow veil', 'spark of life'***? ]
-			var listUseEff = ['hastened','absorbing ward'];
+			var listUseEff = ['hastened','shadow veil'];
 			var listScrollEff = ['avatar','gods'];
 			
 			for(var sc=0;sc<listUseEff.length;sc++){
 				var chkIndexScroll = -1;
 				var vEffn = listUseEff[sc];
 				var vEffScroll = listScrollEff[sc];
-				if(!checkForBuff(vEffn)){
+				if(!checkForScrollBuff(vEffn)){
 
 					var nEffn = effScrollList.indexOf(vEffScroll);
-					chkIndexScroll = nextScroll(nEffn+1);
+					chkIndexScroll = nextScroll(effScrollList[nEffn+1]);
 					
 					if(chkIndexScroll !== -1){
-						useItem(chkIndexScroll);
+						useItemClick('ikey_s'+chkIndexScroll);
 						return;
 					}else{
 						if(vEffn === 'hastened'){
-							if(castSpell('protection',0)){
-								return;
+							if(!checkForBuff('protection')){
+								if(castSpell('protection',0)){
+									return;
+								}
 							}
 
-							if(castSpell('hastened',0)){
-								return;
+							if(!checkForBuff('hastened')){
+								if(castSpell('hastened',0)){
+									return;
+								}
 							}
-						}else if(vEffn === 'absorbing ward'){
-							if(castSpell('spark of life',0)){
-								return;
+						}else if(vEffn === 'shadow veil'){
+							if(!checkForBuff('spark of life')){
+								if(castSpell('spark of life',0)){
+									return;
+								}
 							}
 
-							if(castSpell('shadow veil',0)){
-								return;
+							if(!checkForBuff('absorbing ward')){
+								if(castSpell('absorbing ward',0)){
+									return;
+								}
 							}
 
-							if(castSpell('absorbing ward',0)){
-								return;
+							if(!checkForBuff('shadow veil')){
+								if(castSpell('shadow veil',0)){
+									return;
+								}
 							}
+
 						}
 					}
 				}
@@ -2079,6 +2093,8 @@ function AI() {
 		}else{
 			vUseScroll = true;
 		}
+
+		
 	}else{
 		vUseScroll = true;
 	}
@@ -2102,14 +2118,14 @@ function AI() {
 
 		for(var ifi=0;ifi<listUseInfus.length;ifi++){
 			var chkIndexInfusion = -1;
-			var vEffInn = listUseEff[ifi];
+			var vEffInn = listUseInfus[ifi];
 			if(!checkForBuff(vEffInn)){
 
 				var nEffInn = effInfusionList.indexOf(vEffInn);
 				chkIndexInfusion = nextInfusion(effInfusionList[nEffInn+1]);
 				
 				if(chkIndexInfusion !== -1){
-					useItem(chkIndexInfusion);
+					useItemClick('ikey_n'+chkIndexInfusion);
 					return;
 				}
 			}
@@ -2539,6 +2555,12 @@ function useItem(n) {
     fillForm(1,'items',0,n);
 }
 
+function useItemClick(n) {
+    if(document.getElementById(n)){
+		document.getElementById(n).click();
+	}
+}
+
 //uses whatever gem is currently in inventory
 //If no gem, wastes a turn
 function useGem() {
@@ -2574,6 +2596,27 @@ function getBuffAt(n) {
 //gets the number of buffs currently in the buff bar
 function getBuffLength() {
     return document.getElementById('mainpane').children[1].children[0].children.length;
+}
+
+function getDescAt(n) {
+    try {
+        var ret = document.getElementById('mainpane').children[1].children[0].children[n].getAttribute('onmouseover').split("'")[3];
+        if (ret !== undefined){
+            return ret;
+        }else{
+            return 'none';
+        }
+    }catch(e) {
+        return 'undefined';
+    }
+}
+
+function getDescs() {
+    var r = [];
+    for (var i = 0; i < getBuffLength(); i++) {
+        r[i]=getDescAt(i).toLowerCase();
+    }
+    return r;
 }
 
 //gets the remaining duration (as displayed by the tooltip) of the buff at the given position
@@ -2738,6 +2781,21 @@ function getBuffs() {
 function checkForBuff(n) {
     if (getBuffs().indexOf(n.toLowerCase()) != -1) {
         return true;
+    }else{
+        return false;
+    }
+}
+
+function checkForScrollBuff(n) {
+	var vBuffIndex = getBuffs().indexOf(n.toLowerCase());
+
+    if ( vBuffIndex != -1) {
+		var descBuff = getDescs()[vBuffIndex];
+		if ( descBuff.indexOf('(scroll)') !== -1 ) {
+			return true;
+		}else{
+			return false;
+		}
     }else{
         return false;
     }
