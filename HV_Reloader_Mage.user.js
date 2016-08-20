@@ -4,7 +4,7 @@
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @run-at      document-end
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version     1.3.3.16
+// @version     1.3.3.17
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @grant       none
@@ -35,6 +35,9 @@
 var settings = {
 	godAuto: true,				// God Mode
 	showUsePotion: true,		// Show use potion
+	spellControl: true,			// Spell Control - use Scroll or normal buff
+	showStopStartButton: true,	// Show Stop Start button
+	showBarListBattleItems: true,	// Show list battle items
 	enableCheckPony: true,		// enable check alert pony
 	enableOfflineSong: true,	// enable offline song
 	enablePopupAlert: true,		// enable popup alert
@@ -64,7 +67,7 @@ var settings = {
     popupTime: 0,               // after `popupTime`ms
 
     counterPlus: true,          // HV-Counter-Plus ; log and show turn/speed/time/exp/credits
-    counterPlusSave: true       // Store additional datas for Income Summary by Superlatanium
+    counterPlusSave: false       // Store additional datas for Income Summary by Superlatanium
 };
 
 var currentSong = '';
@@ -82,7 +85,8 @@ if(!localStorage.getItem('songPath')){
 \* ======================================== */
 
 
-
+var GB_BREAK_AUTO_BOT = true;
+var GG_GO_AF_BREAK = false;
 var GBGM_KEY = "HGM_";
 
 function isNumber(n) {
@@ -121,6 +125,10 @@ function checkHaveOverchanrge(){
 
 }
 
+if(!GM_getValue("botSS")){
+	GM_setValue("botSS",false);
+}
+
 
 function genAfterTurn() {
 
@@ -146,6 +154,13 @@ function genAfterTurn() {
 
     console.log(afterTT);
 }
+
+
+String.prototype.replaceAll = function(search, replacement) {
+        var target = this;
+        return target.replace(new RegExp(search, 'g'), replacement);
+    };
+
 
 /* ======================================== *\
  * ============= INITIAL LOAD ============= *
@@ -287,6 +302,298 @@ function OnPageReload() {
     }
     /* ========== DEFAULT ACTION END ========== */
 
+
+	 /* ========== SPELL Control ============== */
+	if (settings.spellControl || settings.showStopStartButton) {
+        (function(){
+        
+	var spellSelect = GM_getValue('spellSelect');
+	if(!spellSelect){
+		GM_setValue("spellSelect", 3);
+	}
+
+	var checkInfusion = GM_getValue('checkInfusion');
+	if(!checkInfusion){
+		GM_setValue("checkInfusion", false);
+	}
+
+	var currentInfusion = GM_getValue('currentInfusion');
+	if(!currentInfusion){
+		GM_setValue("currentInfusion", "infused flames");
+	}
+	
+
+
+    function genShowSellControl(){
+		if(!document.getElementById('aDIscpcID')){
+			var aDIscpc = document.createElement('DIV');
+			aDIscpc.id = "aDIscpcID";
+			aDIscpc.style.position = "absolute";
+			aDIscpc.style.top = "8px";
+			aDIscpc.style.right = "20px";
+			aDIscpc.style.backgroundColor = '#E3E0D1';
+			aDIscpc.style.opacity = '1';
+			aDIscpc.style.width = '80px';
+			aDIscpc.style.height = '130px';
+
+			/*
+			aDIscpc.addEventListener('mouseover', function() {
+				//GB_BREAK_AUTO_BOT = false;
+			});
+
+			aDIscpc.addEventListener('mouseout', function() {
+				//GB_BREAK_AUTO_BOT = true;
+				if(GG_GO_AF_BREAK && false){
+					var nowHP = document.body.children[4].children[0].children[2].children[0].width*5/6;
+					if(nowHP > 15){
+						document.getElementById('battleform').submit();
+					}
+				}
+			});
+			*/
+
+			if(settings.spellControl){
+
+				// scroll 1
+				var iRadio1 = document.createElement("INPUT");
+					iRadio1.setAttribute("type", "radio");
+					iRadio1.setAttribute("name", "spellCT");
+					iRadio1.setAttribute("value", "1");
+					if(spellSelect === 1){
+						iRadio1.setAttribute("checked", "true");
+					}
+					iRadio1.addEventListener('change', function() {
+						GM_setValue("spellSelect", 1);
+					});
+
+				var lbRad1 = document.createElement("LABEL");
+					lbRad1.style.color = '#5C0D11';
+					lbRad1.style.fontFamily = "'Verdana','sans-serif'";
+					lbRad1.setAttribute("title", "swiftness/shadow/protection/absorption/life");
+					lbRad1.appendChild(document.createTextNode('SC #1'));
+
+				// scroll 2
+				var iRadio2 = document.createElement("INPUT");
+					iRadio2.setAttribute("type", "radio");
+					iRadio2.setAttribute("name", "spellCT");
+					iRadio2.setAttribute("value", "2");
+					if(spellSelect === 2){
+						iRadio2.setAttribute("checked", "true");
+					}
+					iRadio2.addEventListener('change', function() {
+						GM_setValue("spellSelect", 2);
+					});
+
+				var lbRad2 = document.createElement("LABEL");
+					lbRad2.style.color = '#5C0D11';
+					lbRad2.style.fontFamily = "'Verdana','sans-serif'";
+					lbRad2.setAttribute("title", "avatar/gods");
+					lbRad2.appendChild(document.createTextNode('SC #2'));
+
+				// normal
+				var iRadio3 = document.createElement("INPUT");
+					iRadio3.setAttribute("type", "radio");
+					iRadio3.setAttribute("name", "spellCT");
+					iRadio3.setAttribute("value", "3");
+					if(spellSelect === 3){
+						iRadio3.setAttribute("checked", "true");
+					}
+					iRadio3.addEventListener('change', function() {
+						GM_setValue("spellSelect", 3);
+					});
+
+				var lbRad3 = document.createElement("LABEL");
+					lbRad3.style.color = '#5C0D11';
+					lbRad3.style.fontFamily = "'Verdana','sans-serif'";
+					lbRad3.setAttribute("title", "normal buff");
+					lbRad3.appendChild(document.createTextNode('NM #3'));
+
+
+				var cbInfu = document.createElement("INPUT");
+					cbInfu.id = 'cbInfuID';
+					cbInfu.setAttribute("type", "checkbox");
+					if(checkInfusion){
+						cbInfu.setAttribute("checked", "true");
+					}
+					cbInfu.addEventListener('change', function() {
+						GM_setValue("checkInfusion", cbInfu.checked);
+					});
+
+				//'infused flames','infused frost','infused lightning','infused storms','infused divinity','infused darkness'
+				var selex = document.createElement("select");
+					selex.id = 'infSelexID';
+					selex.style.width = '60px';
+					selex.style.webkitAppearance = 'none';
+					selex.style.background = '#ffc8c8';
+					selex.addEventListener('change', function() {
+						GM_setValue("currentInfusion", selex.value);
+					});
+
+				var option1 = document.createElement("option");
+					option1.id = 'opFlames';
+					option1.value = 'infused flames';
+					if(currentInfusion === 'infused flames'){
+						option1.setAttribute("selected", "true");
+					}
+					option1.appendChild(document.createTextNode('Flames'));
+
+				var option2 = document.createElement("option");
+					option2.id = 'opFrost';
+					option2.value = 'infused frost';
+					if(currentInfusion === 'infused frost'){
+						option2.setAttribute("selected", "true");
+					}
+					option2.appendChild(document.createTextNode('Frost'));
+
+				var option3 = document.createElement("option");
+					option3.id = 'opLight';
+					option3.value = 'infused lightning';
+					if(currentInfusion === 'infused lightning'){
+						option3.setAttribute("selected", "true");
+					}
+					option3.appendChild(document.createTextNode('Light'));
+
+				var option4 = document.createElement("option");
+					option4.id = 'opStorms';
+					option4.value = 'infused storms';
+					if(currentInfusion === 'infused storms'){
+						option4.setAttribute("selected", "true");
+					}
+					option4.appendChild(document.createTextNode('Storms'));
+
+				var option5 = document.createElement("option");
+					option5.id = 'opDivinity';
+					option5.value = 'infused divinity';
+					if(currentInfusion === 'infused divinity'){
+						option5.setAttribute("selected", "true");
+					}
+					option5.appendChild(document.createTextNode('Divinity'));
+
+				var option6 = document.createElement("option");
+					option6.id = 'opDarkness';
+					option6.value = 'infused darkness';
+					if(currentInfusion === 'infused darkness'){
+						option6.setAttribute("selected", "true");
+					}
+					option6.appendChild(document.createTextNode('Darkness'));
+
+				selex.appendChild(option1);
+				selex.appendChild(option2);
+				selex.appendChild(option3);
+				selex.appendChild(option4);
+				selex.appendChild(option5);
+				selex.appendChild(option6);
+
+				// table zone
+				var ttble = document.createElement("TABLE");
+
+				var tttr1 = document.createElement("TR");
+				var tttd11 = document.createElement("TD");
+				var tttd12 = document.createElement("TD");
+				tttd11.appendChild(iRadio1);
+				tttd12.appendChild(lbRad1);
+				tttr1.appendChild(tttd11);
+				tttr1.appendChild(tttd12);
+
+				var tttr2 = document.createElement("TR");
+				var tttd21 = document.createElement("TD");
+				var tttd22 = document.createElement("TD");
+				tttd21.appendChild(iRadio2);
+				tttd22.appendChild(lbRad2);
+				tttr2.appendChild(tttd21);
+				tttr2.appendChild(tttd22);
+
+				var tttr3 = document.createElement("TR");
+				var tttd31 = document.createElement("TD");
+				var tttd32 = document.createElement("TD");
+				tttd31.appendChild(iRadio3);
+				tttd32.appendChild(lbRad3);
+				tttr3.appendChild(tttd31);
+				tttr3.appendChild(tttd32);
+
+				var tttr4 = document.createElement("TR");
+				var tttd41 = document.createElement("TD");
+				var tttd42 = document.createElement("TD");
+				tttd41.appendChild(cbInfu);
+				tttd42.appendChild(selex);
+				tttr4.appendChild(tttd41);
+				tttr4.appendChild(tttd42);
+
+				ttble.appendChild(tttr1);
+				ttble.appendChild(tttr2);
+				ttble.appendChild(tttr3);
+				ttble.appendChild(tttr4);
+
+				aDIscpc.appendChild(ttble);
+			}
+
+			if(settings.spellControl || settings.showStopStartButton){
+
+				var btnSS = document.createElement("BUTTON");
+				btnSS.id = "btnSSid";
+				btnSS.style.background = 'rgb(255, 76, 76)';//'#333';
+				btnSS.style.fontFamily = 'Tahoma, Geneva, sans-serif';
+				btnSS.style.fontSize = '12px';
+				btnSS.style.padding = '5px 10px 5px 10px';
+				btnSS.style.color = '#fff';
+				btnSS.style.fontWeight = 'bold';
+				btnSS.style.borderRadius = '6px';
+				btnSS.style.boxShadow = '0 1px 3px rgba(0,0,0,0.5)';
+				btnSS.style.textShadow = '0 -1px 1px rgba(0,0,0,0.25)';
+				btnSS.style.borderBottom = '1px solid rgba(0,0,0,0.25)';
+				btnSS.style.cursor = 'pointer';
+				btnSS.style.borderLeft = 'none';
+				btnSS.style.borderTop = 'none';
+				btnSS.style.margin = '10px 0 10px 0';
+				btnSS.style.opacity = '0.8';
+
+				if(GM_getValue("botSS")){
+					btnSS.appendChild(document.createTextNode("-STOP-"));
+					btnSS.style.background = 'rgb(255, 76, 76)';
+				}else{
+					btnSS.appendChild(document.createTextNode("-START-"));
+					btnSS.style.background = 'rgb(86, 195, 51)';
+					
+				}
+
+				btnSS.addEventListener('click', function() {
+					if(GM_getValue("botSS")){
+						GM_setValue("botSS", false);
+						btnSS.textContent = "-START-";
+						btnSS.style.background = 'rgb(86, 195, 51)';
+					}else{
+						GM_setValue("botSS", true);
+						btnSS.textContent = "-STOP-";
+						btnSS.style.background = 'rgb(255, 76, 76)';
+						window.location.href = window.location.href;
+					}
+					
+				});
+
+				var ccter = document.createElement("CENTER");
+				ccter.appendChild(btnSS);
+
+				aDIscpc.appendChild(ccter);
+			}			
+			
+
+			document.body.appendChild(aDIscpc);
+		}
+
+    }
+
+		if (!document.getElementById('quickbar') && !document.querySelector('#riddleform div img[src*="riddlemaster.php"]') && !checkHaveOverchanrge()) {
+			//nothing..
+		}else{
+			genShowSellControl();   
+		}
+
+        })();
+    }
+	 /* ========== SPELL Control END ========== */
+
+
+
     /* ============ HV COUNTER PLUS =========== */
     if (settings.counterPlus) {
         (function(){
@@ -398,11 +705,234 @@ function OnPageReload() {
     }
     /* ========== HV COUNTER PLUS END ========= */
 
+	/* ============= SHOW LIST BATTLE ITEMS ============ */
+    if (settings.showBarListBattleItems) {
+        (function(){
+        
+			//bar show items
+			function getTrItem(item_no){
+
+				var xTrItem = document.createElement("TR");
+				var xTdItem = document.createElement("TD");
+				var xDivItem ;
+
+				//xDivItem = docGID('ikey_'+item_no).cloneNode(true);
+
+				xDivItem = document.querySelectorAll('div.bti3')[item_no].childNodes[1].cloneNode(true);
+
+				if(xDivItem.onclick !== null){
+					xDivItem.style.cursor = "pointer";
+				}else{
+					xDivItem.style.opacity = "0.4";
+				}
+				xDivItem.id = "xItems_"+item_no;
+
+				var itPosition = false;
+				var isElixir = false;
+
+				var clorI = 'rgb(128, 122, 0)';
+				var clorS = 'rgb(6, 138, 27)';
+
+				if(xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Health Draught"){
+					xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "D- HP";
+					xDivItem.querySelector('div.fd2').childNodes[0].style.color = "#FF0E1A";
+					xDivItem.querySelector('div.fd2').childNodes[0].style.fontWeight = "bolder";
+					itPosition = true;
+				}else if(xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Health Potion"){
+					xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "[P] HP";
+					xDivItem.querySelector('div.fd2').childNodes[0].style.color = "#FF0E1A";
+					xDivItem.querySelector('div.fd2').childNodes[0].style.fontWeight = "bolder";
+					itPosition = true;
+				}else if(xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Health Elixir"){
+					xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "(E) HP";
+					xDivItem.querySelector('div.fd2').childNodes[0].style.color = "#FF0E1A";
+					xDivItem.querySelector('div.fd2').childNodes[0].style.fontWeight = "bolder";
+					itPosition = true;
+					isElixir = true;
+				}else if(xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Mana Draught"){
+					xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "D- MP";
+					xDivItem.querySelector('div.fd2').childNodes[0].style.color = "#6374FF";
+					xDivItem.querySelector('div.fd2').childNodes[0].style.fontWeight = "bolder";
+					itPosition = true;
+				}else if(xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Mana Potion"){
+					xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "[P] MP";
+					xDivItem.querySelector('div.fd2').childNodes[0].style.color = "#6374FF";
+					xDivItem.querySelector('div.fd2').childNodes[0].style.fontWeight = "bolder";
+					itPosition = true;
+				}else if(xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Mana Elixir"){
+					xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "(E) MP";
+					xDivItem.querySelector('div.fd2').childNodes[0].style.color = "#6374FF";
+					xDivItem.querySelector('div.fd2').childNodes[0].style.fontWeight = "bolder";
+					itPosition = true;
+					isElixir = true;
+				}else if(xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Spirit Draught"){
+					xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "D- SP";
+					xDivItem.querySelector('div.fd2').childNodes[0].style.color = "#B3820A";
+					xDivItem.querySelector('div.fd2').childNodes[0].style.fontWeight = "bolder";
+					itPosition = true;
+				}else if(xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Spirit Potion"){
+					xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "[P] SP";
+					xDivItem.querySelector('div.fd2').childNodes[0].style.color = "#7D5A03";
+					xDivItem.querySelector('div.fd2').childNodes[0].style.fontWeight = "bolder";
+					itPosition = true;
+				}else if(xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Spirit Elixir"){
+					xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "(E) SP";
+					xDivItem.querySelector('div.fd2').childNodes[0].style.color = "#7D5A03";
+					xDivItem.querySelector('div.fd2').childNodes[0].style.fontWeight = "bolder";
+					itPosition = true;
+					isElixir = true;
+				}else if(xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Last Elixir"){
+					xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "(LE)";
+					xDivItem.querySelector('div.fd2').childNodes[0].style.color = "rgb(210, 113, 16)";
+					xDivItem.querySelector('div.fd2').childNodes[0].style.fontWeight = "bolder";
+					itPosition = true;
+					isElixir = true;
+				}else if(xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Energy Drink"){
+					xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "(EG)";
+					xDivItem.querySelector('div.fd2').childNodes[0].style.color = "#5cecf9";
+					xDivItem.querySelector('div.fd2').childNodes[0].style.fontWeight = "bolder";
+					itPosition = true;
+					isElixir = true;
+				}else if(xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Infusion of Flames"){
+					xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "(I-Flames)";
+					xDivItem.querySelector('div.fd2').childNodes[0].style.color = clorI;
+					itPosition = true;
+				}else if(xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Infusion of Frost"){
+					xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "(I-Frost)";
+					xDivItem.querySelector('div.fd2').childNodes[0].style.color = clorI;
+					itPosition = true;
+				}else if(xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Infusion of Lightning"){
+					xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "(I-Light)";
+					xDivItem.querySelector('div.fd2').childNodes[0].style.color = clorI;
+					itPosition = true;
+				}else if(xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Infusion of Storms"){
+					xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "(I-Storms)";
+					xDivItem.querySelector('div.fd2').childNodes[0].style.color = clorI;
+					itPosition = true;
+				}else if(xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Infusion of Divinity"){
+					xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "(I-Divin)";
+					xDivItem.querySelector('div.fd2').childNodes[0].style.color = clorI;
+					itPosition = true;
+				}else if(xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Infusion of Darkness"){
+					xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "(I-Dark)";
+					xDivItem.querySelector('div.fd2').childNodes[0].style.color = clorI;
+				}else if(xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Scroll of Swiftness"){
+					xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "(S-Swift)";
+					xDivItem.querySelector('div.fd2').childNodes[0].style.color = clorS;
+					itPosition = true;
+				}else if(xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Scroll of Protection"){
+					xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "(S-Protect)";
+					xDivItem.querySelector('div.fd2').childNodes[0].style.color = clorS;
+					itPosition = true;
+				}else if(xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Scroll of the Avatar"){
+					xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "(S-Avatar)";
+					xDivItem.querySelector('div.fd2').childNodes[0].style.color = clorS;
+					itPosition = true;
+				}else if(xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Scroll of Absorption"){
+					xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "(S-Abs)";
+					xDivItem.querySelector('div.fd2').childNodes[0].style.color = clorS;
+					itPosition = true;
+				}else if(xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Scroll of Shadows"){
+					xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "(S-Shadows)";
+					xDivItem.querySelector('div.fd2').childNodes[0].style.color = clorS;
+					itPosition = true;
+				}else if(xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Scroll of Life"){
+					xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "(S-Life)";
+					xDivItem.querySelector('div.fd2').childNodes[0].style.color = clorS;
+					itPosition = true;
+				}else if(xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Scroll of the Gods"){
+					xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "(S-Gods)";
+					xDivItem.querySelector('div.fd2').childNodes[0].style.color = clorS;
+					itPosition = true;
+				}
+
+
+				xTdItem.style.textAlign = "left";
+
+				var xDivT;
+				if(isElixir && xDivItem.style.opacity !== "0.4"){
+
+					xDivT = document.createElement("DIV");
+					xDivT.id="vxv";
+					xDivT.style.position = "absolute";
+					xDivT.style.cursor = "pointer";
+					xDivT.style.width = "100%";
+					xDivT.style.height = "20px";
+					xDivT.style.color = "#E3E0D1";
+					xDivT.style.zIndex = "1001";
+					var ddTTx = document.createTextNode(".");
+					xDivT.appendChild(ddTTx);
+					xDivT.addEventListener('click', function() {
+						if( confirm('Use Elixir ?') ){
+							if( this.parentNode.childNodes[1] ){
+								if( this.parentNode.childNodes[1].onclick !== null ){
+									this.parentNode.childNodes[1].click();
+								}
+							}
+
+						}
+						return false;
+					});
+
+					xTdItem.appendChild(xDivT);
+
+				}else{
+					xDivT = xDivItem;
+				}
+
+				if(itPosition){
+					xTdItem.style.height = "18px";
+					xTdItem.appendChild(xDivItem);
+				}else{
+					xTdItem.style.height = "30px";
+					xTdItem.appendChild(xDivItem);
+				}
+
+				xTrItem.appendChild(xTdItem);
+				return xTrItem;
+			}
+
+
+			if(document.querySelector('#divShowItems')){
+				var elem = document.querySelector('#divShowItems');
+                elem.parentNode.removeChild(elem);
+			}
+
+
+			var newDivShowItems = document.createElement("div");
+			newDivShowItems.id = "divShowItems";
+			newDivShowItems.style.position = "absolute";
+			newDivShowItems.style.top = "140px";
+			newDivShowItems.style.left = "1240px";
+			newDivShowItems.style.width = "80pxpx";
+			newDivShowItems.style.height = "100%";
+
+			var xTableItems = document.createElement("TABLE");
+
+			for(var wi=1; wi < 16 ;wi++){
+				if( document.querySelectorAll('div.bti3')[wi] ){
+					if( document.querySelectorAll('div.bti3')[wi].childNodes[1]){
+
+						xTableItems.appendChild(getTrItem(wi));
+					}
+				}
+			}
+
+			newDivShowItems.appendChild(xTableItems);
+
+			document.getElementsByClassName('stuffbox csp')[0].appendChild(newDivShowItems);
+
+        })();
+    }
+    /* =========== SHOW LIST BATTLE ITEMS END ========== */
+
+
+
 	/* ============= SHOW USE POTION ============ */
     if (settings.showUsePotion) {
         (function(){
         
-    var POTION_LIST = ['Draught','Potion','Elixir','Gem'];
+    var POTION_LIST = ['Draught','Potion','Elixir','Gem','Swiftness'];
 
     function clearCurrentLastTrack(){
 
@@ -438,6 +968,7 @@ function OnPageReload() {
                 if(arrayValue.length === 3){
                     if(POTION_LIST.indexOf(arrayValue[2]) !== -1){
                         var typePotion = arrayValue[1]+arrayValue[2];
+						typePotion = typePotion.replaceAll(' ','');
                         if('Gem' === arrayValue[2]){
                             typePotion = arrayValue[2];
                         }
@@ -456,33 +987,37 @@ function OnPageReload() {
 
     }
 
+     function genSHowUsePotion(){
 
+		var ttMMD = 'H-[ D(' + GM_getValue('HealthDraught') + ') P(' + GM_getValue('HealthPotion') + ') E(' + GM_getValue('HealthElixir') + ') ]'+ ' - ' + 'M-[ D(' + GM_getValue('ManaDraught') + ') P(' + GM_getValue('ManaPotion') + ') E(' + GM_getValue('ManaElixir') + ') ]' + ' - ' + 'S-[ D(' + GM_getValue('SpiritDraught') + ') P(' + GM_getValue('SpiritPotion') + ') E(' + GM_getValue('SpiritElixir') + ') ] L('+GM_getValue('LastElixir')+') G('+GM_getValue('Gem')+')'; // | Swif('+vSwift+')
 
-    function genSHowUsePotion(){
-        var aDIUseR = document.createElement('DIV');
-        aDIUseR.style.position = "absolute";
-        aDIUseR.style.top = "32px";
-        aDIUseR.style.left = "540px";
-        aDIUseR.style.backgroundColor = '#EDEBDF';
-        aDIUseR.style.opacity = '0.9';
-        aDIUseR.style.width = '460px';
-        aDIUseR.style.height = '14px';
+		if(document.getElementById('shUsPotionID')){
+			document.getElementById('shUsPotionID').textContent = ''+ttMMD;
+		}else{
+			var aDIUseR = document.createElement('DIV');
+			aDIUseR.style.position = "absolute";
+			aDIUseR.style.top = "32px";
+			aDIUseR.style.left = "540px";
+			aDIUseR.style.backgroundColor = '#EDEBDF';
+			aDIUseR.style.opacity = '0.9';
+			aDIUseR.style.width = '460px';
+			aDIUseR.style.height = '14px';
 
-        var lbIU = document.createElement("LABEL");
-        lbIU.style.color = '#5C0D11';
-        lbIU.style.fontFamily = "'Verdana','sans-serif'";
-        var ttMMD = 'H-[ D(' + GM_getValue('HealthDraught') + ') P(' + GM_getValue('HealthPotion') + ') E(' + GM_getValue('HealthElixir') + ') ]'+ ' - ' + 'M-[ D(' + GM_getValue('ManaDraught') + ') P(' + GM_getValue('ManaPotion') + ') E(' + GM_getValue('ManaElixir') + ') ]' + ' - ' + 'S-[ D(' + GM_getValue('SpiritDraught') + ') P(' + GM_getValue('SpiritPotion') + ') E(' + GM_getValue('SpiritElixir') + ') ] L('+GM_getValue('LastElixir')+') G('+GM_getValue('Gem')+')'; // | Swif('+vSwift+')
-        var tnIU = document.createTextNode(ttMMD);
+			var lbIU = document.createElement("LABEL");
+			lbIU.id = "shUsPotionID";
+			lbIU.style.color = '#5C0D11';
+			lbIU.style.fontFamily = "'Verdana','sans-serif'";
+			
+			var tnIU = document.createTextNode(ttMMD);
 
-        //if (!/random encounter/.test(document.getElementById("togpane_log").querySelector("tr:nth-last-child(2)").textContent)) {
-        if ((location.href + "").indexOf('s=Battle&ss=ba&encounter=') === -1) {
+			lbIU.appendChild(tnIU);
+			aDIUseR.appendChild(lbIU);
+			document.body.appendChild(aDIUseR);
+		}
+
+		if ((location.href + "").indexOf('s=Battle&ss=ba&encounter=') === -1) {
             GM_setValue("lastPotionsUse", ttMMD);
         }
-        //}
-
-        lbIU.appendChild(tnIU);
-        aDIUseR.appendChild(lbIU);
-        document.body.appendChild(aDIUseR);
 
     }
 
@@ -985,7 +1520,7 @@ function AI() {
         MAINTAIN_CHANNELING_BUFFS.push('heartseeker');
     }
 
-    MAINTAIN_CHANNELING_BUFFS.push('shadow veil');
+    //MAINTAIN_CHANNELING_BUFFS.push('shadow veil');
 
     if(getSelfHealth() < 60){
         MAINTAIN_CHANNELING_BUFFS.push('full cure');
@@ -1461,42 +1996,171 @@ function AI() {
     //will first see if anything is missing
     //then will check if there are any maintain buffs with under 20 left & cast the one with least time
     //otherwise will cast haste
-    if (checkForBuff('channeling') || getSelfMana() > 80) {
-        for (var s in MAINTAIN_CHANNELING_BUFFS) {
-            var t = MAINTAIN_CHANNELING_BUFFS[s];
-            if (!(checkForBuff(t))) {
-                console.log('decided to cast ' + t);
-                if(castSpell(t,0)){
-                    return;
-                }
-            }
-        }
-        for (var s2 in getBuffs()) {
-            var t2 = getBuffs()[s2];
-            /*
-	    if (getBuffDuration(s) > 8){
-		//console.log(t+' duration > 20');
-                //console.log('decided to cast haste');
-                //if(castSpell('haste',0)){
-                //    return;
-                //}
-            }else{
-	    */
-            if (getBuffDuration(s2) < 20){
-                if (MAINTAIN_CHANNELING_BUFFS.indexOf(t2)!=-1) {
-                    console.log('decided to cast ' + t2);
-                    if(castSpell(t2,0)){
-                        return;
-                    }
-                }
-            }
-        }
-    }else{
-        if (getGem() == 'mystic') {
-            useGem();
-            return;
-        }
-    }
+
+	var vUseScroll = false;
+
+	if(GM_getValue('spellSelect') < 3){
+		// user scroll
+
+		if(GM_getValue('spellSelect') === 1){
+			//-swiftness/shadow/protection/absorption/life
+			var listUseEff = ['hastened','shadow veil','protection','absorbing ward','spark of life'];
+			
+			for(var sc=0;sc<listUseEff.length;sc++){
+				var chkIndexScroll = -1;
+				var vEffn = listUseEff[sc];
+				if(!checkForBuff(vEffn)){
+
+					var nEffn = effScrollList.indexOf(vEffn);
+					chkIndexScroll = nextScroll(nEffn+1);
+					
+					if(chkIndexScroll !== -1){
+						useItem(chkIndexScroll);
+						return;
+					}else{
+						if(castSpell(vEffn,0)){
+							return;
+						}
+					}
+				}
+			}	
+			
+		}else if(GM_getValue('spellSelect') === 2){
+
+			//-avatar	[ 'hastened', 'protection' ]
+			//-god		[ 'absorbing ward', 'shadow veil', 'spark of life'***? ]
+			var listUseEff = ['hastened','absorbing ward'];
+			var listScrollEff = ['avatar','gods'];
+			
+			for(var sc=0;sc<listUseEff.length;sc++){
+				var chkIndexScroll = -1;
+				var vEffn = listUseEff[sc];
+				var vEffScroll = listScrollEff[sc];
+				if(!checkForBuff(vEffn)){
+
+					var nEffn = effScrollList.indexOf(vEffScroll);
+					chkIndexScroll = nextScroll(nEffn+1);
+					
+					if(chkIndexScroll !== -1){
+						useItem(chkIndexScroll);
+						return;
+					}else{
+						if(vEffn === 'hastened'){
+							if(castSpell('protection',0)){
+								return;
+							}
+
+							if(castSpell('hastened',0)){
+								return;
+							}
+						}else if(vEffn === 'absorbing ward'){
+							if(castSpell('spark of life',0)){
+								return;
+							}
+
+							if(castSpell('shadow veil',0)){
+								return;
+							}
+
+							if(castSpell('absorbing ward',0)){
+								return;
+							}
+						}
+					}
+				}
+			}
+
+			if(!checkForBuff('spark of life')){
+				if(castSpell('spark of life',0)){
+					return;
+				}
+			}
+
+		}else{
+			vUseScroll = true;
+		}
+	}else{
+		vUseScroll = true;
+	}
+
+	var effInfusionList = [
+		'infused flames',	'Infusion of Flames',
+		'infused frost',		'Infusion of Frost',
+		'infused lightning',		'Infusion of Lightning',
+		'infused storms',		'Infusion of Storms',
+		'infused divinity',	'Infusion of Divinity',
+		'infused darkness',	'Infusion of Darkness'
+	];
+
+	//["spirit shield", "spark of life", "shadow veil", "protection", "hastened", "infused flames"]
+
+	if(GM_getValue('checkInfusion')){
+		//'Infusion of Flames','Infusion of Frost','Infusion of Lightning','Infusion of Storms','Infusion of Divinity','Infusion of Darkness'
+		var listUseInfus = [];//['infused flames','infused frost','infused lightning','infused storms','infused divinity','infused darkness'];
+		//GM_getValue('currentInfusion');
+		listUseInfus.push(GM_getValue('currentInfusion'));
+
+		for(var ifi=0;ifi<listUseInfus.length;ifi++){
+			var chkIndexInfusion = -1;
+			var vEffInn = listUseEff[ifi];
+			if(!checkForBuff(vEffInn)){
+
+				var nEffInn = effInfusionList.indexOf(vEffInn);
+				chkIndexInfusion = nextInfusion(effInfusionList[nEffInn+1]);
+				
+				if(chkIndexInfusion !== -1){
+					useItem(chkIndexInfusion);
+					return;
+				}
+			}
+		}
+	}
+
+	if(vUseScroll){
+		if (checkForBuff('channeling') || getSelfMana() > 100) {
+			for (var s in MAINTAIN_CHANNELING_BUFFS) {
+				var t = MAINTAIN_CHANNELING_BUFFS[s];
+				if (!(checkForBuff(t))) {
+					console.log('decided to cast ' + t);
+					if(castSpell(t,0)){
+						return;
+					}
+				}
+			}
+			for (var s2 in getBuffs()) {
+				var t2 = getBuffs()[s2];
+				/*
+			if (getBuffDuration(s) > 8){
+			//console.log(t+' duration > 20');
+					//console.log('decided to cast haste');
+					//if(castSpell('haste',0)){
+					//    return;
+					//}
+				}else{
+			*/
+				if (getBuffDuration(s2) < 20){
+					if (MAINTAIN_CHANNELING_BUFFS.indexOf(t2)!=-1) {
+						console.log('decided to cast ' + t2);
+						if(castSpell(t2,0)){
+							return;
+						}
+					}
+				}
+			}
+		}else{
+			if (getGem() == 'mystic') {
+				useGem();
+				return;
+			}
+		}
+	}else{
+		if (getGem() == 'mystic') {
+			useGem();
+			return;
+		}
+	}
+
+    
 
 
 
@@ -1711,20 +2375,23 @@ function AI() {
     }
 
     //make sure all asked for buffs are up and running
-    for (var s3 in MAINTAIN_BUFFS) {
-        var t3 = MAINTAIN_BUFFS[s3];
-        if (!(checkForBuff(t3))) {
-            if (getGem() == 'mystic') {
-                useGem();
-                return;
-            }else{
-                console.log('decided to cast ' + t3);
-                if(castSpell(t3,0)){
-                    return;
-                }
-            }
-        }
-    }
+	if(vUseScroll){
+		for (var s3 in MAINTAIN_BUFFS) {
+			var t3 = MAINTAIN_BUFFS[s3];
+			if (!(checkForBuff(t3))) {
+				if (getGem() == 'mystic') {
+					useGem();
+					return;
+				}else{
+					console.log('decided to cast ' + t3);
+					if(castSpell(t3,0)){
+						return;
+					}
+				}
+			}
+		}
+	}
+    
 
     //get rid of spirit gems
     if (getGem()=='spirit') {
@@ -1752,7 +2419,10 @@ function fillForm(a,b,c,d) {
     console.log('console 1:' +b);
     console.log('console 2:' +c);
     console.log('console 3:' +d);
-    document.getElementById('battleform').submit();
+	GG_GO_AF_BREAK = true;
+	if(GB_BREAK_AUTO_BOT){
+		document.getElementById('battleform').submit();
+	}
 }
 
 function castSpell(spellName, target) {
@@ -1829,6 +2499,32 @@ function nextItem(vNameItem) {
     for (var i=1;i<=15;i++) {
         if (document.getElementById('ikey_'+i) !== null) {
             if(document.getElementById('ikey_'+i).childNodes[0].childNodes[0].textContent === vNameItem){
+                hvChk =  i;
+                break;
+            }
+        }
+    }
+    return hvChk;
+}
+
+function nextScroll(vNameItem) {
+    var hvChk = -1;
+    for (var i=1;i<=15;i++) {
+        if (document.getElementById('ikey_s'+i) !== null) {
+            if(document.getElementById('ikey_s'+i).childNodes[0].childNodes[0].textContent === vNameItem){
+                hvChk =  i;
+                break;
+            }
+        }
+    }
+    return hvChk;
+}
+
+function nextInfusion(vNameItem) {
+    var hvChk = -1;
+    for (var i=1;i<=15;i++) {
+        if (document.getElementById('ikey_n'+i) !== null) {
+            if(document.getElementById('ikey_n'+i).childNodes[0].childNodes[0].textContent === vNameItem){
                 hvChk =  i;
                 break;
             }
