@@ -1514,7 +1514,7 @@ function AI() {
     var CURE_HP_CUTOFF = 55;
 
     var ENABLE_HP_POTION = true; // true , false
-    var HP_ITEM_D_CUTOFF = 45;
+    var HP_ITEM_D_CUTOFF = 50;
     var HP_ITEM_P_CUTOFF = 35;
     var HP_ITEM_E_CUTOFF = 25;
 
@@ -1528,9 +1528,9 @@ function AI() {
     var MP_ITEM_E_CUTOFF = 15;
 
     var ENABLE_SP_POTION = true;
-    var SP_ITEM_D_CUTOFF = 55;
-    var SP_ITEM_P_CUTOFF = 32;
-    var SP_ITEM_E_CUTOFF = 5;
+    var SP_ITEM_D_CUTOFF = 75;
+    var SP_ITEM_P_CUTOFF = 50;
+    var SP_ITEM_E_CUTOFF = 25;
 
     var ENABLE_FLEE = false;
     var MP_CHK_FLEE = 22;  // MP < less than ?
