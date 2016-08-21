@@ -4,7 +4,7 @@
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @run-at      document-end
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version     1.3.3.25
+// @version     1.3.3.26
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @grant       none
@@ -4563,7 +4563,7 @@ if ( document.getElementById('togpane_log') ) {
 
 				GM_setValue('ScrollofSwiftness', 0);
 				GM_setValue('ScrollofProtection', 0);
-				GM_setValue('ScrollofAvatar', 0);
+				GM_setValue('ScrolloftheAvatar', 0);
 				GM_setValue('ScrollofAbsorption', 0);
 				GM_setValue('ScrollofShadows', 0);
 				GM_setValue('ScrollofLife', 0);
