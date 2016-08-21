@@ -4,7 +4,7 @@
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @run-at      document-end
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version     1.3.3.20
+// @version     1.3.3.21
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @grant       none
@@ -911,7 +911,7 @@ function OnPageReload() {
 
 			var xTableItems = document.createElement("TABLE");
 
-			for(var wi=1; wi < 16 ;wi++){
+			for(var wi=1; wi < document.querySelectorAll('div.bti3').length ;wi++){
 				if( document.querySelectorAll('div.bti3')[wi] ){
 					if( document.querySelectorAll('div.bti3')[wi].childNodes[1]){
 
