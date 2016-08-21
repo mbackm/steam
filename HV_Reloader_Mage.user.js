@@ -4,7 +4,7 @@
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @run-at      document-end
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version     1.3.3.21
+// @version     1.3.3.22
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @grant       none
@@ -808,7 +808,7 @@ function OnPageReload() {
 					xDivItem.querySelector('div.fd2').childNodes[0].style.color = clorI;
 					itPosition = true;
 				}else if(xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Infusion of Storms"){
-					xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "(I-Storms)";
+					xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "(I-Storm)";
 					xDivItem.querySelector('div.fd2').childNodes[0].style.color = clorI;
 					itPosition = true;
 				}else if(xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Infusion of Divinity"){
@@ -823,11 +823,11 @@ function OnPageReload() {
 					xDivItem.querySelector('div.fd2').childNodes[0].style.color = clorS;
 					itPosition = true;
 				}else if(xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Scroll of Protection"){
-					xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "(S-Protect)";
+					xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "(S-Prot)";
 					xDivItem.querySelector('div.fd2').childNodes[0].style.color = clorS;
 					itPosition = true;
 				}else if(xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Scroll of the Avatar"){
-					xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "(S-Avatar)";
+					xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "(S-Avat)";
 					xDivItem.querySelector('div.fd2').childNodes[0].style.color = clorS;
 					itPosition = true;
 				}else if(xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Scroll of Absorption"){
@@ -835,7 +835,7 @@ function OnPageReload() {
 					xDivItem.querySelector('div.fd2').childNodes[0].style.color = clorS;
 					itPosition = true;
 				}else if(xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Scroll of Shadows"){
-					xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "(S-Shadows)";
+					xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "(S-Shad)";
 					xDivItem.querySelector('div.fd2').childNodes[0].style.color = clorS;
 					itPosition = true;
 				}else if(xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Scroll of Life"){
@@ -1325,7 +1325,7 @@ function OnPageReload() {
 
 
 	/* ============== GOD AUTO ============= */
-    if (settings.godAuto) {
+    if (settings.godAuto  && GM_getValue("botSS")) {
         (function(){
 
     // Your code here...
@@ -2054,6 +2054,16 @@ function AI() {
     //otherwise will cast haste
 
 	var vUseScroll = false;
+
+	var effScrollList = [
+		'hastened',	'Scroll of Swiftness',
+		'shadow veil',		'Scroll of Shadows',
+		'protection',		'Scroll of Protection',
+		'absorbing ward',		'Scroll of Absorption',
+		'spark of life',	'Scroll of Life',
+		'avatar',	'Scroll of the Avatar',
+		'gods',	'Scroll of the Gods'
+	];
 
 	if(GM_getValue('spellSelect') < 3){
 		// user scroll
