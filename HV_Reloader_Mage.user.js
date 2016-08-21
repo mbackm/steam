@@ -4,7 +4,7 @@
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @run-at      document-end
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version     1.3.3.19
+// @version     1.3.3.20
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @grant       none
@@ -330,7 +330,8 @@ function OnPageReload() {
 			aDIscpc.id = "aDIscpcID";
 			aDIscpc.style.position = "absolute";
 			aDIscpc.style.top = "8px";
-			aDIscpc.style.right = "20px";
+			//aDIscpc.style.right = "20px";
+			aDIscpc.style.left = "1240px";
 			aDIscpc.style.backgroundColor = '#E3E0D1';
 			aDIscpc.style.opacity = '1';
 			aDIscpc.style.width = '80px';
@@ -577,7 +578,8 @@ function OnPageReload() {
 			}			
 			
 
-			document.body.appendChild(aDIscpc);
+			//document.body.appendChild(aDIscpc);
+			document.getElementsByClassName('stuffbox csp')[0].appendChild(aDIscpc);
 		}
 
     }
