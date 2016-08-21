@@ -4,7 +4,7 @@
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @run-at      document-end
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version     1.3.3.22
+// @version     1.3.3.23
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @grant       none
@@ -954,7 +954,7 @@ function OnPageReload() {
 
 		GM_setValue('ScrollofSwiftness', 0);
 		GM_setValue('ScrollofProtection', 0);
-		GM_setValue('ScrollofAvatar', 0);
+		GM_setValue('ScrolloftheAvatar', 0);
 		GM_setValue('ScrollofAbsorption', 0);
 		GM_setValue('ScrollofShadows', 0);
 		GM_setValue('ScrollofLife', 0);
@@ -1015,7 +1015,7 @@ function OnPageReload() {
 
 		var ttMMD = 'H-[ D(' + GM_getValue('HealthDraught') + ') P(' + GM_getValue('HealthPotion') + ') E(' + GM_getValue('HealthElixir') + ') ]'+ ' - ' + 'M-[ D(' + GM_getValue('ManaDraught') + ') P(' + GM_getValue('ManaPotion') + ') E(' + GM_getValue('ManaElixir') + ') ]' + ' - ' + 'S-[ D(' + GM_getValue('SpiritDraught') + ') P(' + GM_getValue('SpiritPotion') + ') E(' + GM_getValue('SpiritElixir') + ') ] L('+GM_getValue('LastElixir')+') G('+GM_getValue('Gem')+')'; // | Swif('+vSwift+')
 
-		var ttSc = 'Sc-[ Swif(' + GM_getValue('ScrollofSwiftness') + ') Pro(' + GM_getValue('ScrollofProtection') + ') Ava(' + GM_getValue('ScrollofAvatar') + ') Abs(' + GM_getValue('ScrollofAbsorption') + ') Sha(' + GM_getValue('ScrollofShadows') + ') Life(' + GM_getValue('ScrollofLife') + ') Gods(' + GM_getValue('ScrolloftheGods') + ') ]';
+		var ttSc = 'Sc-[ Swif(' + GM_getValue('ScrollofSwiftness') + ') Pro(' + GM_getValue('ScrollofProtection') + ') Ava(' + GM_getValue('ScrolloftheAvatar') + ') Abs(' + GM_getValue('ScrollofAbsorption') + ') Sha(' + GM_getValue('ScrollofShadows') + ') Life(' + GM_getValue('ScrollofLife') + ') Gods(' + GM_getValue('ScrolloftheGods') + ') ]';
 		var ttInf = 'Inf-[ Fl(' + GM_getValue('InfusionofFlames') + ') Fr(' + GM_getValue('InfusionofFrost') + ') Li(' + GM_getValue('InfusionofLightning') + ') St(' + GM_getValue('InfusionofStorms') + ') Di(' + GM_getValue('InfusionofDivinity') + ') Da(' + GM_getValue('InfusionofDarkness') + ') ]';
 
 
