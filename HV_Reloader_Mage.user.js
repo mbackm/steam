@@ -4,7 +4,7 @@
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @run-at      document-end
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version     1.3.3.23
+// @version     1.3.3.24
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @grant       none
@@ -2080,6 +2080,15 @@ function AI() {
 
 					var nEffn = effScrollList.indexOf(vEffn);
 					chkIndexScroll = nextScroll(effScrollList[nEffn+1]);
+
+					if(chkIndexScroll === -1){
+						chkIndexScroll = nextItem(effScrollList[nEffn+1);
+
+						if(chkIndexScroll !== -1){
+							useItem(chkIndexScroll);
+							return;
+						}
+					}
 					
 					if(chkIndexScroll !== -1){
 						useItemClick('ikey_s'+chkIndexScroll);
@@ -2092,7 +2101,7 @@ function AI() {
 						}
 					}
 				}
-			}	
+			}
 			
 		}else if(GM_getValue('spellSelect') === 2){
 
@@ -2109,6 +2118,15 @@ function AI() {
 
 					var nEffn = effScrollList.indexOf(vEffScroll);
 					chkIndexScroll = nextScroll(effScrollList[nEffn+1]);
+
+					if(chkIndexScroll === -1){
+						chkIndexScroll = nextItem(effScrollList[nEffn+1);
+
+						if(chkIndexScroll !== -1){
+							useItem(chkIndexScroll);
+							return;
+						}
+					}
 					
 					if(chkIndexScroll !== -1){
 						useItemClick('ikey_s'+chkIndexScroll);
@@ -2195,6 +2213,15 @@ function AI() {
 
 				var nEffInn = effInfusionList.indexOf(vEffInn);
 				chkIndexInfusion = nextInfusion(effInfusionList[nEffInn+1]);
+
+				if(chkIndexInfusion === -1){
+					chkIndexInfusion = nextItem(effInfusionList[nEffInn+1);
+
+					if(chkIndexInfusion !== -1){
+						useItem(chkIndexInfusion);
+						return;
+					}
+				}
 				
 				if(chkIndexInfusion !== -1){
 					useItemClick('ikey_n'+chkIndexInfusion);
