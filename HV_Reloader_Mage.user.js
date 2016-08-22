@@ -427,6 +427,7 @@ function OnPageReload() {
 					selex.style.width = '60px';
 					selex.style.webkitAppearance = 'none';
 					selex.style.background = '#ffc8c8';
+					selex.setAttribute("title", "infuse list");
 					selex.addEventListener('change', function() {
 						GM_setValue("currentInfusion", selex.value);
 					});
