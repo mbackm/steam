@@ -28,6 +28,7 @@
 // No Blinking              : HV Stat
 // HV Counter Plus          : OMP, Superlatanium
 // HV State HP              : tatarime
+// BOT						: ?? bAttack(t)
 
 /* ======================================== *\
  * ============= CONFIGURATION ============ *
@@ -2003,7 +2004,7 @@ function AI() {
             //Magic
 
             //Fight boss
-            var bossId = chooseTargetBoss();
+            //var bossId = chooseTargetBoss();
             var monForMage = chooseTargetForMAGE();
             var spell_list = ['ragnarok', 'disintegrate', 'corruption'];// selectSpellWithMonEff(monForMage);
           
