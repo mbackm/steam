@@ -2276,7 +2276,7 @@ function AI() {
 		*/
 			var gDura = getBuffDuration(s2);
 			if (gDura > 0 && gDura < 20){
-				if (MAINTAIN_CHANNELING_BUFFS.indexOf(t2)!=-1) {
+				if (MAINTAIN_CHANNELING_BUFFS.indexOf(t2)!== -1 && (effScrollList.indexOf(t2) === -1 || vUseScroll)) {
 					console.log('decided to cast ' + t2);
 					if(castSpell(t2,0)){
 						return;
