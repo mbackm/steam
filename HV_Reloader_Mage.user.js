@@ -4,7 +4,7 @@
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @run-at      document-end
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version     1.3.3.33
+// @version     1.3.3.34
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @grant       none
@@ -162,6 +162,11 @@ String.prototype.replaceAll = function(search, replacement) {
         return target.replace(new RegExp(search, 'g'), replacement);
     };
 
+
+
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
 /* ======================================== *\
  * ============= INITIAL LOAD ============= *
@@ -3010,10 +3015,6 @@ function getQueryVariableEX(variable, vHref) {
             return pair[1];
         }
     }
-}
-
-function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 function addShortcutAnswer(){
