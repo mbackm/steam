@@ -4,7 +4,7 @@
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @run-at      document-end
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version     1.3.3.30
+// @version     1.3.3.31
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @grant       none
@@ -509,7 +509,7 @@ function OnPageReload() {
 					lbMelee.style.color = '#5C0D11';
 					lbMelee.style.fontFamily = "'Verdana','sans-serif'";
 					lbMelee.setAttribute("title", "avatar/gods");
-					lbMelee.appendChild(document.createTextNode('Melee Mode'));
+					lbMelee.appendChild(document.createTextNode('Melee'));
 				}
 
 
@@ -2033,7 +2033,7 @@ function AI() {
     //given we want to attack something, choose how we attack it and lock that action
     function bAttack(t) {
 
-		if(difficulty === 'PFUDOR' && enableUseImperil && !meleeMode){
+		if(difficulty === 'PFUDOR' && enableUseImperil && !GM_getValue('meleeMode')){
 
 			for (var sb in MAIN_SPELL_MONSTER) {
 				var tb = MAIN_SPELL_MONSTER[sb];
@@ -2055,7 +2055,7 @@ function AI() {
           
             //Fight normal
 
-			if(!meleeMode){
+			if(!GM_getValue('meleeMode')){
 				for(var s=0;s<(spell_list.length*5);s++){
 					var iRdSpell = getRandomInt(0,(spell_list.length-1));
 					if(castSpell(spell_list[iRdSpell],monForMage)){
