@@ -4,7 +4,7 @@
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @run-at      document-end
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version     1.3.3.36
+// @version     1.3.3.37
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @grant       none
@@ -3890,8 +3890,6 @@ function addAnswerButton() {
     newDivOptionsX.appendChild(btnAnswerC);
 
     document.getElementsByClassName('stuffbox csp')[0].appendChild(newDivOptionsX);
-
-    addAnswerImage();
 
     var vRandomAns = "B";
     var ansRR = ['A', 'B', 'C'];
