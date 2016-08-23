@@ -494,7 +494,7 @@ function OnPageReload() {
 
 
 				//meleeMode zone
-				if (STYLE=='mage') {
+				if (document.getElementById('2501')) {
 					var cbMelee = document.createElement("INPUT");
 						cbMelee.id = 'cbInfuID';
 						cbMelee.setAttribute("type", "checkbox");
@@ -541,7 +541,7 @@ function OnPageReload() {
 				tttr3.appendChild(tttd31);
 				tttr3.appendChild(tttd32);
 
-				if (STYLE=='mage') {
+				if (document.getElementById('2501')) {
 					var tttr3m = document.createElement("TR");
 					var tttd3m1 = document.createElement("TD");
 					var tttd3m2 = document.createElement("TD");
@@ -562,7 +562,7 @@ function OnPageReload() {
 				ttble.appendChild(tttr1);
 				ttble.appendChild(tttr2);
 				ttble.appendChild(tttr3);
-				if (STYLE=='mage') {
+				if (document.getElementById('2501')) {
 					ttble.appendChild(tttr3m);
 				}
 				ttble.appendChild(tttr4);
