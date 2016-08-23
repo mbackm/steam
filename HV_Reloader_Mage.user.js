@@ -4,7 +4,7 @@
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @run-at      document-end
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version     1.3.3.31
+// @version     1.3.3.32
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @grant       none
@@ -341,7 +341,12 @@ function OnPageReload() {
 			aDIscpc.style.backgroundColor = '#E3E0D1';
 			aDIscpc.style.opacity = '1';
 			aDIscpc.style.width = '80px';
-			aDIscpc.style.height = '130px';
+
+			if (document.getElementById('2501')) {
+				aDIscpc.style.height = '150px';
+			}else{
+				aDIscpc.style.height = '130px';
+			}
 
 			/*
 			aDIscpc.addEventListener('mouseover', function() {
@@ -501,7 +506,7 @@ function OnPageReload() {
 						if(meleeMode){
 							cbMelee.setAttribute("checked", "true");
 						}
-						cbInfu.addEventListener('change', function() {
+						cbMelee.addEventListener('change', function() {
 							GM_setValue("meleeMode", cbMelee.checked);
 						});
 
@@ -946,7 +951,11 @@ function OnPageReload() {
 			var newDivShowItems = document.createElement("div");
 			newDivShowItems.id = "divShowItems";
 			newDivShowItems.style.position = "absolute";
-			newDivShowItems.style.top = "140px";
+			if (document.getElementById('2501')) {
+				newDivShowItems.style.top = "160px";
+			}else{
+				newDivShowItems.style.top = "140px";
+			}
 			newDivShowItems.style.left = "1240px";
 			newDivShowItems.style.width = "80pxpx";
 			newDivShowItems.style.height = "100%";
