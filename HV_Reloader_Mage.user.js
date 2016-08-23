@@ -4,7 +4,7 @@
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @run-at      document-end
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version     1.3.3.32
+// @version     1.3.3.33
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @grant       none
@@ -2165,9 +2165,9 @@ function AI() {
 
 			//-avatar	[ 'hastened', 'protection' ]
 			//-god		[ 'absorbing ward', 'shadow veil', 'spark of life'***? ]
-			var listUseEff = ['hastened','shadow veil'];
-			var listScrollEff = ['avatar','gods'];
-			
+			var listUseEff = ['shadow veil','hastened'];
+			var listScrollEff = ['gods','avatar'];
+			var doRoundTwo = false;
 			for(var sc=0;sc<listUseEff.length;sc++){
 				var chkIndexScroll = -1;
 				var vEffn = listUseEff[sc];
@@ -2226,6 +2226,7 @@ function AI() {
 				}
 			}
 
+			
 			if(!checkForBuff('spark of life')){
 				if(castSpell('spark of life',0)){
 					return;
@@ -2237,6 +2238,7 @@ function AI() {
 					return;
 				}
 			}
+			
 
 		}else{
 			vUseScroll = true;
