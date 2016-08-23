@@ -2256,7 +2256,7 @@ function AI() {
 	if (checkForBuff('channeling') || getSelfMana() > 190 || (getGem()=='mana' && getSelfMana() > 70 )) {
 		for (var s in MAINTAIN_CHANNELING_BUFFS) {
 			var t = MAINTAIN_CHANNELING_BUFFS[s];
-			if (!(checkForBuff(t)) && (effScrollList.indexOf(MAINTAIN_CHANNELING_BUFFS[s] === -1 || vUseScroll) ) {
+			if (!(checkForBuff(t)) && (effScrollList.indexOf(MAINTAIN_CHANNELING_BUFFS[s]) === -1 || vUseScroll) ) {
 				//console.log('decided to cast ' + t);
 				if(castSpell(t,0)){
 					return;
@@ -2516,7 +2516,7 @@ function AI() {
 	//if(vUseScroll){
 		for (var s3 in MAINTAIN_BUFFS) {
 			var t3 = MAINTAIN_BUFFS[s3];
-			if (!(checkForBuff(t3)) && (effScrollList.indexOf(MAINTAIN_BUFFS[s3] === -1 || vUseScroll)) {
+			if (!(checkForBuff(t3)) && (effScrollList.indexOf(MAINTAIN_BUFFS[s3]) === -1 || vUseScroll)) {
 				if (getGem() == 'mystic') {
 					useGem();
 					return;
