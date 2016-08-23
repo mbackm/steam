@@ -1626,7 +1626,7 @@ function AI() {
 	var	lowerHPAlert = 15;
     if (STYLE=='mage') {
         MAINTAIN_CHANNELING_BUFFS.push('arcane focus');
-		lowerHPAlert = 30;
+		lowerHPAlert = 35;
     }else{
         MAINTAIN_CHANNELING_BUFFS.push('heartseeker');
     }
