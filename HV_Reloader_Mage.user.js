@@ -4,7 +4,7 @@
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @run-at      document-end
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version     1.3.3.27
+// @version     1.3.3.28
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @grant       none
@@ -2071,6 +2071,7 @@ function AI() {
 		'gods',	'Scroll of the Gods'
 	];
 
+
 	if(GM_getValue('spellSelect') < 3){
 		// user scroll
 
@@ -2237,6 +2238,7 @@ function AI() {
 		}
 	}
 
+	/*
 	if(!vUseScroll){
 		MAINTAIN_CHANNELING_BUFFS = ['regen','spirit shield'];
 		if (STYLE=='mage') {
@@ -2249,11 +2251,12 @@ function AI() {
         MAINTAIN_CHANNELING_BUFFS.push('cure');
 
 	}
+	*/
 
 	if (checkForBuff('channeling') || getSelfMana() > 190 || (getGem()=='mana' && getSelfMana() > 70 )) {
 		for (var s in MAINTAIN_CHANNELING_BUFFS) {
 			var t = MAINTAIN_CHANNELING_BUFFS[s];
-			if (!(checkForBuff(t))) {
+			if (!(checkForBuff(t)) && (effScrollList.indexOf(MAINTAIN_CHANNELING_BUFFS[s] === -1 || vUseScroll) ) {
 				//console.log('decided to cast ' + t);
 				if(castSpell(t,0)){
 					return;
@@ -2508,10 +2511,12 @@ function AI() {
     }
 
     //make sure all asked for buffs are up and running
-	if(vUseScroll){
+	//MAINTAIN_BUFFS = ['regen','arcane focus']
+	//effScrollList.indexOf(MAINTAIN_BUFFS[1])
+	//if(vUseScroll){
 		for (var s3 in MAINTAIN_BUFFS) {
 			var t3 = MAINTAIN_BUFFS[s3];
-			if (!(checkForBuff(t3))) {
+			if (!(checkForBuff(t3)) && (effScrollList.indexOf(MAINTAIN_BUFFS[s3] === -1 || vUseScroll)) {
 				if (getGem() == 'mystic') {
 					useGem();
 					return;
@@ -2523,7 +2528,7 @@ function AI() {
 				}
 			}
 		}
-	}
+	//}
     
 
     //get rid of spirit gems
