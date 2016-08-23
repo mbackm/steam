@@ -4,7 +4,7 @@
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @run-at      document-end
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version     1.3.3.26
+// @version     1.3.3.27
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @grant       none
@@ -1534,6 +1534,8 @@ function AI() {
     var SP_ITEM_P_CUTOFF = 50;
     var SP_ITEM_E_CUTOFF = 25;
 
+	var ENABALE_LE_POTION = true;
+
     var ENABLE_FLEE = false;
     var MP_CHK_FLEE = 22;  // MP < less than ?
     var HP_CHK_FLEE = 40;  // and HP > more than ? exit fight.
@@ -1572,8 +1574,10 @@ function AI() {
     var MAINTAIN_CHANNELING_BUFFS = ['hastened','protection','spark of life','regen','spirit shield','absorbing ward'];
 
     //customize above settings per style!
+	var	lowerHPAlert = 15;
     if (STYLE=='mage') {
         MAINTAIN_CHANNELING_BUFFS.push('arcane focus');
+		lowerHPAlert = 30;
     }else{
         MAINTAIN_CHANNELING_BUFFS.push('heartseeker');
     }
@@ -2233,41 +2237,48 @@ function AI() {
 		}
 	}
 
-	if(vUseScroll){
-		if (checkForBuff('channeling') || getSelfMana() > 100) {
-			for (var s in MAINTAIN_CHANNELING_BUFFS) {
-				var t = MAINTAIN_CHANNELING_BUFFS[s];
-				if (!(checkForBuff(t))) {
-					console.log('decided to cast ' + t);
-					if(castSpell(t,0)){
+	if(!vUseScroll){
+		MAINTAIN_CHANNELING_BUFFS = ['regen','spirit shield'];
+		if (STYLE=='mage') {
+			MAINTAIN_CHANNELING_BUFFS.push('arcane focus');
+		}else{
+			MAINTAIN_CHANNELING_BUFFS.push('heartseeker');
+		}
+
+		MAINTAIN_CHANNELING_BUFFS.push('full cure');
+        MAINTAIN_CHANNELING_BUFFS.push('cure');
+
+	}
+
+	if (checkForBuff('channeling') || getSelfMana() > 190 || (getGem()=='mana' && getSelfMana() > 70 )) {
+		for (var s in MAINTAIN_CHANNELING_BUFFS) {
+			var t = MAINTAIN_CHANNELING_BUFFS[s];
+			if (!(checkForBuff(t))) {
+				//console.log('decided to cast ' + t);
+				if(castSpell(t,0)){
+					return;
+				}
+			}
+		}
+		for (var s2 in getBuffs()) {
+			var t2 = getBuffs()[s2];
+			/*
+		if (getBuffDuration(s) > 8){
+		//console.log(t+' duration > 20');
+				//console.log('decided to cast haste');
+				//if(castSpell('haste',0)){
+				//    return;
+				//}
+			}else{
+		*/
+			var gDura = getBuffDuration(s2);
+			if (gDura > 0 && gDura < 20){
+				if (MAINTAIN_CHANNELING_BUFFS.indexOf(t2)!=-1) {
+					console.log('decided to cast ' + t2);
+					if(castSpell(t2,0)){
 						return;
 					}
 				}
-			}
-			for (var s2 in getBuffs()) {
-				var t2 = getBuffs()[s2];
-				/*
-			if (getBuffDuration(s) > 8){
-			//console.log(t+' duration > 20');
-					//console.log('decided to cast haste');
-					//if(castSpell('haste',0)){
-					//    return;
-					//}
-				}else{
-			*/
-				if (getBuffDuration(s2) < 20){
-					if (MAINTAIN_CHANNELING_BUFFS.indexOf(t2)!=-1) {
-						console.log('decided to cast ' + t2);
-						if(castSpell(t2,0)){
-							return;
-						}
-					}
-				}
-			}
-		}else{
-			if (getGem() == 'mystic') {
-				useGem();
-				return;
 			}
 		}
 	}else{
@@ -2276,9 +2287,6 @@ function AI() {
 			return;
 		}
 	}
-
-    
-
 
 
     //check for use mana potion
@@ -2464,7 +2472,15 @@ function AI() {
 	}
 	
 
-    if(getSelfHealth() < 15 && !isSOL){
+    if(getSelfHealth() < lowerHPAlert && !isSOL){
+		if(ENABALE_LE_POTION){
+			var indexItemLE = nextItem('Last Elixir');
+            if(indexItemLE !== -1){
+                useItem(indexItemLE);
+                return;
+            }
+		}
+
         actionBeep(false,false);
         return;
     }
@@ -2724,7 +2740,7 @@ function getDescs() {
 function getBuffDuration(n) {
     try {
         //return document.getElementById('mainpane').children[1].children[0].children[n].attributes.item(1).value.split(',')[3].split(' ')[1].split(')')[0];
-        var duration = document.getElementById('mainpane').children[1].children[0].children[n].getAttribute('onmouseover').split(',')[2].split(' ')[1].split(')')[0];
+        var duration = document.getElementById('mainpane').children[1].children[0].children[n].getAttribute('onmouseover').split("',")[2].split(' ')[1].split(')')[0];
 
         if(isNaN(parseInt(duration))){
             duration = 0;
@@ -3523,6 +3539,12 @@ function actionBeep(enableSound,isBattleDone) {
         var a = new Audio('http://www.soundsnap.com/themes/soundsnap2/assets/mp3/please-refresh.mp3');
         a.play();
     }
+
+	if(!enableSound && !isBattleDone){
+		var c = new Audio('https://dl.dropboxusercontent.com/u/10739586/Outkast%20-%20Hey%20Ya!%20(mp3cut.net).mp3');
+			c.loop = "true";
+			c.play()
+	}
 }
 
 function verifyAnswer(vvSkipvv) {
