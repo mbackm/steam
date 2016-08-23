@@ -4559,7 +4559,10 @@ if(settings.enableCheckPony){
 			}
 
 			if(settings.enablePopupAlert){
-				window.open('https://dl.dropboxusercontent.com/u/10739586/Outkast%20-%20Hey%20Ya!%20(mp3cut.net).mp3', '_blank');
+				//window.open('https://dl.dropboxusercontent.com/u/10739586/Outkast%20-%20Hey%20Ya!%20(mp3cut.net).mp3', '_blank');
+
+				window.open('https://ehwiki.org/images/5/53/Ponychart.jpg', '_blank');
+
 			}
 
 		    if (document.getElementById('monsterpane') !== null) {
