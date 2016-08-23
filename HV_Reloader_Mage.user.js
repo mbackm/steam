@@ -4,7 +4,7 @@
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @run-at      document-end
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version     1.3.3.28
+// @version     1.3.3.30
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @grant       none
@@ -322,6 +322,11 @@ function OnPageReload() {
 	if(!currentInfusion){
 		GM_setValue("currentInfusion", "infused flames");
 	}
+
+	var meleeMode = GM_getValue('meleeMode');
+	if(!meleeMode){
+		GM_setValue("meleeMode", false);
+	}
 	
 
 
@@ -487,6 +492,28 @@ function OnPageReload() {
 				selex.appendChild(option5);
 				selex.appendChild(option6);
 
+
+				//meleeMode zone
+				if (STYLE=='mage') {
+					var cbMelee = document.createElement("INPUT");
+						cbMelee.id = 'cbInfuID';
+						cbMelee.setAttribute("type", "checkbox");
+						if(meleeMode){
+							cbMelee.setAttribute("checked", "true");
+						}
+						cbInfu.addEventListener('change', function() {
+							GM_setValue("meleeMode", cbMelee.checked);
+						});
+
+					var lbMelee = document.createElement("LABEL");
+					lbMelee.style.color = '#5C0D11';
+					lbMelee.style.fontFamily = "'Verdana','sans-serif'";
+					lbMelee.setAttribute("title", "avatar/gods");
+					lbMelee.appendChild(document.createTextNode('Melee Mode'));
+				}
+
+
+
 				// table zone
 				var ttble = document.createElement("TABLE");
 
@@ -514,6 +541,16 @@ function OnPageReload() {
 				tttr3.appendChild(tttd31);
 				tttr3.appendChild(tttd32);
 
+				if (STYLE=='mage') {
+					var tttr3m = document.createElement("TR");
+					var tttd3m1 = document.createElement("TD");
+					var tttd3m2 = document.createElement("TD");
+					tttd3m1.appendChild(cbMelee);
+					tttd3m2.appendChild(lbMelee);
+					tttr3m.appendChild(tttd3m1);
+					tttr3m.appendChild(tttd3m2);
+				}
+
 				var tttr4 = document.createElement("TR");
 				var tttd41 = document.createElement("TD");
 				var tttd42 = document.createElement("TD");
@@ -525,6 +562,9 @@ function OnPageReload() {
 				ttble.appendChild(tttr1);
 				ttble.appendChild(tttr2);
 				ttble.appendChild(tttr3);
+				if (STYLE=='mage') {
+					ttble.appendChild(tttr3m);
+				}
 				ttble.appendChild(tttr4);
 
 				aDIscpc.appendChild(ttble);
@@ -1993,7 +2033,7 @@ function AI() {
     //given we want to attack something, choose how we attack it and lock that action
     function bAttack(t) {
 
-		if(difficulty === 'PFUDOR' && enableUseImperil){
+		if(difficulty === 'PFUDOR' && enableUseImperil && !meleeMode){
 
 			for (var sb in MAIN_SPELL_MONSTER) {
 				var tb = MAIN_SPELL_MONSTER[sb];
@@ -2015,18 +2055,20 @@ function AI() {
           
             //Fight normal
 
-            for(var s=0;s<(spell_list.length*5);s++){
-                var iRdSpell = getRandomInt(0,(spell_list.length-1));
-                if(castSpell(spell_list[iRdSpell],monForMage)){
-                    return;
-                }
-            }
+			if(!meleeMode){
+				for(var s=0;s<(spell_list.length*5);s++){
+					var iRdSpell = getRandomInt(0,(spell_list.length-1));
+					if(castSpell(spell_list[iRdSpell],monForMage)){
+						return;
+					}
+				}
 
-            for(var sz=0;sz<spell_list.length;sz++){
-                if(castSpell(spell_list[sz],monForMage)){
-                    return;
-                }
-            }
+				for(var sz=0;sz<spell_list.length;sz++){
+					if(castSpell(spell_list[sz],monForMage)){
+						return;
+					}
+				}
+			}
 
             attack(chooseTarget(false));
             return;
