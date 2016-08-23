@@ -1581,7 +1581,7 @@ function AI() {
     var ENABLE_SP_POTION = true;
     var SP_ITEM_D_CUTOFF = 75;
     var SP_ITEM_P_CUTOFF = 50;
-    var SP_ITEM_E_CUTOFF = 25;
+    var SP_ITEM_E_CUTOFF = 30;
 
 	var ENABALE_LE_POTION = true;
 
