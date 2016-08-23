@@ -2226,7 +2226,7 @@ function AI() {
 				}
 			}
 
-			
+			/*
 			if(!checkForBuff('spark of life')){
 				if(castSpell('spark of life',0)){
 					return;
@@ -2238,6 +2238,7 @@ function AI() {
 					return;
 				}
 			}
+			*/
 			
 
 		}else{
