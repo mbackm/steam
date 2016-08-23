@@ -40,7 +40,7 @@ var settings = {
 	showStopStartButton: true,	// Show Stop Start button
 	showBarListBattleItems: true,	// Show list battle items
 	enableCheckPony: true,		// enable check alert pony
-	enableOfflineSong: false,	// enable offline song
+	enableOfflineSong: true,	// enable offline song
 	enablePopupAlert: true,		// enable popup alert
 	enableGFslowGEM: true,		// enable Grindfest use GEM slow
     hideWelcome: true,          // Hide the "Welcome to the Hentaiverse" image/logo
@@ -4554,8 +4554,8 @@ function playAudio() {
 if(settings.enableCheckPony){
 		if (checkPony()) {
 				//http://www.soundsnap.com/audio/play/17604
-			a = new Audio('http://www.soundsnap.com/themes/soundsnap2/assets/mp3/please-refresh.mp3');
-			a.play();
+			//a = new Audio('http://www.soundsnap.com/themes/soundsnap2/assets/mp3/please-refresh.mp3');
+			//a.play();
 
 			if(settings.enableOfflineSong && currentSong !== ''){
 				var bs = new Audio(currentSong);
