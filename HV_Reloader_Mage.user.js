@@ -1615,17 +1615,18 @@ function AI() {
 
     var MAINTAIN_BUFFS = ['regen','arcane focus'];//['hastened','protection','spark of life','spirit shield','regen'];
 
-    if(getMaxSelfMana() > 500){
+    //if(getMaxSelfMana() > 500){
         //MAINTAIN_BUFFS.push('spark of life');
         //MAINTAIN_BUFFS.push('spirit shield');
-    }
+    //}
 
-    var MAINTAIN_CHANNELING_BUFFS = ['hastened','protection','spark of life','regen','spirit shield','absorbing ward'];
+    var MAINTAIN_CHANNELING_BUFFS = []; //['hastened','protection','spark of life','regen','spirit shield','absorbing ward'];
 
     //customize above settings per style!
 	var	lowerHPAlert = 15;
     if (STYLE=='mage') {
-        MAINTAIN_CHANNELING_BUFFS.push('arcane focus');
+        //MAINTAIN_CHANNELING_BUFFS.push('arcane focus');
+		MAINTAIN_CHANNELING_BUFFS.push('absorbing ward');
 		lowerHPAlert = 35;
     }else{
         MAINTAIN_CHANNELING_BUFFS.push('heartseeker');
@@ -1634,8 +1635,8 @@ function AI() {
     //MAINTAIN_CHANNELING_BUFFS.push('shadow veil');
 
     if(getSelfHealth() < 60){
-        MAINTAIN_CHANNELING_BUFFS.push('full cure');
-        MAINTAIN_CHANNELING_BUFFS.push('cure');
+        //MAINTAIN_CHANNELING_BUFFS.push('full cure');
+        //MAINTAIN_CHANNELING_BUFFS.push('cure');
     }
 
     var MAIN_SPELL_MONSTER = ['imperil'];//['weaken','slow'];
