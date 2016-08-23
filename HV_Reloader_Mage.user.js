@@ -2253,7 +2253,7 @@ function AI() {
 	}
 	*/
 
-	if (checkForBuff('channeling') || getSelfMana() > 190 || (getGem()=='mana' && getSelfMana() > 70 )) {
+	if (checkForBuff('channeling') || getSelfMana() > 190 || (getGem()=='mana' && getSelfMana() > 160 )) {
 		for (var s in MAINTAIN_CHANNELING_BUFFS) {
 			var t = MAINTAIN_CHANNELING_BUFFS[s];
 			if (!(checkForBuff(t)) && (effScrollList.indexOf(MAINTAIN_CHANNELING_BUFFS[s]) === -1 || vUseScroll) ) {
