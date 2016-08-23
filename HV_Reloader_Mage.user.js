@@ -1634,10 +1634,10 @@ function AI() {
 
     //MAINTAIN_CHANNELING_BUFFS.push('shadow veil');
 
-    if(getSelfHealth() < 60){
+    //if(getSelfHealth() < 60){
         //MAINTAIN_CHANNELING_BUFFS.push('full cure');
         //MAINTAIN_CHANNELING_BUFFS.push('cure');
-    }
+    //}
 
     var MAIN_SPELL_MONSTER = ['imperil'];//['weaken','slow'];
 
