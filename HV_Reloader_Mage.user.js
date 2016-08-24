@@ -4,7 +4,7 @@
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @run-at      document-end
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version     1.3.3.38
+// @version     1.3.3.39
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @grant       none
@@ -39,6 +39,7 @@ var settings = {
 	spellControl: true,			// Spell Control - use Scroll or normal buff
 	showStopStartButton: true,	// Show Stop Start button
 	showBarListBattleItems: true,	// Show list battle items
+	trackDrop: true,			// Track item drop
 	enableCheckPony: true,		// enable check alert pony
 	enableOfflineSong: true,	// enable offline song
 	enablePopupAlert: true,		// enable popup alert
@@ -128,6 +129,155 @@ function checkHaveOverchanrge(){
 
 if(!GM_getValue("botSS")){
 	GM_setValue("botSS",false);
+}
+
+var enableDel = GM_getValue('enableDel');
+
+function addDataToJson(vKey, vValue, vColor) {
+	var logs = null;
+	if (GM_getValue('detailLogs'))
+		logs = JSON.parse(GM_getValue('detailLogs'));
+	else
+		logs = [];
+
+	var keyAlready = false;
+
+	for (var i = 0; i < logs.length; i++) {
+
+		if (logs[i].id === vKey) {
+			logs[i].value = (parseInt(vValue) + parseInt(logs[i].value));
+
+			keyAlready = true;
+			break;
+		}
+	}
+
+	var chkEquip = true;
+
+	if(vColor === 'rgb(255, 0, 0)'){
+		if(!vKey.startsWith('Legendary') && !vKey.startsWith('Magnificent')){
+			chkEquip = false;
+		}
+	}
+
+	if (!keyAlready) {
+
+		if(chkEquip){
+			logs.push({
+				"id" : vKey,
+				"value" : vValue,
+				"color" : vColor
+			});
+		}else{
+			var vOtherEquip = GM_getValue('vOtherEquip');
+
+			if(!vOtherEquip){
+				vOtherEquip = 0;
+			}
+
+			vOtherEquip = (vOtherEquip +1);
+			GM_setValue('vOtherEquip', vOtherEquip);
+		}
+	}
+
+	GM_setValue('detailLogs', JSON.stringify(logs));
+
+	GM_setValue('enableDel', false);
+	GM_setValue('enableKeep', false);
+	enableDel = false;
+}
+
+function axeccp(a1, b1) {
+	var a = a1.id;
+	var b = b1.id;
+	//console.log('a = '+a);
+	//console.log('b = '+b);
+	var ax = [],
+		bx = [];
+
+	a.replace(/(\d+)|(\D+)/g, function(_, $1, $2) {
+		ax.push([$1 || Infinity, $2 || ""]);
+	});
+
+	b.replace(/(\d+)|(\D+)/g, function(_, $1, $2) {
+		bx.push([$1 || Infinity, $2 || ""]);
+	});
+
+	while (ax.length && bx.length) {
+		var an = ax.shift();
+		var bn = bx.shift();
+		var nn = (an[0] - bn[0]) || an[1].localeCompare(bn[1]);
+		if (nn) return nn;
+	}
+
+	return ax.length - bx.length;
+}
+
+function keepTrackDrop(){
+	var logs = null;
+	if (GM_getValue('detailLogsHistory'))
+		logs = JSON.parse(GM_getValue('detailLogsHistory'));
+	else
+		logs = [];
+
+	var logsOld = null;
+
+	if (GM_getValue('detailLogs'))
+		logsOld = JSON.parse(GM_getValue('detailLogs'));
+	else
+		logsOld = [];
+
+	console.log('logsOld = '+logsOld.length+' logs='+logs.length);
+	var keyAlready = false;
+
+	for(var j=0;j<logsOld.length;j++){
+		keyAlready = false;
+		for (var i = 0; i < logs.length; i++) {
+
+			if (logs[i].id === logsOld[j].id) {
+				logs[i].value = (parseInt(logsOld[j].value) + parseInt(logs[i].value));
+				keyAlready = true;
+				break;
+			}
+		}
+
+		if (!keyAlready) {
+			logs.push({
+				"id" : logsOld[j].id,
+				"value" : logsOld[j].value,
+				"color" : logsOld[j].color
+			});
+		}
+	}
+
+
+	var vOtherEquipHis = GM_getValue('vOtherEquipHis');
+
+	if(!vOtherEquipHis){
+		vOtherEquipHis = 0;
+	}
+
+	var vOtherEquip = GM_getValue('vOtherEquip');
+
+	if(!vOtherEquip){
+		vOtherEquip = 0;
+	}
+
+	GM_setValue('vOtherEquipHis', (vOtherEquipHis+vOtherEquip));
+	GM_setValue('vOtherEquipMain', vOtherEquip);
+	GM_setValue('vOtherEquip', 0);
+	GM_setValue('detailLogsHistory', JSON.stringify(logs));
+}
+
+function checkHaveNoCurrentBattle(){
+	try {
+		if(document.querySelector('img[src*="/y/battle/nocurrentbattle.png"]')){
+			return true;
+		}
+	}catch(e) {
+		return false;
+	}
+
 }
 
 
@@ -758,6 +908,90 @@ function OnPageReload() {
         })();
     }
     /* ========== HV COUNTER PLUS END ========= */
+
+	/* ============= TRACK DROP ============ */
+    if (settings.trackDrop) {
+        (function(){
+
+    if (document.getElementById('monsterpane') !== null) {
+        if (document.getElementById('monsterpane').innerHTML.indexOf('Choose the right answer based on the image below.') !== -1) {
+            foundPony = true;
+        }
+    }
+
+    if(document.querySelectorAll('#togpane_log td.t1').length > 0 && document.getElementById('quickbar') && !foundPony){
+
+        if(enableDel){
+            GM_setValue('detailLogs', null);
+            GM_setValue('enableDel', false);
+            GM_setValue('enableKeep', false);
+            enableDel = false;
+        }
+
+        var elArray = document.querySelectorAll('#togpane_log td.t3b span');
+
+        var lastIdTrack = GM_getValue('lastIdTrack');
+
+        var chkCurrent = document.querySelectorAll('#togpane_log td.t1')[0].textContent;
+
+        if(chkCurrent === 0){
+            lastIdTrack = 0;
+        }
+
+
+        if (lastIdTrack !== chkCurrent) {
+
+            for (var i = 0; i < elArray.length; i++) {
+
+                if (chkCurrent === elArray[i].parentNode.parentNode.childNodes[0].textContent) {
+
+                    var dataTracking = elArray[i].textContent;
+
+                    var repx = /^\[(\d){1,2}x[A-Za-z0-9_ ]*\]$/;
+
+                    var cColor = elArray[i].style.color;
+
+                    if (repx.test(dataTracking)) {
+
+                        var nowC = dataTracking.match(/(\d){1,2}/g);
+
+                        if (nowC !== null) {
+                            var countItem = nowC[0];
+                            var cNameText = dataTracking.match(/\ [A-Za-z0-9_ ]*/g)[0].trim();
+
+                            addDataToJson(cNameText, countItem, cColor);
+
+                        }
+
+                    } else {
+                        var countItem2 = 1;
+                        var cNameText2 = dataTracking.replace('[', '').replace(']', '');
+
+                        if(/^\d{1,}\ Credits$/.test(cNameText2)){
+                            countItem2 = cNameText2.match(/\d{1,}/g)[0];
+                            cNameText2 = 'Credits';
+                        }
+
+                        addDataToJson(cNameText2, countItem2, cColor);
+                    }
+
+
+                }
+            }
+
+            GM_setValue('lastIdTrack', chkCurrent);
+
+        }else{
+			GM_setValue('lastIdTrack', -1);
+		}
+
+    }
+
+        })();
+    }
+    /* =========== TRACK DROP END ========== */
+
+
 
 	/* ============= SHOW LIST BATTLE ITEMS ============ */
     if (settings.showBarListBattleItems) {
@@ -4071,6 +4305,37 @@ if ( document.getElementById('togpane_log') ) {
 				GM_setValue('InfusionofStorms', 0);
 				GM_setValue('InfusionofDivinity', 0);
 				GM_setValue('InfusionofDarkness', 0);
+			}
+
+		}
+	}
+
+	//track drop
+	if (settings.trackDrop) {
+		if (document.getElementById('riddleform') || document.getElementById('equipment') || document.querySelector('img[src $= "derpy.gif"]')) return;
+
+		if(GM_getValue('detailLogs') && !checkHaveOverchanrge() && !checkHaveNoCurrentBattle()){
+
+			//function gen +
+			if(!GM_getValue('enableKeep')){
+				keepTrackDrop();
+				GM_setValue('enableKeep', true);
+			}
+
+			GM_setValue('enableDel', true);
+
+			genShowList('divTTDMain', 'divTTD', 'showFixedTTD', 'detailLogs', '', '35px', '25px', '', 'left', 'block','vOtherEquipMain',20);
+
+			if(GM_getValue('detailLogsHistory')){
+				var mMainId = 'divTTDMainHis';
+
+				//    vDivId, vMDivId, vSFId, vKeyLogs, vTop, vBottom, vLeft, vRight, vTdAlign, vDisplay, vOtherEquip, vSpecHeight
+				genShowList(mMainId, 'divTTDHis', 'showFixedTTDHis', 'detailLogsHistory', '14px', '', '', '25px', 'right', 'none','vOtherEquipHis',20);
+
+				if(GM_getValue('showHistory')){
+					document.getElementById(mMainId).style.display = 'block';
+				}
+
 			}
 
 		}
