@@ -5,8 +5,8 @@
 // @run-at      document-end
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
 // @version     2.0.0.30
-// @updateURL       https:X
-// @downloadURL     https:X
+// @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_melee.user.js
+// @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_melee.user.js
 // @grant       none
 // ==/UserScript==
 
