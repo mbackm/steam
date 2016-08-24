@@ -5,8 +5,8 @@
 // @run-at      document-end
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
 // @version     2.0.0.31
-// @updateURL       https:X
-// @downloadURL     https:X
+// @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
+// @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @grant       none
 // ==/UserScript==
 
@@ -2359,13 +2359,14 @@ function AI() {
 				changeSpiritMode('OFF');
 				useOverchargeMode = true;
 			}else{
-				if(getSelfOvercharge() > 85 && getSelfSpirit() > (SP_ITEM_D_CUTOFF+15)){
+				if(getSelfOvercharge() > 85 && getSelfSpirit() > (SP_ITEM_D_CUTOFF+18)){
 					changeSpiritMode('ON');
+				}else{
+					useOverchargeMode = true;
 				}
 
-				if(getSelfOvercharge() < 10 || getSelfSpirit() < SP_ITEM_D_CUTOFF){
+				if(getSelfOvercharge() < 10 || getSelfSpirit() < (SP_ITEM_D_CUTOFF-5)){
 					changeSpiritMode('OFF');
-					useOverchargeMode = true;
 				}
 			}
 
