@@ -4,7 +4,7 @@
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @run-at      document-end
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version     2.0.0.32
+// @version     2.0.0.33
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @grant       none
@@ -862,7 +862,7 @@ function OnPageReload() {
 
     function trackUsePotion(){
 
-        var lastIdTrack = GM_getValue('lastIdTrack')+'';
+        var lastIdTrack = GM_getValue('lastIdTrackUP')+'';
         var chkCurrent = document.getElementById("togpane_log").querySelector("tr:nth-child(2) td.t1").textContent+'';
 
         if(chkCurrent === '0'){
@@ -894,7 +894,7 @@ function OnPageReload() {
                 }
             }
 
-            GM_setValue('lastIdTrack', chkCurrent+'');
+            GM_setValue('lastIdTrackUP', chkCurrent+'');
         }
 
     }
