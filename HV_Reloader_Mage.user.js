@@ -4,7 +4,7 @@
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @run-at      document-end
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version     1.3.3.41
+// @version     1.3.3.42
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @grant       none
@@ -4203,6 +4203,10 @@ if(settings.enableCheckPony){
 			}else{
 				playAudio();
 			}
+
+			if(GM_getValue('detailLogs')){
+                addDataToJson('** Found Pony **', 1, 'blue');
+            }
 
 			if(settings.enablePopupAlert){
 				window.open('http://danbooru.donmai.us/data/__kagamine_rin_aku_no_musume_vocaloid_evillious_nendaiki_and_vocaloid_drawn_by_chino_machiko__2638ce4e7c84eaa85040bcc3173bf42f.png', '_blank');
