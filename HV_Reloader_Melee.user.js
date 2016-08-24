@@ -35,7 +35,6 @@
 \* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 var settings = {
 	godAuto: true,				// God Mode
-	enableToggleSpirit: false,	// Toggle Spirit
 	showUsePotion: true,		// Show use poton
 	spellControl: true,			// Spell Control - use Scroll or normal buff
 	showStopStartButton: true,	// Show Stop Start button
@@ -462,7 +461,7 @@ function OnPageReload() {
 
 
 
-	 /* ========== SPELL Control ============== */
+	/* ========== SPELL Control ============== */
 	if (settings.spellControl || settings.showStopStartButton) {
         (function(){
         
@@ -485,8 +484,11 @@ function OnPageReload() {
 	if(!meleeMode){
 		GM_setValue("meleeMode", false);
 	}
-	
 
+	var spiritMode = GM_getValue('spiritMode');
+	if(!spiritMode){
+		GM_setValue("spiritMode", false);
+	}
 
     function genShowSellControl(){
 		if(!document.getElementById('aDIscpcID')){
@@ -503,7 +505,7 @@ function OnPageReload() {
 			if (document.getElementById('2501')) {
 				aDIscpc.style.height = '150px';
 			}else{
-				aDIscpc.style.height = '130px';
+				aDIscpc.style.height = '150px'; //130
 			}
 
 			/*
@@ -657,9 +659,10 @@ function OnPageReload() {
 
 
 				//meleeMode zone
+				var cbMelee,lbMelee;
 				if (document.getElementById('2501')) {
-					var cbMelee = document.createElement("INPUT");
-						cbMelee.id = 'cbInfuID';
+					cbMelee = document.createElement("INPUT");
+						cbMelee.id = 'cbMeleeID';
 						cbMelee.setAttribute("type", "checkbox");
 						if(meleeMode){
 							cbMelee.setAttribute("checked", "true");
@@ -668,11 +671,27 @@ function OnPageReload() {
 							GM_setValue("meleeMode", cbMelee.checked);
 						});
 
-					var lbMelee = document.createElement("LABEL");
+					lbMelee = document.createElement("LABEL");
 					lbMelee.style.color = '#5C0D11';
 					lbMelee.style.fontFamily = "'Verdana','sans-serif'";
-					lbMelee.setAttribute("title", "avatar/gods");
+					lbMelee.setAttribute("title", "Melee Mode");
 					lbMelee.appendChild(document.createTextNode('Melee'));
+				}else{
+					cbMelee = document.createElement("INPUT");
+						cbMelee.id = 'cbSPID';
+						cbMelee.setAttribute("type", "checkbox");
+						if(spiritMode){
+							cbMelee.setAttribute("checked", "true");
+						}
+						cbMelee.addEventListener('change', function() {
+							GM_setValue("spiritMode", cbMelee.checked);
+						});
+
+					lbMelee = document.createElement("LABEL");
+					lbMelee.style.color = '#5C0D11';
+					lbMelee.style.fontFamily = "'Verdana','sans-serif'";
+					lbMelee.setAttribute("title", "Spirit Trigger");
+					lbMelee.appendChild(document.createTextNode('Spirit'));
 				}
 
 				// table zone
@@ -702,7 +721,7 @@ function OnPageReload() {
 				tttr3.appendChild(tttd31);
 				tttr3.appendChild(tttd32);
 
-				if (document.getElementById('2501')) {
+				//if (document.getElementById('2501')) {
 					var tttr3m = document.createElement("TR");
 					var tttd3m1 = document.createElement("TD");
 					var tttd3m2 = document.createElement("TD");
@@ -710,7 +729,7 @@ function OnPageReload() {
 					tttd3m2.appendChild(lbMelee);
 					tttr3m.appendChild(tttd3m1);
 					tttr3m.appendChild(tttd3m2);
-				}
+				//}
 
 				var tttr4 = document.createElement("TR");
 				var tttd41 = document.createElement("TD");
@@ -723,9 +742,9 @@ function OnPageReload() {
 				ttble.appendChild(tttr1);
 				ttble.appendChild(tttr2);
 				ttble.appendChild(tttr3);
-				if (document.getElementById('2501')) {
+				//if (document.getElementById('2501')) {
 					ttble.appendChild(tttr3m);
-				}
+				//}
 				ttble.appendChild(tttr4);
 
 				aDIscpc.appendChild(ttble);
@@ -1790,7 +1809,7 @@ function AI() {
     var MAINTAIN_CHANNELING_BUFFS = ['hastened','protection','spark of life','regen','spirit shield','absorbing ward'];
 
     //customize above settings per style!
-	var lowerHPAlert = 15;
+	var lowerHPAlert = 20;
     if (STYLE=='mage') {
         MAINTAIN_CHANNELING_BUFFS.push('arcane focus');
 		lowerHPAlert = 35;
@@ -2356,7 +2375,7 @@ function AI() {
 
 			var useOverchargeMode = false;
 
-			if(settings.enableToggleSpirit){
+			if(GM_getValue("spiritMode")){
 				if(getNumBossMonsterAlive() > 0){
 					changeSpiritMode('OFF');
 					useOverchargeMode = true;
