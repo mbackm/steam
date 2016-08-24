@@ -4,7 +4,7 @@
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @run-at      document-end
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version     1.3.3.39
+// @version     1.3.3.40
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @grant       none
@@ -4228,6 +4228,236 @@ if(settings.enableCheckPony){
 
 
 /*=================== CHECK PONY ZONE END ============*/
+
+/*=================== TRACK DROP ZONE ============*/
+
+
+var _table_ = document.createElement('table'),
+        _tr_ = document.createElement('tr'),
+        _th_ = document.createElement('th'),
+        _td_ = document.createElement('td');
+
+    // Builds the HTML Table out of myList json data from Ivy restful service.
+    function buildHtmlTable(arr) {
+        var table = _table_.cloneNode(false),
+            columns = addAllColumnHeaders(arr, table);
+        for (var i = 0, maxi = arr.length; i < maxi; ++i) {
+            var tr = _tr_.cloneNode(false);
+            var nextChk = false;
+            for (var j = 0, maxj = columns.length; j < (maxj-1); ++j) {
+                var td = _td_.cloneNode(false);
+                var cellValue = arr[i][columns[j]];
+                if (nextChk) {
+                    td.style.fontWeight = 'bold';
+                    //td.style.color = '#001dfb';
+                    nextChk = false;
+                }
+
+                if(j===0 || j===1){
+                    if(columns.length === 3){
+                        td.style.color = arr[i][columns[2]];
+                    }
+                }
+
+                if (cellValue === 'Credits' || cellValue === 'Precursor Artifact' || cellValue === '** Found Pony **' || cellValue === 'Other Equip') {
+                    td.style.fontWeight = 'bold';
+                    //td.style.color = '#001dfb';
+                    nextChk = true;
+                }
+                td.appendChild(document.createTextNode(arr[i][columns[j]] || ''));
+                tr.appendChild(td);
+            }
+            table.appendChild(tr);
+        }
+        return table;
+    }
+
+    // Adds a header row to the table and returns the set of columns.
+    // Need to do union of keys from all records as some records may not contain
+    // all records
+    function addAllColumnHeaders(arr, table) {
+        var columnSet = [],
+            tr = _tr_.cloneNode(false);
+        for (var i = 0, l = arr.length; i < l; i++) {
+            for (var key1 in arr[i]) {
+                if (arr[i].hasOwnProperty(key1) && columnSet.indexOf(key1) === -1) {
+                    columnSet.push(key1);
+                    var th = _th_.cloneNode(false);
+                    if (key1 === 'id') {
+                        key1 = "Items";
+                    } else if (key1 === 'value') {
+                        key1 = "Count";
+                    }
+
+                    if(key1 === 'color'){
+                        //skip
+                    }else{
+                        th.appendChild(document.createTextNode(key1));
+                        tr.appendChild(th);
+                    }
+                }
+            }
+        }
+        table.appendChild(tr);
+        return columnSet;
+    }
+
+    function showOrHideDivTTD(id1, id2) {
+        var txt2 = document.getElementById(id1).style.display;
+
+        if(txt2 == 'none'){
+            document.getElementById(id1).style.display = 'block';
+            document.getElementById(id2).innerHTML = ' - ';
+
+            if(document.getElementById(id1+'cls')){
+                document.getElementById(id1+'cls').style.display = 'inherit';
+            }
+
+
+        }else{
+            document.getElementById(id1).style.display = 'none';
+            document.getElementById(id2).innerHTML = ' +';
+
+            if(document.getElementById(id1+'cls')){
+                document.getElementById(id1+'cls').style.display = 'none';
+            }
+
+        }
+
+
+    }
+
+    function genShowList(vDivId, vMDivId, vSFId, vKeyLogs, vTop, vBottom, vLeft, vRight, vTdAlign, vDisplay, vOtherEquip, vSpecHeight){
+
+
+        var divPS = document.createElement("DIV");
+
+        divPS.style.position = 'fixed';
+
+        if(vTop !== '')
+            divPS.style.top = vTop;
+
+        if(vBottom !== '')
+            divPS.style.bottom = vBottom;
+
+        if(vLeft !== '')
+            divPS.style.left = vLeft;
+
+        if(vRight !== '')
+            divPS.style.right = vRight;
+
+        divPS.style.backgroundColor = '#E0D8C1';
+        divPS.style.boxShadow = '-1px -1px 9px #888888';
+
+        divPS.id = vDivId;
+        divPS.style.zIndex = '2222';
+        divPS.style.overflowY = 'auto';
+        divPS.style.display = vDisplay;
+
+        var aDiv = document.createElement("div");
+        aDiv.id=vMDivId;
+        aDiv.style.display = "none";
+
+        var legHei = 15;
+        try{
+            legHei = legHei + (Object.keys(JSON.parse(GM_getValue(vKeyLogs))).length*vSpecHeight);
+        }catch(ee){console.log(ee.message);}
+
+        var maxHei = screen.height - 210;
+        if(legHei > maxHei){
+            legHei = maxHei;
+        }
+
+        aDiv.style.height = legHei+'px';
+
+        var mainJson = JSON.parse(GM_getValue(vKeyLogs));
+        var otherCount = GM_getValue(vOtherEquip);
+        if(!otherCount){
+            otherCount = 0;
+        }
+
+        mainJson.push({
+            "id" : "Other Equip",
+            "value" : ""+otherCount,
+            "color" : 'rgb(255, 0, 0)'
+        });
+
+        aDiv.appendChild(buildHtmlTable(mainJson.sort(axeccp)));
+
+        var aTR2 = document.createElement("tr");
+        var aTD2 = document.createElement("td");
+
+        aTD2.appendChild(aDiv);
+        aTR2.appendChild(aTD2);
+
+        var aTable = document.createElement("table");
+
+        var aTR1 = document.createElement("tr");
+        var aTD1 = document.createElement("td");
+        aTD1.align = vTdAlign;
+        var aButton = document.createElement("button");
+        aButton.id = vSFId;
+        var linkTextBtn = document.createTextNode(" + ");
+        aButton.appendChild(linkTextBtn);
+        aButton.addEventListener('click', function() {
+            showOrHideDivTTD(vMDivId, vSFId);
+        });
+
+
+        if('right' === vTdAlign){
+            var aButtonH = document.createElement("button");
+            aButtonH.id = 'divTTDHiscls';
+            var linkTextBtnH = document.createTextNode(" Clear ");
+            aButtonH.appendChild(linkTextBtnH);
+            aButtonH.addEventListener('click', function() {
+                GM_setValue('detailLogsHistory', null);
+                GM_setValue('vOtherEquipHis', 0);
+                GM_setValue('vOtherEquip', 0);
+            });
+            aButtonH.style.marginRight = '8em';
+            aButtonH.style.display = 'none';
+            aTD1.appendChild(aButtonH);
+
+            aTD1.appendChild(aButton);
+            aTR1.appendChild(aTD1);
+
+            aTable.appendChild(aTR1);
+            aTable.appendChild(aTR2);
+
+        }else{
+            var cbFFx = document.createElement("INPUT");
+            cbFFx.id = 'divTTDcls';
+            cbFFx.setAttribute("type", "checkbox");
+            cbFFx.style.marginLeft = '8px';
+            cbFFx.style.display = 'none';
+
+            cbFFx.addEventListener('change', function() {
+                GM_setValue('showHistory', this.checked); 
+
+                if(this.checked){
+                    document.getElementById(mMainId).style.display = 'block';
+                }else{
+                    document.getElementById(mMainId).style.display = 'none';
+                }
+            });
+
+            cbFFx.checked = GM_getValue('showHistory');
+
+            aTD1.appendChild(aButton);
+            aTD1.appendChild(cbFFx);
+
+            aTR1.appendChild(aTD1);
+
+            aTable.appendChild(aTR2);
+            aTable.appendChild(aTR1);
+        }
+
+        divPS.appendChild(aTable);
+        document.body.appendChild(divPS);
+    }
+
+
+/*=================== TRACK DROP ZONE END ============*/
 
 
 // Start script if in battle
