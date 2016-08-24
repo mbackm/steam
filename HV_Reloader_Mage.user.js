@@ -1625,7 +1625,7 @@ function AI() {
         //MAINTAIN_BUFFS.push('spirit shield');
     //}
 
-    var MAINTAIN_CHANNELING_BUFFS = ['absorbing ward']; //['absorbing ward'];
+    var MAINTAIN_CHANNELING_BUFFS = ['absorbing ward','regen']; //['absorbing ward'];
 
     //customize above settings per style!
 	var	lowerHPAlert = 15;
