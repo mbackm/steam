@@ -506,7 +506,7 @@ function OnPageReload() {
 				//meleeMode zone
 				if (document.getElementById('2501')) {
 					var cbMelee = document.createElement("INPUT");
-						cbMelee.id = 'cbInfuID';
+						cbMelee.id = 'cbMeleeID';
 						cbMelee.setAttribute("type", "checkbox");
 						if(meleeMode){
 							cbMelee.setAttribute("checked", "true");
@@ -518,7 +518,7 @@ function OnPageReload() {
 					var lbMelee = document.createElement("LABEL");
 					lbMelee.style.color = '#5C0D11';
 					lbMelee.style.fontFamily = "'Verdana','sans-serif'";
-					lbMelee.setAttribute("title", "avatar/gods");
+					lbMelee.setAttribute("title", "Melee Mode");
 					lbMelee.appendChild(document.createTextNode('Melee'));
 				}
 
