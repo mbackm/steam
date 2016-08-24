@@ -35,7 +35,7 @@
 \* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 var settings = {
 	godAuto: true,				// God Mode
-	enableToggleSpirit: true,	// Toggle Spirit
+	enableToggleSpirit: false,	// Toggle Spirit
 	showUsePotion: true,		// Show use poton
 	spellControl: true,			// Spell Control - use Scroll or normal buff
 	showStopStartButton: true,	// Show Stop Start button
