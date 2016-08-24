@@ -4,7 +4,7 @@
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @run-at      document-end
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version     2.0.0.31
+// @version     2.0.0.32
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @grant       none
@@ -2359,14 +2359,16 @@ function AI() {
 				changeSpiritMode('OFF');
 				useOverchargeMode = true;
 			}else{
-				if(getSelfOvercharge() > 85 && getSelfSpirit() > (SP_ITEM_D_CUTOFF+18)){
+				if(getSelfOvercharge() > 85 && getSelfSpirit() >= (SP_ITEM_D_CUTOFF)){
 					changeSpiritMode('ON');
 				}else{
-					useOverchargeMode = true;
-				}
-
-				if(getSelfOvercharge() < 10 || getSelfSpirit() < (SP_ITEM_D_CUTOFF-5)){
-					changeSpiritMode('OFF');
+					if(getSelfOvercharge() < 10 && getSelfSpirit() < (SP_ITEM_D_CUTOFF-15)){
+						changeSpiritMode('OFF');
+						useOverchargeMode = true;
+					}else if( getSelfOvercharge() > 85 ){
+						//changeSpiritMode('OFF');
+						useOverchargeMode = true;
+					}
 				}
 			}
 
@@ -3007,7 +3009,7 @@ function AI() {
 
 
     //check overcharge conditions
-    if ( (getNumMonsters()-getNumMonstersDead() == 1) && (getSelfOvercharge() > 25) && (getNumBossMonsterAlive() == 0) && (document.querySelector('img[src*="/y/battle/spirit_n.png"]')) ) {
+    if ( (getNumMonsters()-getNumMonstersDead() == 1) && (getSelfOvercharge() > 25 && getSelfOvercharge() < 35) && (getNumBossMonsterAlive() == 0) && (document.querySelector('img[src*="/y/battle/spirit_n.png"]')) ) {
         if ((DEFEND_FOR_HP) && (getSelfHealth() < HP_DEFEND_CUTOFF)) {
             console.log('decided to defend');
             defend();
