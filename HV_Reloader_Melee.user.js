@@ -39,6 +39,7 @@ var settings = {
 	spellControl: true,			// Spell Control - use Scroll or normal buff
 	showStopStartButton: true,	// Show Stop Start button
 	showBarListBattleItems: true,	// Show list battle items
+	trackDrop: true,			// Track item drop
 	enableCheckPony: true,		// enable check alert pony
 	enableBeepPopup: true,		// enable beep popup
 	enableOfflineSong: true,	// enable offline song
@@ -1114,6 +1115,88 @@ function OnPageReload() {
         })();
     }
     /* ========== HV COUNTER PLUS END ========= */
+
+	/* ============= TRACK DROP ============ */
+    if (settings.trackDrop) {
+        (function(){
+
+    if (document.getElementById('monsterpane') !== null) {
+        if (document.getElementById('monsterpane').innerHTML.indexOf('Choose the right answer based on the image below.') !== -1) {
+            foundPony = true;
+        }
+    }
+
+    if(document.querySelectorAll('#togpane_log td.t1').length > 0 && document.getElementById('quickbar') && !foundPony){
+
+        if(enableDel){
+            GM_setValue('detailLogs', null);
+            GM_setValue('enableDel', false);
+            GM_setValue('enableKeep', false);
+            enableDel = false;
+        }
+
+        var elArray = document.querySelectorAll('#togpane_log td.t3b span');
+
+        var lastIdTrack = GM_getValue('lastIdTrack');
+
+        var chkCurrent = document.querySelectorAll('#togpane_log td.t1')[0].textContent;
+
+        if(chkCurrent === 0){
+            lastIdTrack = 0;
+        }
+
+
+        if (lastIdTrack !== chkCurrent) {
+
+            for (var i = 0; i < elArray.length; i++) {
+
+                if (chkCurrent === elArray[i].parentNode.parentNode.childNodes[0].textContent) {
+
+                    var dataTracking = elArray[i].textContent;
+
+                    var repx = /^\[(\d){1,2}x[A-Za-z0-9_ ]*\]$/;
+
+                    var cColor = elArray[i].style.color;
+
+                    if (repx.test(dataTracking)) {
+
+                        var nowC = dataTracking.match(/(\d){1,2}/g);
+
+                        if (nowC !== null) {
+                            var countItem = nowC[0];
+                            var cNameText = dataTracking.match(/\ [A-Za-z0-9_ ]*/g)[0].trim();
+
+                            addDataToJson(cNameText, countItem, cColor);
+
+                        }
+
+                    } else {
+                        var countItem2 = 1;
+                        var cNameText2 = dataTracking.replace('[', '').replace(']', '');
+
+                        if(/^\d{1,}\ Credits$/.test(cNameText2)){
+                            countItem2 = cNameText2.match(/\d{1,}/g)[0];
+                            cNameText2 = 'Credits';
+                        }
+
+                        addDataToJson(cNameText2, countItem2, cColor);
+                    }
+
+
+                }
+            }
+
+            GM_setValue('lastIdTrack', chkCurrent);
+
+        }else{
+			GM_setValue('lastIdTrack', -1);
+		}
+
+    }
+
+        })();
+    }
+    /* =========== TRACK DROP END ========== */
 
 
 	/* ============= SHOW LIST BATTLE ITEMS ============ */
@@ -4822,6 +4905,37 @@ if ( document.getElementById('togpane_log') ) {
 				GM_setValue('InfusionofStorms', 0);
 				GM_setValue('InfusionofDivinity', 0);
 				GM_setValue('InfusionofDarkness', 0);
+			}
+
+		}
+	}
+
+	//track drop
+	if (settings.trackDrop) {
+		if (document.getElementById('riddleform') || document.getElementById('equipment') || document.querySelector('img[src $= "derpy.gif"]')) return;
+
+		if(GM_getValue('detailLogs') && !checkHaveOverchanrge() && !checkHaveNoCurrentBattle()){
+
+			//function gen +
+			if(!GM_getValue('enableKeep')){
+				keepTrackDrop();
+				GM_setValue('enableKeep', true);
+			}
+
+			GM_setValue('enableDel', true);
+
+			genShowList('divTTDMain', 'divTTD', 'showFixedTTD', 'detailLogs', '', '35px', '25px', '', 'left', 'block','vOtherEquipMain',20);
+
+			if(GM_getValue('detailLogsHistory')){
+				var mMainId = 'divTTDMainHis';
+
+				//    vDivId, vMDivId, vSFId, vKeyLogs, vTop, vBottom, vLeft, vRight, vTdAlign, vDisplay, vOtherEquip, vSpecHeight
+				genShowList(mMainId, 'divTTDHis', 'showFixedTTDHis', 'detailLogsHistory', '14px', '', '', '25px', 'right', 'none','vOtherEquipHis',20);
+
+				if(GM_getValue('showHistory')){
+					document.getElementById(mMainId).style.display = 'block';
+				}
+
 			}
 
 		}
