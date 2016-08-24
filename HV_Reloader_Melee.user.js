@@ -1734,7 +1734,7 @@ function AI() {
     var MP_ITEM_E_CUTOFF = 15;
 
     var ENABLE_SP_POTION = true;
-    var SP_ITEM_D_CUTOFF = 55;
+    var SP_ITEM_D_CUTOFF = 60;
     var SP_ITEM_P_CUTOFF = 32;
     var SP_ITEM_E_CUTOFF = 5;
 
@@ -2359,12 +2359,13 @@ function AI() {
 				changeSpiritMode('OFF');
 				useOverchargeMode = true;
 			}else{
-				if(getSelfOvercharge() > 85 && getSelfSpirit() > 70){
+				if(getSelfOvercharge() > 85 && getSelfSpirit() > (SP_ITEM_D_CUTOFF+15)){
 					changeSpiritMode('ON');
 				}
 
-				if(getSelfOvercharge() < 10 || getSelfSpirit() < 60){
+				if(getSelfOvercharge() < 10 || getSelfSpirit() < SP_ITEM_D_CUTOFF){
 					changeSpiritMode('OFF');
+					useOverchargeMode = true;
 				}
 			}
 
