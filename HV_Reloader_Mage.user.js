@@ -90,6 +90,7 @@ if(!localStorage.getItem('songPath')){
 var GB_BREAK_AUTO_BOT = true;
 var GG_GO_AF_BREAK = false;
 var GBGM_KEY = "HGM_";
+var foundPony = false;
 
 function isNumber(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
