@@ -35,6 +35,7 @@
 \* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 var settings = {
 	godAuto: true,				// God Mode
+	enableToggleSpirit: true,	// Toggle Spirit
 	showUsePotion: true,		// Show use poton
 	spellControl: true,			// Spell Control - use Scroll or normal buff
 	showStopStartButton: true,	// Show Stop Start button
@@ -2354,22 +2355,26 @@ function AI() {
             //Sword style
 
 			var useOverchargeMode = false;
-			
-			if(getNumBossMonsterAlive() > 0){
-				changeSpiritMode('OFF');
-				useOverchargeMode = true;
-			}else{
-				if(getSelfOvercharge() > 85 && getSelfSpirit() >= (SP_ITEM_D_CUTOFF)){
-					changeSpiritMode('ON');
+
+			if(settings.enableToggleSpirit){
+				if(getNumBossMonsterAlive() > 0){
+					changeSpiritMode('OFF');
+					useOverchargeMode = true;
 				}else{
-					if(getSelfOvercharge() < 10 && getSelfSpirit() < (SP_ITEM_D_CUTOFF-15)){
-						changeSpiritMode('OFF');
-						useOverchargeMode = true;
-					}else if( getSelfOvercharge() > 85 ){
-						//changeSpiritMode('OFF');
-						useOverchargeMode = true;
+					if(getSelfOvercharge() > 85 && getSelfSpirit() >= (SP_ITEM_D_CUTOFF)){
+						changeSpiritMode('ON');
+					}else{
+						if(getSelfOvercharge() < 10 && getSelfSpirit() < (SP_ITEM_D_CUTOFF-15)){
+							changeSpiritMode('OFF');
+							useOverchargeMode = true;
+						}else if( getSelfOvercharge() > 85 ){
+							//changeSpiritMode('OFF');
+							useOverchargeMode = true;
+						}
 					}
 				}
+			}else{
+				useOverchargeMode = true;
 			}
 
             if(useOverchargeMode){
