@@ -4951,70 +4951,76 @@ function getPotionUsePrice(){
 
 	var totalUsePrice = 0;
 
-	var useSPlit = GM_getValue('lastPotionsUse').split(']');
-	var usp1 = useSPlit[0].split('(');
-	var uHPD = usp1[1].substring(0,usp1[1].indexOf(')'));
-	var uHPP = usp1[2].substring(0,usp1[2].indexOf(')'));
-	var uHPE = usp1[3].substring(0,usp1[3].indexOf(')'));
+	try {
+		var useSPlit = GM_getValue('lastPotionsUse').split(']');
+		var usp1 = useSPlit[0].split('(');
+		var uHPD = usp1[1].substring(0,usp1[1].indexOf(')'));
+		var uHPP = usp1[2].substring(0,usp1[2].indexOf(')'));
+		var uHPE = usp1[3].substring(0,usp1[3].indexOf(')'));
 
-	var usp2 = useSPlit[1].split('(');
-	var uMPD = usp2[1].substring(0,usp2[1].indexOf(')'));
-	var uMPP = usp2[2].substring(0,usp2[2].indexOf(')'));
-	var uMPE = usp2[3].substring(0,usp2[3].indexOf(')'));
+		var usp2 = useSPlit[1].split('(');
+		var uMPD = usp2[1].substring(0,usp2[1].indexOf(')'));
+		var uMPP = usp2[2].substring(0,usp2[2].indexOf(')'));
+		var uMPE = usp2[3].substring(0,usp2[3].indexOf(')'));
 
-	var usp3 = useSPlit[2].split('(');
-	var uSPD = usp3[1].substring(0,usp3[1].indexOf(')'));
-	var uSPP = usp3[2].substring(0,usp3[2].indexOf(')'));
-	var uSPE = usp3[3].substring(0,usp3[3].indexOf(')'));
+		var usp3 = useSPlit[2].split('(');
+		var uSPD = usp3[1].substring(0,usp3[1].indexOf(')'));
+		var uSPP = usp3[2].substring(0,usp3[2].indexOf(')'));
+		var uSPE = usp3[3].substring(0,usp3[3].indexOf(')'));
 
-	var usp4 = useSPlit[3].split('(');
-	var uLE = usp4[1].substring(0,usp4[1].indexOf(')'));
+		var usp4 = useSPlit[3].split('(');
+		var uLE = usp4[1].substring(0,usp4[1].indexOf(')'));
 
-	var use1SPlit = GM_getValue('lastPotionsUse1').split(']');
-	var u1sp1 = use1SPlit[0].split('(');
-	var uSWIF = u1sp1[1].substring(0,u1sp1[1].indexOf(')'));
-	var uPRO = u1sp1[2].substring(0,u1sp1[2].indexOf(')'));
-	var uAVA = u1sp1[3].substring(0,u1sp1[3].indexOf(')'));
-	var uABS = u1sp1[4].substring(0,u1sp1[4].indexOf(')'));
-	var uSHA = u1sp1[5].substring(0,u1sp1[5].indexOf(')'));
-	var uLIF = u1sp1[6].substring(0,u1sp1[6].indexOf(')'));
-	var uGOD = u1sp1[7].substring(0,u1sp1[7].indexOf(')'));
-
-
-	var use2SPlit = GM_getValue('lastPotionsUse2').split(']');
-	var u2sp1 = use2SPlit[0].split('(');
-	var uFL = u2sp1[1].substring(0,u2sp1[1].indexOf(')'));
-	var uFR = u2sp1[2].substring(0,u2sp1[2].indexOf(')'));
-	var uLI = u2sp1[3].substring(0,u2sp1[3].indexOf(')'));
-	var uST = u2sp1[4].substring(0,u2sp1[4].indexOf(')'));
-	var uDI = u2sp1[5].substring(0,u2sp1[5].indexOf(')'));
-	var uDA = u2sp1[6].substring(0,u2sp1[6].indexOf(')'));
+		var use1SPlit = GM_getValue('lastPotionsUse1').split(']');
+		var u1sp1 = use1SPlit[0].split('(');
+		var uSWIF = u1sp1[1].substring(0,u1sp1[1].indexOf(')'));
+		var uPRO = u1sp1[2].substring(0,u1sp1[2].indexOf(')'));
+		var uAVA = u1sp1[3].substring(0,u1sp1[3].indexOf(')'));
+		var uABS = u1sp1[4].substring(0,u1sp1[4].indexOf(')'));
+		var uSHA = u1sp1[5].substring(0,u1sp1[5].indexOf(')'));
+		var uLIF = u1sp1[6].substring(0,u1sp1[6].indexOf(')'));
+		var uGOD = u1sp1[7].substring(0,u1sp1[7].indexOf(')'));
 
 
+		var use2SPlit = GM_getValue('lastPotionsUse2').split(']');
+		var u2sp1 = use2SPlit[0].split('(');
+		var uFL = u2sp1[1].substring(0,u2sp1[1].indexOf(')'));
+		var uFR = u2sp1[2].substring(0,u2sp1[2].indexOf(')'));
+		var uLI = u2sp1[3].substring(0,u2sp1[3].indexOf(')'));
+		var uST = u2sp1[4].substring(0,u2sp1[4].indexOf(')'));
+		var uDI = u2sp1[5].substring(0,u2sp1[5].indexOf(')'));
+		var uDA = u2sp1[6].substring(0,u2sp1[6].indexOf(')'));
 
-	totalUsePrice = totalUsePrice + (itemsPrice[(itemsPrice.indexOf('Health Draught')+1)]*uHPD);
-	totalUsePrice = totalUsePrice + (itemsPrice[(itemsPrice.indexOf('Health Potion')+1)]*uHPP);
-	totalUsePrice = totalUsePrice + (itemsPrice[(itemsPrice.indexOf('Health Elixir')+1)]*uHPE);
-	totalUsePrice = totalUsePrice + (itemsPrice[(itemsPrice.indexOf('Mana Draught')+1)]*uMPD);
-	totalUsePrice = totalUsePrice + (itemsPrice[(itemsPrice.indexOf('Mana Potion')+1)]*uMPP);
-	totalUsePrice = totalUsePrice + (itemsPrice[(itemsPrice.indexOf('Mana Elixir')+1)]*uMPE);
-	totalUsePrice = totalUsePrice + (itemsPrice[(itemsPrice.indexOf('Spirit Draught')+1)]*uSPD);
-	totalUsePrice = totalUsePrice + (itemsPrice[(itemsPrice.indexOf('Spirit Potion')+1)]*uSPP);
-	totalUsePrice = totalUsePrice + (itemsPrice[(itemsPrice.indexOf('Spirit Elixir')+1)]*uSPE);
-	totalUsePrice = totalUsePrice + (itemsPrice[(itemsPrice.indexOf('Last Elixir')+1)]*uLE);
-	totalUsePrice = totalUsePrice + (itemsPrice[(itemsPrice.indexOf('Scroll of Swiftness')+1)]*uSWIF);
-	totalUsePrice = totalUsePrice + (itemsPrice[(itemsPrice.indexOf('Scroll of Protection')+1)]*uPRO);
-	totalUsePrice = totalUsePrice + (itemsPrice[(itemsPrice.indexOf('Scroll of the Avatar')+1)]*uAVA);
-	totalUsePrice = totalUsePrice + (itemsPrice[(itemsPrice.indexOf('Scroll of Absorption')+1)]*uABS);
-	totalUsePrice = totalUsePrice + (itemsPrice[(itemsPrice.indexOf('Scroll of Shadows')+1)]*uSHA);
-	totalUsePrice = totalUsePrice + (itemsPrice[(itemsPrice.indexOf('Scroll of Life')+1)]*uLIF);
-	totalUsePrice = totalUsePrice + (itemsPrice[(itemsPrice.indexOf('Scroll of the Gods')+1)]*uGOD);
-	totalUsePrice = totalUsePrice + (itemsPrice[(itemsPrice.indexOf('Infusion of Flames')+1)]*uFL);
-	totalUsePrice = totalUsePrice + (itemsPrice[(itemsPrice.indexOf('Infusion of Frost')+1)]*uFR);
-	totalUsePrice = totalUsePrice + (itemsPrice[(itemsPrice.indexOf('Infusion of Lightning')+1)]*uLI);
-	totalUsePrice = totalUsePrice + (itemsPrice[(itemsPrice.indexOf('Infusion of Storms')+1)]*uST);
-	totalUsePrice = totalUsePrice + (itemsPrice[(itemsPrice.indexOf('Infusion of Divinity')+1)]*uDI);
-	totalUsePrice = totalUsePrice + (itemsPrice[(itemsPrice.indexOf('Infusion of Darkness')+1)]*uDA);
+
+
+		totalUsePrice = totalUsePrice + (itemsPrice[(itemsPrice.indexOf('Health Draught')+1)]*uHPD);
+		totalUsePrice = totalUsePrice + (itemsPrice[(itemsPrice.indexOf('Health Potion')+1)]*uHPP);
+		totalUsePrice = totalUsePrice + (itemsPrice[(itemsPrice.indexOf('Health Elixir')+1)]*uHPE);
+		totalUsePrice = totalUsePrice + (itemsPrice[(itemsPrice.indexOf('Mana Draught')+1)]*uMPD);
+		totalUsePrice = totalUsePrice + (itemsPrice[(itemsPrice.indexOf('Mana Potion')+1)]*uMPP);
+		totalUsePrice = totalUsePrice + (itemsPrice[(itemsPrice.indexOf('Mana Elixir')+1)]*uMPE);
+		totalUsePrice = totalUsePrice + (itemsPrice[(itemsPrice.indexOf('Spirit Draught')+1)]*uSPD);
+		totalUsePrice = totalUsePrice + (itemsPrice[(itemsPrice.indexOf('Spirit Potion')+1)]*uSPP);
+		totalUsePrice = totalUsePrice + (itemsPrice[(itemsPrice.indexOf('Spirit Elixir')+1)]*uSPE);
+		totalUsePrice = totalUsePrice + (itemsPrice[(itemsPrice.indexOf('Last Elixir')+1)]*uLE);
+		totalUsePrice = totalUsePrice + (itemsPrice[(itemsPrice.indexOf('Scroll of Swiftness')+1)]*uSWIF);
+		totalUsePrice = totalUsePrice + (itemsPrice[(itemsPrice.indexOf('Scroll of Protection')+1)]*uPRO);
+		totalUsePrice = totalUsePrice + (itemsPrice[(itemsPrice.indexOf('Scroll of the Avatar')+1)]*uAVA);
+		totalUsePrice = totalUsePrice + (itemsPrice[(itemsPrice.indexOf('Scroll of Absorption')+1)]*uABS);
+		totalUsePrice = totalUsePrice + (itemsPrice[(itemsPrice.indexOf('Scroll of Shadows')+1)]*uSHA);
+		totalUsePrice = totalUsePrice + (itemsPrice[(itemsPrice.indexOf('Scroll of Life')+1)]*uLIF);
+		totalUsePrice = totalUsePrice + (itemsPrice[(itemsPrice.indexOf('Scroll of the Gods')+1)]*uGOD);
+		totalUsePrice = totalUsePrice + (itemsPrice[(itemsPrice.indexOf('Infusion of Flames')+1)]*uFL);
+		totalUsePrice = totalUsePrice + (itemsPrice[(itemsPrice.indexOf('Infusion of Frost')+1)]*uFR);
+		totalUsePrice = totalUsePrice + (itemsPrice[(itemsPrice.indexOf('Infusion of Lightning')+1)]*uLI);
+		totalUsePrice = totalUsePrice + (itemsPrice[(itemsPrice.indexOf('Infusion of Storms')+1)]*uST);
+		totalUsePrice = totalUsePrice + (itemsPrice[(itemsPrice.indexOf('Infusion of Divinity')+1)]*uDI);
+		totalUsePrice = totalUsePrice + (itemsPrice[(itemsPrice.indexOf('Infusion of Darkness')+1)]*uDA);
+	}
+	catch(err) {
+		//....
+	}
+
 
 	return totalUsePrice;
 
