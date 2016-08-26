@@ -4,7 +4,7 @@
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @run-at      document-end
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version     2.0.0.34
+// @version     2.0.0.35
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @grant       none
@@ -2947,6 +2947,25 @@ function AI() {
 						return;
 					}
 				}
+			}
+		}
+
+		//force use Channeling choose lower duration on channeleing_buff
+		var useTS2 = '';
+		var minBuff = 999;
+		for (var ss2 in getBuffs()) {
+			var ts2 = getBuffs()[ss2];
+			var gsDura = getBuffDuration(ss2);
+			if (gsDura < minBuff){
+				minBuff = gsDura;
+				useTS2 = ts2;
+			}
+		}
+
+		if (MAINTAIN_CHANNELING_BUFFS.indexOf(useTS2)!== -1 && (effScrollList.indexOf(useTS2) === -1 || vUseScroll)) {
+			console.log('decided to cast ' + useTS2);
+			if(castSpell(useTS2,0)){
+				return;
 			}
 		}
 	}else{
