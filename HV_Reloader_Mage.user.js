@@ -36,6 +36,8 @@
 var settings = {
 	godAuto: true,				// God Mode
 	enableHaveAutoCast: true,	// if you already unlock auto-cast please enable and go to LIST_AUTO_CAST for config.
+	enableOFC: true,			// use orbital friendship cannon
+	enableBuffMon: false,		// use buff to monster
 	showUsePotion: true,		// Show use poton
 	spellControl: true,			// Spell Control - use Scroll or normal buff
 	showStopStartButton: true,	// Show Stop Start button
@@ -1795,7 +1797,8 @@ var spellsEx = [
     'iris strike',	2401,
     'backstab',		2402,
     'frenzied blows',	2403,
-    'concussive strike', 2501
+    'concussive strike', 2501,
+	'orbital friendship cannon', 1111
 ];
 
 var spellsEffect = [
@@ -2455,7 +2458,7 @@ function AI() {
 
         var iRandom = getRandomInt(1,99);
 
-        if((iRandom%7) === 0 && getNumBossMonsterAlive() > 1){
+        if(settings.enableBuffMon && ( (iRandom%7) === 0 && getNumBossMonsterAlive() > 1 )){
             var indexMon = chooseTargetBoss();
             if(indexMon !== -1){
                 if ((location.href + "").indexOf('s=Battle&ss=rb') === -1) {
@@ -2492,7 +2495,7 @@ function AI() {
                 return;
 
             }
-        }else if( (iRandom > 40 && iRandom < 65 && getSelfMana() > 85 && getMaxSelfMana() > 1000) || (FORCE_USE_SPELL_MONSTER && getSelfMana() > 45)){
+        }else if( settings.enableBuffMon && ( (iRandom > 40 && iRandom < 65 && getSelfMana() > 85 && getMaxSelfMana() > 1000) || (FORCE_USE_SPELL_MONSTER && getSelfMana() > 45)) ){
             //if(useSkilllToMonster('slow')){
             //    return;
             //}
@@ -2514,7 +2517,7 @@ function AI() {
                 }
             }
 
-        }else if(getNumBossMonsterAlive() > 1 || (difficulty === 'PFUDOR' && getNumBossMonsterAlive() > 0)){
+        }else if( settings.enableBuffMon && (getNumBossMonsterAlive() > 1 || (difficulty === 'PFUDOR' && getNumBossMonsterAlive() > 0)) ){
 
 			if((iRandom%10) === 0){
                 //MAIN_SPELL_MONSTER.push('imperil');
@@ -2562,137 +2565,148 @@ function AI() {
 
             if(useOverchargeMode){
 				var mainOvercharge = 10;
-				if(MODE_FIGHTING === "1H"){
-
-					var canUseMerBlow = false;
-					var canUseVitalST = false;
-					var chkMB = document.getElementById(spellsEx[(spellsEx.indexOf('merciful blow')+1)]);
-					var chkVS = document.getElementById(spellsEx[(spellsEx.indexOf('vital strike')+1)]);
-					if(chkMB){
-						if(chkMB.getAttribute('onclick')){
-							canUseMerBlow = true;
-						}
-					}
-					
-					if(chkVS){
-						if(chkVS.getAttribute('onclick')){
-							canUseVitalST = true;
-						}
-					}
-
-					if(getNumMonstersAlive() > 2 || getNumBossMonsterAlive() > 0){
-						if(getBuffs().indexOf('chain 2') !== -1){
-							mainOvercharge = 30.8;
-						}else if(getBuffs().indexOf('chain 1') !== -1){
-							mainOvercharge = 23;
-						}
-					}
-
-					if(getNumMonstersAlive() === 1 && getNumBossMonsterAlive() === 1 && !GM_getValue("offOverWaitLine")){
-						GM_setValue("offOverWaitLine", true);
-					}
-
-					if(GM_getValue("offOverWaitLine")){
-						mainOvercharge = 80;
-					}
-
-					if(getSelfOvercharge() > mainOvercharge){
-						if(canUseMerBlow){
-							var iMonterBlow = getMonsterWithConditionHPMP(7,25,-1,100);
-							if(iMonterBlow > -1){
-								if(castSpell('merciful blow',iMonterBlow)){
-									return;
-								}
+				if(settings.enableOFC){
+					mainOvercharge = 100;
+					if(getNumMonstersAlive() > 0 || getNumBossMonsterAlive() > 0){
+						if(getSelfOvercharge() >= mainOvercharge){
+							if(castSpell('orbital friendship cannon',iMonterBlow)){
+								return;
 							}
 						}
+					}
+				}else{
+					if(MODE_FIGHTING === "1H"){
 
-						if(canUseVitalST){
-							//getMonsterWithEff(effImgName, vHPMin, vHPMax, vMPMin, vMPMax){
-							var monWEff = getMonsterWithEff('wpn_stun',5,100,-1,100);
-							if(monWEff > -1){
-								if(castSpell('vital strike',monWEff)){
-									return;
-								}
+						var canUseMerBlow = false;
+						var canUseVitalST = false;
+						var chkMB = document.getElementById(spellsEx[(spellsEx.indexOf('merciful blow')+1)]);
+						var chkVS = document.getElementById(spellsEx[(spellsEx.indexOf('vital strike')+1)]);
+						if(chkMB){
+							if(chkMB.getAttribute('onclick')){
+								canUseMerBlow = true;
 							}
-						}
-
-						if(useSkilllToMonster('vital strike')){
-						   return;
-						} 
-						
-						if(useSkilllToMonster('shield bash')){
-							GM_setValue("offOverWaitLine", false);
-							return;
-						}
-
-					}
-				}else if(MODE_FIGHTING === "2H"){
-					if(getNumMonstersAlive() > 2 || getNumBossMonsterAlive() > 0){
-						if(getBuffs().indexOf('chain 2') !== -1){
-							mainOvercharge = 30.8;
-						}else if(getBuffs().indexOf('chain 1') !== -1){
-							mainOvercharge = 23;
-						}
-					}
-
-					if(getSelfOvercharge() > mainOvercharge){
-						if(useSkilllToMonster('shatter strike')){
-							return;
-						}else if(useSkilllToMonster('rending blow')){
-							return;
-						}else if(useSkilllToMonster('great cleave')){
-							return;
-						}
-					}
-				}else if(MODE_FIGHTING === "DW"){
-					var canUseBKST = false;
-
-					var chkBKST = document.getElementById(spellsEx[(spellsEx.indexOf('backstab')+1)]);
-
-					if(chkBKST){
-						if(chkBKST.getAttribute('onclick')){
-							canUseBKST = true;
-						}
-					}
-
-					if(getNumMonstersAlive() > 2 || getNumBossMonsterAlive() > 0){
-
-						if(getBuffs().indexOf('chain 2') !== -1){
-							mainOvercharge = 30.8;
-						}else if(getBuffs().indexOf('chain 1') !== -1){
-							mainOvercharge = 23;
-						}
-					}
-
-					if(getSelfOvercharge() > mainOvercharge){
-						if(useSkilllToMonster('frenzied blows')){
-							return;
-						}
-
-						if(canUseBKST){
-							var monWEff2 = getMonsterWithEff('blind',40,100,-1,100);
-							if(monWEff2 > -1){
-								if(castSpell('backstab',monWEff2)){
-									return;
-								}
-							}
-						}
-
-						if(useSkilllToMonster('backstab')){
-							return;
-						}else if(useSkilllToMonster('iris strike')){
-							return;
 						}
 						
-					}
+						if(chkVS){
+							if(chkVS.getAttribute('onclick')){
+								canUseVitalST = true;
+							}
+						}
 
-				}else if(MODE_FIGHTING === "NT"){
-					if(useSkilllToMonster('skyward sword')){
-						return;
-					}
-				}else if(MODE_FIGHTING === "ST"){
-					if(useSkilllToMonster('concussive strike')){
-						return;
+						if(getNumMonstersAlive() > 2 || getNumBossMonsterAlive() > 0){
+							if(getBuffs().indexOf('chain 2') !== -1){
+								mainOvercharge = 30.8;
+							}else if(getBuffs().indexOf('chain 1') !== -1){
+								mainOvercharge = 23;
+							}
+						}
+
+						if(getNumMonstersAlive() === 1 && getNumBossMonsterAlive() === 1 && !GM_getValue("offOverWaitLine")){
+							GM_setValue("offOverWaitLine", true);
+						}
+
+						if(GM_getValue("offOverWaitLine")){
+							mainOvercharge = 80;
+						}
+
+						if(getSelfOvercharge() > mainOvercharge){
+							if(canUseMerBlow){
+								var iMonterBlow = getMonsterWithConditionHPMP(7,25,-1,100);
+								if(iMonterBlow > -1){
+									if(castSpell('merciful blow',iMonterBlow)){
+										return;
+									}
+								}
+							}
+
+							if(canUseVitalST){
+								//getMonsterWithEff(effImgName, vHPMin, vHPMax, vMPMin, vMPMax){
+								var monWEff = getMonsterWithEff('wpn_stun',5,100,-1,100);
+								if(monWEff > -1){
+									if(castSpell('vital strike',monWEff)){
+										return;
+									}
+								}
+							}
+
+							if(useSkilllToMonster('vital strike')){
+							   return;
+							} 
+							
+							if(useSkilllToMonster('shield bash')){
+								GM_setValue("offOverWaitLine", false);
+								return;
+							}
+
+						}
+					}else if(MODE_FIGHTING === "2H"){
+						if(getNumMonstersAlive() > 2 || getNumBossMonsterAlive() > 0){
+							if(getBuffs().indexOf('chain 2') !== -1){
+								mainOvercharge = 30.8;
+							}else if(getBuffs().indexOf('chain 1') !== -1){
+								mainOvercharge = 23;
+							}
+						}
+
+						if(getSelfOvercharge() > mainOvercharge){
+							if(useSkilllToMonster('shatter strike')){
+								return;
+							}else if(useSkilllToMonster('rending blow')){
+								return;
+							}else if(useSkilllToMonster('great cleave')){
+								return;
+							}
+						}
+					}else if(MODE_FIGHTING === "DW"){
+						var canUseBKST = false;
+
+						var chkBKST = document.getElementById(spellsEx[(spellsEx.indexOf('backstab')+1)]);
+
+						if(chkBKST){
+							if(chkBKST.getAttribute('onclick')){
+								canUseBKST = true;
+							}
+						}
+
+						if(getNumMonstersAlive() > 2 || getNumBossMonsterAlive() > 0){
+
+							if(getBuffs().indexOf('chain 2') !== -1){
+								mainOvercharge = 30.8;
+							}else if(getBuffs().indexOf('chain 1') !== -1){
+								mainOvercharge = 23;
+							}
+						}
+
+						if(getSelfOvercharge() > mainOvercharge){
+							if(useSkilllToMonster('frenzied blows')){
+								return;
+							}
+
+							if(canUseBKST){
+								var monWEff2 = getMonsterWithEff('blind',40,100,-1,100);
+								if(monWEff2 > -1){
+									if(castSpell('backstab',monWEff2)){
+										return;
+									}
+								}
+							}
+
+							if(useSkilllToMonster('backstab')){
+								return;
+							}else if(useSkilllToMonster('iris strike')){
+								return;
+							}
+							
+						}
+
+					}else if(MODE_FIGHTING === "NT"){
+						if(useSkilllToMonster('skyward sword')){
+							return;
+						}
+					}else if(MODE_FIGHTING === "ST"){
+						if(useSkilllToMonster('concussive strike')){
+							return;
+						}
 					}
 				}
 			}
