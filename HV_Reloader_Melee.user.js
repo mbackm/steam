@@ -5035,6 +5035,9 @@ if ( document.getElementById('togpane_log') ) {
 
 	//show potion
 	if (settings.showUsePotion) {
+
+		if (document.getElementById('riddleform') || document.getElementById('equipment') || document.querySelector('img[src $= "derpy.gif"]')) return;
+
 		if (!document.getElementById('quickbar') && !document.querySelector('#riddleform div img[src*="riddlemaster.php"]') && !checkHaveOverchanrge()) {
 
 			var divPS = document.createElement("DIV");
