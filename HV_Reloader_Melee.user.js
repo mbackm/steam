@@ -2,11 +2,19 @@
 // @name        HV Reloader Melee
 // @namespace   HVRLD3
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
-// @run-at      document-end
-// @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version     2.0.0.37
+// @match          http://hentaiverse.org/*
+// @exclude        http://hentaiverse.org/pages/showequip*
+// @exclude        http://hentaiverse.org/?s=Character*
+// @exclude        http://hentaiverse.org/?s=Bazaar*
+// @match          http://alt.hentaiverse.org/*
+// @exclude        http://alt.hentaiverse.org/pages/showequip*
+// @exclude        http://alt.hentaiverse.org/?s=Character*
+// @exclude        http://alt.hentaiverse.org/?s=Bazaar*
+// @include			/^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
+// @version			2.0.0.37
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
+// @run-at      document-end
 // @grant       none
 // ==/UserScript==
 
