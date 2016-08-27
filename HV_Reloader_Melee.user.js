@@ -4,7 +4,7 @@
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @run-at      document-end
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version     2.0.0.36
+// @version     2.0.0.37
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @grant       none
@@ -2569,7 +2569,7 @@ function AI() {
 					mainOvercharge = 100;
 					if(getNumMonstersAlive() > 0 || getNumBossMonsterAlive() > 0){
 						if(getSelfOvercharge() >= mainOvercharge){
-							if(castSpell('orbital friendship cannon',iMonterBlow)){
+							if(castSpell('orbital friendship cannon',chooseTarget(false))){
 								return;
 							}
 						}
