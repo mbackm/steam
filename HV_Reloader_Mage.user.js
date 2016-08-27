@@ -4,7 +4,7 @@
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @run-at      document-end
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version     1.3.3.43
+// @version     1.3.3.44
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @grant       none
@@ -35,6 +35,7 @@
 \* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 var settings = {
 	godAuto: true,				// God Mode
+	enableHaveAutoCast: true,	// if you already unlock auto-cast please enable and go to LIST_AUTO_CAST for config.
 	showUsePotion: true,		// Show use potion
 	spellControl: true,			// Spell Control - use Scroll or normal buff
 	showStopStartButton: true,	// Show Stop Start button
@@ -1715,6 +1716,12 @@ var MAGE_SPELL_FIRE = ['fiery blast','inferno','flames of loki'];
 var MAGE_SPELL_DARK = ['corruption','disintegrate','ragnarok'];
 var MAGE_SPELL_HOLY = ['smite','banishment','paradise lost'];
 
+//****************** First time please check this LIST_AUTO_CAST *****//
+var LIST_AUTO_CAST = [];
+if(settings.enableHaveAutoCast){
+	LIST_AUTO_CAST = ['spark of life','hastened','shadow veil','protection','spirit shield'];
+}
+
 
 var spellsEx = [
     'fiery blast',	111,
@@ -2925,6 +2932,13 @@ function fillForm(a,b,c,d) {
 }
 
 function castSpell(spellName, target) {
+
+	if(LIST_AUTO_CAST.length > 0){
+		if(LIST_AUTO_CAST.indexOf(spellName) !== -1){
+			return false;
+		}
+	}
+
     var n = spellsEx.indexOf(spellName.toLowerCase());
     var vChk = false;
     //document.getElementById('311').style.opacity
