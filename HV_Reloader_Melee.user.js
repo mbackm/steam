@@ -3,7 +3,7 @@
 // @namespace   HVRLD3
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @include			/^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version			2.0.0.38
+// @version			2.0.0.39
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @run-at      document-end
@@ -2985,10 +2985,12 @@ function AI() {
 		var minBuff = 999;
 		for (var ss2 in getBuffs()) {
 			var ts2 = getBuffs()[ss2];
-			var gsDura = getBuffDuration(ss2);
-			if (gsDura < minBuff){
-				minBuff = gsDura;
-				useTS2 = ts2;
+			if(MAINTAIN_CHANNELING_BUFFS.indexOf(ts2) !== -1){
+				var gsDura = getBuffDuration(ss2);
+				if (gsDura < minBuff){
+					minBuff = gsDura;
+					useTS2 = ts2;
+				}
 			}
 		}
 
