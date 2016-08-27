@@ -11,7 +11,7 @@
 // @exclude        http://alt.hentaiverse.org/?s=Character*
 // @exclude        http://alt.hentaiverse.org/?s=Bazaar*
 // @include			/^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version			2.0.0.37
+// @version			2.0.0.38
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @run-at      document-end
@@ -1475,7 +1475,7 @@ function OnPageReload() {
 			if (document.getElementById('2501')) {
 				newDivShowItems.style.top = "160px";
 			}else{
-				newDivShowItems.style.top = "140px";
+				newDivShowItems.style.top = "160px";
 			}
 			newDivShowItems.style.left = "1240px";
 			newDivShowItems.style.width = "80pxpx";
@@ -1725,7 +1725,7 @@ var vHealUseBuff = 35;
 var enableAutoJoinGrindfest = true;
 
 var stmnMain = 70;
-var stmnMin = 50;
+var stmnMin = 10;
 var enableSkipSTMN = false;
 
 if(GM_getValue("enableSkipSTMN") !== null){
