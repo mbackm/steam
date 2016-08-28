@@ -2563,10 +2563,10 @@ function AI() {
 				useOverchargeMode = true;
 			}
 
-            if(useOverchargeMode){
+            if(useOverchargeMode || settings.enableOFC){
 				var mainOvercharge = 10;
 				if(settings.enableOFC){
-					mainOvercharge = 100;
+					mainOvercharge = 100; //82.5
 					if(getNumMonstersAlive() > 0 || getNumBossMonsterAlive() > 0){
 						if(getSelfOvercharge() >= mainOvercharge){
 							if(castSpell('orbital friendship cannon',chooseTarget(false))){
