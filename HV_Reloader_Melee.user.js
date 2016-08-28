@@ -2987,7 +2987,7 @@ function AI() {
 			var ts2 = getBuffs()[ss2];
 			if(MAINTAIN_CHANNELING_BUFFS.indexOf(ts2) !== -1){
 				var gsDura = getBuffDuration(ss2);
-				if (gsDura < minBuff){
+				if (gsDura > 0 && gsDura < minBuff){
 					minBuff = gsDura;
 					useTS2 = ts2;
 				}
