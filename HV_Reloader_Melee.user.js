@@ -5011,8 +5011,8 @@ if(settings.enableCheckPony){
 				if(settings.enableBeepPopup){
 					window.open('http://www.soundsnap.com/themes/soundsnap2/assets/mp3/please-refresh.mp3', '_blank');
 				}
-                //addShortcutAnswer();
-                actionBeepX(true,false);
+                addShortcutAnswer();
+                //actionBeepX(true,false);
                 return false;
             }
         }
