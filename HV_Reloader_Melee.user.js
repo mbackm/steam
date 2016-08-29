@@ -1911,7 +1911,7 @@ function OnPageReload() {
             }
 
             var vHealUseBuff = 35;
-            var enableAutoJoinGrindfest = true;
+            var enableAutoJoinGrindfest = false;
 
             var stmnMain = 11;
             var stmnMin = 10;
