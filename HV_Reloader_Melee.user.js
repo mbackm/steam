@@ -2286,15 +2286,26 @@ function OnPageReload() {
 
                 }
 
-                function chooseTargetBossMaxHP(){
+                function chooseTargetBossLowHP(){
                     var monArray = document.getElementById('monsterpane').querySelectorAll('div[id^="mkey_"][onclick*="battle"] div.btm2[style^="background"]');
                     var m = 101;
                     var x = -1;
+                    var textComclick;
+
                     for (var i2=1;i2<=monArray.length;i2++) {
-                        if (m > (monArray[(i2-1)].parentNode.children[2].children[0].children[0].firstElementChild.width*5/6) ) {
+                        if(bossHaveHealSkill.indexOf(monArray[(i2-1)].parentNode.querySelector('div.btm3').textContent) !== -1){
+
+                            textComclick = monArray[(i2-1)].parentNode.getAttribute('onclick');
+
+                            if(textComclick.indexOf('commit_target(') !== -1){
+                                x = textComclick.substring(textComclick.indexOf('commit_target(')+14, (textComclick.length-1));
+                            }
+
+                            break;
+                        }else if (m > (monArray[(i2-1)].parentNode.children[2].children[0].children[0].firstElementChild.width*5/6) ) {
                             //x = i2;
                             //x = monArray[(i2-1)].parentNode.id.substring(5);
-                            var textComclick = monArray[(i2-1)].parentNode.getAttribute('onclick');
+                            textComclick = monArray[(i2-1)].parentNode.getAttribute('onclick');
 
                             if(textComclick.indexOf('commit_target(') !== -1){
                                 x = textComclick.substring(textComclick.indexOf('commit_target(')+14, (textComclick.length-1));
@@ -2935,9 +2946,9 @@ function OnPageReload() {
                             }
                         }
 
-                        var monMaxHP = chooseTargetBossMaxHP();
-                        if( monMaxHP !== -1){
-                            attack(monMaxHP);
+                        var monLowHP = chooseTargetBossLowHP();
+                        if( monLowHP !== -1){
+                            attack(monLowHP);
                         }else{
                             attack(chooseTarget(false));
                         }
