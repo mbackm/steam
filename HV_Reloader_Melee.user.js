@@ -3,7 +3,7 @@
 // @namespace   HVRLD3
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @include		/^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version		2.0.0.40
+// @version		2.0.0.41
 // @updateURL      https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @downloadURL    https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @run-at      document-end
@@ -44,7 +44,7 @@ var settings = {
     showBarListBattleItems: true,	// Show list battle items
     trackDrop: true,			// Track item drop
     enableCheckPony: true,		// enable check alert pony
-    enableBeepPopup: true,		// enable beep popup
+    enableBeepPopup: false,		// enable beep popup
     enableOfflineSong: true,	// enable offline song
     enableGFslowGEM: true,		// enable Grindfest use GEM slow
     hideWelcome: true,          // Hide the "Welcome to the Hentaiverse" image/logo
@@ -52,6 +52,7 @@ var settings = {
     effectDurations: true,      // Show buff/debuff durations
     gemIcon: true,              // Show gem/powerup, click on icon to use
     staminaControl: true,         // Show Stamina Control
+    enableFocusDefend: false,     // enable Focus Defend
     roundCounter: true,         // Show current round and rounds remaining
     hvStateHP: false,            // Show enemy HP value
     fluidHPBar: false,           // Shorten HP Bar width to easily see which monster has the most HP
@@ -3515,18 +3516,20 @@ function OnPageReload() {
 
 
                 //check overcharge conditions
-                if ( (getNumMonsters()-getNumMonstersDead() == 1) && (getSelfOvercharge() > 25 && getSelfOvercharge() < 35) && (getNumBossMonsterAlive() == 0) && (document.querySelector('img[src*="/y/battle/spirit_n.png"]')) ) {
-                    if ((DEFEND_FOR_HP) && (getSelfHealth() < HP_DEFEND_CUTOFF)) {
-                        console.log('decided to defend');
-                        defend();
-                        return;
-                    }
-                    if ((FOCUS_FOR_MP) && (getSelfMana() < MP_FOCUS_CUTOFF)) {
-                        console.log('decided to focus');
-                        focus();
-                        return;
-                    }
-                }
+				if(settings.enableFocusDefend){
+					if ( (getNumMonsters()-getNumMonstersDead() == 1) && (getSelfOvercharge() > 25 && getSelfOvercharge() < 35) && (getNumBossMonsterAlive() == 0) && (document.querySelector('img[src*="/y/battle/spirit_n.png"]')) ) {
+						if ((DEFEND_FOR_HP) && (getSelfHealth() < HP_DEFEND_CUTOFF)) {
+							console.log('decided to defend');
+							defend();
+							return;
+						}
+						if ((FOCUS_FOR_MP) && (getSelfMana() < MP_FOCUS_CUTOFF)) {
+							console.log('decided to focus');
+							focus();
+							return;
+						}
+					}
+				}
 
                 //make sure all asked for buffs are up and running
                 //&& (effScrollList.indexOf(MAINTAIN_BUFFS[s3] === -1 || vUseScroll)
@@ -4987,8 +4990,8 @@ function playAudio() {
 if(settings.enableCheckPony){
     if (checkPony()) {
         //http://www.soundsnap.com/audio/play/17604
-        a = new Audio('http://www.soundsnap.com/themes/soundsnap2/assets/mp3/please-refresh.mp3');
-        a.play();
+        //a = new Audio('http://www.soundsnap.com/themes/soundsnap2/assets/mp3/please-refresh.mp3');
+        //a.play();
 
         if(settings.enableOfflineSong && currentSong !== ''){
             var bs = new Audio(currentSong);
@@ -5005,7 +5008,10 @@ if(settings.enableCheckPony){
         if (document.getElementById('monsterpane') !== null) {
             if (document.getElementById('monsterpane').innerHTML.indexOf('Choose the right answer based on the image below.') !== -1) {
                 addAnswerButton();
-                addShortcutAnswer();
+				if(settings.enableBeepPopup){
+					window.open('http://www.soundsnap.com/themes/soundsnap2/assets/mp3/please-refresh.mp3', '_blank');
+				}
+                //addShortcutAnswer();
                 actionBeepX(true,false);
                 return false;
             }
