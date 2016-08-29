@@ -2288,30 +2288,52 @@ function OnPageReload() {
 
                 function chooseTargetBossLowHP(){
                     var monArray = document.getElementById('monsterpane').querySelectorAll('div[id^="mkey_"][onclick*="battle"] div.btm2[style^="background"]');
+					var firstFoundBoss = true;
+					if(monArray.length === 0){
+						monArray = [];
+						var monArrayCB = document.getElementById('monsterpane').querySelectorAll('div[id^="mkey_"][onclick*="battle"]');
+						for(var cb=1;cb<=monArrayCB.length;cb++){
+							var cbMonName = monArrayCB[(cb-1)].parentNode.querySelector('div.btm3').textContent;
+							if(bossNameEff.indexOf(cbMonName) !== -1){
+								monArray.push(monArrayCB[(cb-1)]);
+								firstFoundBoss = false;
+							}
+						}
+					}
+
+
                     var m = 101;
                     var x = -1;
                     var textComclick;
+					var ctlMonName = '';
+					var ctlHPMon = 0;
 
                     for (var i2=1;i2<=monArray.length;i2++) {
-                        if(bossHaveHealSkill.indexOf(monArray[(i2-1)].parentNode.querySelector('div.btm3').textContent) !== -1){
-
-                            textComclick = monArray[(i2-1)].parentNode.getAttribute('onclick');
+						if(firstFoundBoss){
+							ctlMonName = monArray[(i2-1)].parentNode.querySelector('div.btm3').textContent;
+							textComclick = monArray[(i2-1)].parentNode.getAttribute('onclick');
+							ctlHPMon = monArray[(i2-1)].parentNode.children[2].children[0].children[0].firstElementChild.width*5/6;
+						}else{
+							ctlMonName = monArray[(i2-1)].querySelector('div.btm3').textContent;
+							textComclick = monArray[(i2-1)].getAttribute('onclick');
+							ctlHPMon = monArray[(i2-1)].children[2].children[0].children[0].firstElementChild.width*5/6;
+						}
+						console.log(textComclick);
+						
+                        if(bossHaveHealSkill.indexOf(ctlMonName) !== -1){
 
                             if(textComclick.indexOf('commit_target(') !== -1){
                                 x = textComclick.substring(textComclick.indexOf('commit_target(')+14, (textComclick.length-1));
                             }
 
                             break;
-                        }else if (m > (monArray[(i2-1)].parentNode.children[2].children[0].children[0].firstElementChild.width*5/6) ) {
-                            //x = i2;
-                            //x = monArray[(i2-1)].parentNode.id.substring(5);
-                            textComclick = monArray[(i2-1)].parentNode.getAttribute('onclick');
+                        }else if (m > ctlHPMon ) {
 
                             if(textComclick.indexOf('commit_target(') !== -1){
                                 x = textComclick.substring(textComclick.indexOf('commit_target(')+14, (textComclick.length-1));
                             }
 
-                            m = monArray[(i2-1)].parentNode.children[2].children[0].children[0].firstElementChild.width*5/6;
+							m = ctlHPMon;
                         }
                     }
 
@@ -2324,8 +2346,12 @@ function OnPageReload() {
                     var x = -1;
                     for (var i2=1;i2<=monArray.length;i2++) {
 
+
+						var cbMonName = monArray[(i2-1)].parentNode.querySelector('div.btm3').textContent;
+							
                         //is boss  getMonsterWithConditionHPMP(7,25,-1,100);
-                        if(monArray[(i2-1)].parentNode.parentNode.querySelector('div.btm2[style^="background"]')){
+                        //if(monArray[(i2-1)].parentNode.parentNode.querySelector('div.btm2[style^="background"]')){
+						if(bossNameEff.indexOf(cbMonName) !== -1){
                             vHPMin = 2;
                         }
 
@@ -2354,9 +2380,10 @@ function OnPageReload() {
 
                     var x = -1;
                     for (var i2=1;i2<=monArray.length;i2++) {
-
+						var cbMonName = monArray[(i2-1)].parentNode.parentNode.querySelector('div.btm3').textContent;
                         //is boss   getMonsterWithEff('wpn_stun',5,100,-1,100);
-                        if(monArray[(i2-1)].parentNode.parentNode.querySelector('div.btm2[style^="background"]')){
+                        //if(monArray[(i2-1)].parentNode.parentNode.querySelector('div.btm2[style^="background"]')){
+						if(bossNameEff.indexOf(cbMonName) !== -1){
                             vHPMin = 1;
                         }
 
@@ -2382,9 +2409,13 @@ function OnPageReload() {
 
                 function checkMonsterIsBoss(idMon){
                     if(document.querySelector('div[id^="mkey_"][onclick*="battle.commit_target('+idMon+')"]')){
-                        if(document.querySelector('div[id^="mkey_"][onclick*="battle.commit_target('+idMon+')"]').querySelector('div.btm2[style^="background"]')){
-                            return true;
-                        }
+						var cbMonName = document.querySelector('div[id^="mkey_"][onclick*="battle.commit_target('+idMon+')"]').parentNode.querySelector('div.btm3').textContent;
+						if(bossNameEff.indexOf(cbMonName) !== -1){
+							return true;
+						}
+                        //if(document.querySelector('div[id^="mkey_"][onclick*="battle.commit_target('+idMon+')"]').querySelector('div.btm2[style^="background"]')){
+                        //    return true;
+                        //}
                     }
 
                     return false;
@@ -2633,11 +2664,28 @@ function OnPageReload() {
 
                 function useSpellEffToBoss(vNameSpell){
                     var monArray = document.getElementById('monsterpane').querySelectorAll('div[id^="mkey_"][onclick*="battle"] div.btm2[style^="background"]');
+					var firstFoundBoss = true;
+					if(monArray.length === 0){
+						monArray = [];
+						var monArrayCB = document.getElementById('monsterpane').querySelectorAll('div[id^="mkey_"][onclick*="battle"]');
+						for(var cb=1;cb<=monArrayCB.length;cb++){
+							var cbMonName = monArrayCB[(cb-1)].parentNode.querySelector('div.btm3').textContent;
+							
+							if(bossNameEff.indexOf(cbMonName) !== -1){
+								monArray.push(monArrayCB[(cb-1)]);
+								firstFoundBoss = false;
+							}
+						}
+					}
+
                     var textComclick;
                     var x = -1;
                     for (var i2=1;i2<=monArray.length;i2++) {
-
-                        textComclick = monArray[(i2-1)].parentNode.getAttribute('onclick');
+						if(firstFoundBoss){
+							textComclick = monArray[(i2-1)].parentNode.getAttribute('onclick');
+						}else{
+							textComclick = monArray[(i2-1)].getAttribute('onclick');
+						}
 
                         if(textComclick.indexOf('commit_target(') !== -1){
                             x = textComclick.substring(textComclick.indexOf('commit_target(')+14, (textComclick.length-1));
@@ -3805,7 +3853,19 @@ function OnPageReload() {
             }
 
             function getNumBossMonsterAlive(){
-                return document.getElementById('monsterpane').querySelectorAll('div[id^="mkey_"][onclick*="battle"] div.btm2[style^="background"]').length;
+				var monCount = document.getElementById('monsterpane').querySelectorAll('div[id^="mkey_"][onclick*="battle"] div.btm2[style^="background"]').length;
+
+				if(monCount === 0){
+					var monArrayCB = document.getElementById('monsterpane').querySelectorAll('div[id^="mkey_"][onclick*="battle"]');
+					for(var cb=1;cb<=monArrayCB.length;cb++){
+						var cbMonName = monArrayCB[(cb-1)].parentNode.querySelector('div.btm3').textContent;
+						if(bossNameEff.indexOf(cbMonName) !== -1){
+							monCount++;
+						}
+					}
+				}
+
+                return monCount;
 
             }
 
