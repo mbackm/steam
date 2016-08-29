@@ -3,7 +3,7 @@
 // @namespace   HVRLD3
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @include		/^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version		2.0.0.41
+// @version		2.0.0.42
 // @updateURL      https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @downloadURL    https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @run-at      document-end
@@ -2132,7 +2132,7 @@ function OnPageReload() {
                 var MP_CHK_FLEE = 22;  // MP < less than ?
                 var HP_CHK_FLEE = 40;  // and HP > more than ? exit fight.
 
-                if ((location.href + "").indexOf('s=Battle&ss=gr') !== -1) {
+                if ((location.href + "").indexOf('s=Battle&ss=gr') !== -1 && enableAutoJoinGrindfest) {
                     MP_CHK_FLEE = 10;
                     HP_CHK_FLEE = 40;
                     ENABLE_FLEE = true;
