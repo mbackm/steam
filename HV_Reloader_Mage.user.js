@@ -357,8 +357,12 @@ function checkHaveNoCurrentBattle(){
 
 
 function genAfterTurn() {
+	var vRound = '';
+	if (settings.roundCounter) {
+		vRound = 'Rounds: '+localStorage.getItem('lastData_rounds')+', ';
+	}
 
-    var afterTT = 'Rounds: '+localStorage.getItem('lastData_rounds')+', Turn: '+localStorage.getItem('lastData_turn')+', Time: '+localStorage.getItem('lastData_time')+', Exp: '+localStorage.getItem('lastData_exp')+', Credit: '+localStorage.getItem('lastData_credit');
+    var afterTT = vRound+'Turn: '+localStorage.getItem('lastData_turn')+', Time: '+localStorage.getItem('lastData_time')+', Exp: '+localStorage.getItem('lastData_exp')+', Credit: '+localStorage.getItem('lastData_credit');
     var divPSX = document.createElement("DIV");
     var lbPS = document.createElement("LABEL");
 
@@ -1330,7 +1334,11 @@ function OnPageReload() {
                         localStorage.setItem('lastData_exp',result.querySelectorAll('div')[2].textContent);
                         localStorage.setItem('lastData_credit',result.querySelectorAll('div')[3].textContent);
 
-                        localStorage.setItem('lastData_rounds',record.rounds);
+                        if (settings.roundCounter) {
+							try{
+								localStorage.setItem('lastData_rounds', localStorage.getItem('rounds').split('/')[1].trim());
+							}catch(ee){console.log(ee.message);}
+						}
                     }
                     catch(err) {
                         //
