@@ -3452,10 +3452,11 @@ function OnPageReload() {
                 return document.getElementById('monsterpane').querySelectorAll('div[id^="mkey_"][style*="opacity"]').length;
             }
 
+            var vDoChkMonsterAlive = true;
             function getNumBossMonsterAlive(){
 				var monCount = document.getElementById('monsterpane').querySelectorAll('div[id^="mkey_"][onclick*="battle"] div.btm2[style^="background"]').length;
 
-				if(monCount === 0){
+				if(monCount === 0 && vDoChkMonsterAlive){
 					var monArrayCB = document.getElementById('monsterpane').querySelectorAll('div[id^="mkey_"][onclick*="battle"]');
 					for(var cb=1;cb<=monArrayCB.length;cb++){
 						var cbMonName = monArrayCB[(cb-1)].parentNode.querySelector('div.btm3').textContent;
@@ -3463,10 +3464,10 @@ function OnPageReload() {
 							monCount++;
 						}
 					}
+
+					vDoChkMonsterAlive = false;
 				}
-
                 return monCount;
-
             }
 
             //tells if monster at n is dead or not
