@@ -40,6 +40,7 @@ var settings = {
     enableBuffMon: false,		// use buff to monster
     showUsePotion: true,		// Show use poton
     spellControl: true,			// Spell Control - use Scroll or normal buff
+	stopSpiritWhenFoundBoss: false,	//Stop spirit when found boss
     showStopStartButton: true,	// Show Stop Start button
     showBarListBattleItems: true,	// Show list battle items
     trackDrop: true,			// Track item drop
@@ -2835,7 +2836,7 @@ function OnPageReload() {
                         var useOverchargeMode = false;
 
                         if(GM_getValue("spiritMode")){
-                            if(getNumBossMonsterAlive() > 0){
+                            if(getNumBossMonsterAlive() > 0 && settings.stopSpiritWhenFoundBoss){
                                 changeSpiritMode('OFF');
                                 useOverchargeMode = true;
                             }else{
