@@ -4083,6 +4083,10 @@ function OnPageReload() {
                     GM_setValue("enableSkipSTMN", true);
                     window.location.href = window.location.href;
                 });
+
+				var skipAudio = new Audio(currentSong);
+				skipAudio.loop = "true";
+				skipAudio.play();
             }
 
             if(enableSkipSTMN){
