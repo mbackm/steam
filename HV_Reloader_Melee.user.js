@@ -73,6 +73,26 @@ var settings = {
     counterPlusSave: false // Store additional datas for Income Summary by Superlatanium
 };
 
+var isOperaChk = false;
+var isFirefoxChk = false;
+var isSafariChk = false;
+var isChromeChk = false;
+var isIEChk = false;
+
+try {
+	isOperaChk = !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
+	    // Opera 8.0+ (UA detection to detect Blink/v8-powered Opera)
+	isFirefoxChk = typeof InstallTrigger !== 'undefined';   // Firefox 1.0+
+	isSafariChk = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
+	    // At least Safari 3+: "[object HTMLElementConstructor]"
+	isChromeChk = !!window.chrome && !isOperaChk;              // Chrome 1+
+	isIEChk = /*@cc_on!@*/false || !!document.documentMode; // At least IE6
+
+}catch(err) {
+    //console.log( err.message );
+}
+
+
 var currentSong = '';
 
 if (settings.enableOfflineSong && localStorage.getItem('songPath')) {
@@ -559,7 +579,11 @@ function OnPageReload() {
                     //== STMN Main #1 ============
                     var seles = document.createElement("select");
                     seles.id = 'stmnSelesID';
-                    seles.style.width = '24px';
+                    if(isFirefoxChk){
+						seles.style.width = '44px';
+					}else{
+						seles.style.width = '24px';
+					}
                     seles.style.textAlignLast = 'center';
                     seles.style.webkitAppearance = 'none';
                     seles.style.background = 'rgb(156, 210, 255)';
@@ -627,7 +651,11 @@ function OnPageReload() {
                     //== STMN Min #2 ============
                     var selesM = document.createElement("select");
                     selesM.id = 'stmnselesMID';
-                    selesM.style.width = '24px';
+					if(isFirefoxChk){
+						selesM.style.width = '44px';
+					}else{
+						selesM.style.width = '24px';
+					}
                     selesM.style.textAlignLast = 'center';
                     selesM.style.webkitAppearance = 'none';
                     selesM.style.background = 'rgb(253, 115, 115)';
@@ -772,9 +800,17 @@ function OnPageReload() {
                     aDIscpc.style.width = '80px';
 
                     if (document.getElementById('2501')) {
-                        aDIscpc.style.height = '150px';
+                        if(isFirefoxChk){
+							aDIscpc.style.height = '170px';
+						}else{
+							aDIscpc.style.height = '150px';
+						}
                     } else {
-                        aDIscpc.style.height = '150px'; //130
+                        if(isFirefoxChk){
+							aDIscpc.style.height = '170px';
+						}else{
+							aDIscpc.style.height = '150px';
+						}
                     }
 
                     /*
@@ -1675,9 +1711,17 @@ function OnPageReload() {
             newDivShowItems.id = "divShowItems";
             newDivShowItems.style.position = "absolute";
             if (document.getElementById('2501')) {
-                newDivShowItems.style.top = "160px";
+				if(isFirefoxChk){
+					newDivShowItems.style.top = "180px";
+				}else{
+					newDivShowItems.style.top = "160px";
+				}
             } else {
-                newDivShowItems.style.top = "160px";
+                if(isFirefoxChk){
+					newDivShowItems.style.top = "180px";
+				}else{
+					newDivShowItems.style.top = "160px";
+				}
             }
             newDivShowItems.style.left = "1240px";
             newDivShowItems.style.width = "80pxpx";
