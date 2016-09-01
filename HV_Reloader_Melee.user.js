@@ -445,7 +445,7 @@ function initialPageLoad() {
     }
 
     // Change page title to "HV"
-    document.title = 'THV-##--1H--##';
+    document.title = 'THV-( ^_^ )';
 
     // Insert stylesheet for Round Counter and Effect Duration
     var sheet = document.createElement('style');
@@ -486,6 +486,9 @@ function initialPageLoad() {
 			}else {
                 var round = localStorage.getItem('rounds') || undefined;
             }
+
+			// Change page title to "HV"
+			document.title = 'THV-('+localStorage.getItem('rounds')+')';
 
             if (round !== undefined) {
                 var x = document.getElementById('mainpane').appendChild(document.createElement('div'));
