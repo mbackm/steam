@@ -3,7 +3,7 @@
 // @namespace   HVRLD3
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @include		/^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version		2.0.0.42
+// @version		2.0.0.43
 // @updateURL      https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @downloadURL    https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @run-at      document-end
@@ -480,7 +480,10 @@ function initialPageLoad() {
             if (/Round/.test(logs)) {
                 var round = logs.match(/Round ([\d\s\/]+)/)[1];
                 localStorage.setItem('rounds', round);
-            } else {
+            }else if(/random encounter/.test(logs)){
+				var round = '1 / 1;
+				localStorage.setItem('rounds', round);
+			}else {
                 var round = localStorage.getItem('rounds') || undefined;
             }
 
