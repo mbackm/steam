@@ -5073,6 +5073,7 @@ function playAudio() {
 
 if (settings.enableCheckPony) {
     if (checkPony()) {
+		document.title = '** PONY **';
         //http://www.soundsnap.com/audio/play/17604
         //a = new Audio('http://www.soundsnap.com/themes/soundsnap2/assets/mp3/please-refresh.mp3');
         //a.play();
