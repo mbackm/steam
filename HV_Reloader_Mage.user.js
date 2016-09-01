@@ -4,7 +4,7 @@
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @run-at      document-end
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version     1.3.3.45
+// @version     1.3.3.46
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @grant       none
@@ -37,6 +37,7 @@ var settings = {
     showBarListBattleItems: true, // Show list battle items
     trackDrop: true, // Track item drop
     enableCheckPony: true, // enable check alert pony
+    stopPlayAfterAutoAnswerPony: true, // stop bot after auto answer pony
     enableOfflineSong: true, // enable offline song
     enablePopupAlert: true, // enable popup alert
     enableGFslowGEM: true, // enable Grindfest use GEM slow
@@ -439,7 +440,7 @@ function initialPageLoad() {
     }
 
     // Change page title to "HV"
-    document.title = 'THV-( ^_^ )';
+    document.title = '( ^_^ )-THV';
 
     // Insert stylesheet for Round Counter and Effect Duration
     var sheet = document.createElement('style');
@@ -482,7 +483,7 @@ function initialPageLoad() {
             }
 
 			// Change page title to "HV"
-			document.title = 'THV-('+localStorage.getItem('rounds')+')';
+			document.title = '('+localStorage.getItem('rounds')+')-THV';
 
             if (round !== undefined) {
                 var x = document.getElementById('mainpane').appendChild(document.createElement('div'));
@@ -4313,7 +4314,7 @@ function addShortcutAnswer() {
 
         if (document.getElementById("riddlemaster")) {
             document.getElementById("riddlemaster").value = "A";
-            document.querySelectorAll('img[src="/y/battle/answer.png"]')[0].onclick();
+            document.querySelectorAll('img[src*="/y/battle/answer.png"]')[0].onclick();
         }
 
     });
@@ -4349,7 +4350,7 @@ function addShortcutAnswer() {
 
         if (document.getElementById("riddlemaster")) {
             document.getElementById("riddlemaster").value = "B";
-            document.querySelectorAll('img[src="/y/battle/answer.png"]')[0].onclick();
+            document.querySelectorAll('img[src*="/y/battle/answer.png"]')[0].onclick();
         }
 
     });
@@ -4385,7 +4386,7 @@ function addShortcutAnswer() {
 
         if (document.getElementById("riddlemaster")) {
             document.getElementById("riddlemaster").value = "C";
-            document.querySelectorAll('img[src="/y/battle/answer.png"]')[0].onclick();
+            document.querySelectorAll('img[src*="/y/battle/answer.png"]')[0].onclick();
         }
 
     });
@@ -4464,7 +4465,7 @@ function addAnswerButton() {
         if (document.getElementById("riddlemaster")) {
             document.getElementById("riddlemaster").value = "A";
             // riddlemaster.value = "A";
-            document.querySelectorAll('img[src="/y/battle/answer.png"]')[0].onclick();
+            document.querySelectorAll('img[src*="/y/battle/answer.png"]')[0].onclick();
         }
 
     });
@@ -4506,7 +4507,7 @@ function addAnswerButton() {
 
         if (document.getElementById("riddlemaster")) {
             document.getElementById("riddlemaster").value = "B";
-            document.querySelectorAll('img[src="/y/battle/answer.png"]')[0].onclick();
+            document.querySelectorAll('img[src*="/y/battle/answer.png"]')[0].onclick();
         }
     });
 
@@ -4547,7 +4548,7 @@ function addAnswerButton() {
 
         if (document.getElementById("riddlemaster")) {
             document.getElementById("riddlemaster").value = "C";
-            document.querySelectorAll('img[src="/y/battle/answer.png"]')[0].onclick();
+            document.querySelectorAll('img[src*="/y/battle/answer.png"]')[0].onclick();
         }
     });
 
@@ -4600,8 +4601,11 @@ function addAnswerButton() {
     setInterval(function() {
 
         if (document.getElementById("riddlemaster")) {
+			if(settings.stopPlayAfterAutoAnswerPony){
+				GM_setValue("botSS", false);
+			}
 
-            document.querySelectorAll('img[src="/y/battle/answer.png"]')[0].click();
+            document.querySelectorAll('img[src*="/y/battle/answer.png"]')[0].click();
         }
 
     }, 16000);
