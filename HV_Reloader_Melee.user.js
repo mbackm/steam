@@ -3,7 +3,7 @@
 // @namespace   HVRLD3
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @include		/^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version		2.0.0.44
+// @version		2.0.0.45
 // @updateURL      https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @downloadURL    https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @run-at      document-end
@@ -1088,6 +1088,7 @@ function OnPageReload() {
                             btnSS.style.background = 'rgb(255, 76, 76)';
                         } else {
                             btnSS.appendChild(document.createTextNode("-YES-"));
+							document.title = '(-WTF-)';
                             btnSS.style.background = 'rgb(86, 195, 51)';
 
                         }
@@ -1096,6 +1097,7 @@ function OnPageReload() {
                             if (GM_getValue("botSS")) {
                                 GM_setValue("botSS", false);
                                 btnSS.textContent = "-YES-";
+								document.title = '(-WTF-)';
                                 btnSS.style.background = 'rgb(86, 195, 51)';
                             } else {
                                 GM_setValue("botSS", true);
