@@ -4,7 +4,7 @@
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @run-at      document-end
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version     1.3.3.44
+// @version     1.3.3.45
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @grant       none
@@ -439,7 +439,7 @@ function initialPageLoad() {
     }
 
     // Change page title to "HV"
-    document.title = 'HV';
+    document.title = 'THV-( ^_^ )';
 
     // Insert stylesheet for Round Counter and Effect Duration
     var sheet = document.createElement('style');
@@ -480,6 +480,9 @@ function initialPageLoad() {
 			}else {
                 var round = localStorage.getItem('rounds') || undefined;
             }
+
+			// Change page title to "HV"
+			document.title = 'THV-('+localStorage.getItem('rounds')+')';
 
             if (round !== undefined) {
                 var x = document.getElementById('mainpane').appendChild(document.createElement('div'));
