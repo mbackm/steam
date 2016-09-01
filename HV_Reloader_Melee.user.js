@@ -3,7 +3,7 @@
 // @namespace   HVRLD3
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @include		/^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version		2.0.0.43
+// @version		2.0.0.44
 // @updateURL      https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @downloadURL    https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @run-at      document-end
@@ -32,7 +32,7 @@ var settings = {
     godAuto: true, // God Mode
     enableHaveAutoCast: true, // if you already unlock auto-cast please enable and go to LIST_AUTO_CAST for config.
     enableOFC: true, // use orbital friendship cannon
-    enableBuffMon: false, // use buff to monster
+    enableBuffMon: false, // use debuff to monster
     showUsePotion: true, // Show use poton
     spellControl: true, // Spell Control - use Scroll or normal buff
     stopSpiritWhenFoundBoss: false, //Stop spirit when found boss
@@ -40,6 +40,7 @@ var settings = {
     showBarListBattleItems: true, // Show list battle items
     trackDrop: true, // Track item drop
     enableCheckPony: true, // enable check alert pony
+    stopPlayAfterAutoAnswerPony: true, // stop bot after auto answer pony
     enableBeepPopup: false, // enable beep popup
     enableOfflineSong: true, // enable offline song
     enableGFslowGEM: true, // enable Grindfest use GEM slow
@@ -445,7 +446,7 @@ function initialPageLoad() {
     }
 
     // Change page title to "HV"
-    document.title = 'THV-( ^_^ )';
+    document.title = '( ^_^ )-THV';
 
     // Insert stylesheet for Round Counter and Effect Duration
     var sheet = document.createElement('style');
@@ -488,7 +489,7 @@ function initialPageLoad() {
             }
 
 			// Change page title to "HV"
-			document.title = 'THV-('+localStorage.getItem('rounds')+')';
+			document.title = '('+localStorage.getItem('rounds')+')-THV';
 
             if (round !== undefined) {
                 var x = document.getElementById('mainpane').appendChild(document.createElement('div'));
@@ -4731,7 +4732,7 @@ function addShortcutAnswer() {
 
         if (document.getElementById("riddlemaster")) {
             document.getElementById("riddlemaster").value = "A";
-            document.querySelectorAll('img[src="/y/battle/answer.png"]')[0].onclick();
+            document.querySelectorAll('img[src*="/y/battle/answer.png"]')[0].onclick();
         }
 
     });
@@ -4767,7 +4768,7 @@ function addShortcutAnswer() {
 
         if (document.getElementById("riddlemaster")) {
             document.getElementById("riddlemaster").value = "B";
-            document.querySelectorAll('img[src="/y/battle/answer.png"]')[0].onclick();
+            document.querySelectorAll('img[src*="/y/battle/answer.png"]')[0].onclick();
         }
 
     });
@@ -4803,7 +4804,7 @@ function addShortcutAnswer() {
 
         if (document.getElementById("riddlemaster")) {
             document.getElementById("riddlemaster").value = "C";
-            document.querySelectorAll('img[src="/y/battle/answer.png"]')[0].onclick();
+            document.querySelectorAll('img[src*="/y/battle/answer.png"]')[0].onclick();
         }
 
     });
@@ -4882,7 +4883,7 @@ function addAnswerButton() {
         if (document.getElementById("riddlemaster")) {
             document.getElementById("riddlemaster").value = "A";
             // riddlemaster.value = "A";
-            document.querySelectorAll('img[src="/y/battle/answer.png"]')[0].onclick();
+            document.querySelectorAll('img[src*="/y/battle/answer.png"]')[0].onclick();
         }
 
     });
@@ -4924,7 +4925,7 @@ function addAnswerButton() {
 
         if (document.getElementById("riddlemaster")) {
             document.getElementById("riddlemaster").value = "B";
-            document.querySelectorAll('img[src="/y/battle/answer.png"]')[0].onclick();
+            document.querySelectorAll('img[src*="/y/battle/answer.png"]')[0].onclick();
         }
     });
 
@@ -4965,7 +4966,7 @@ function addAnswerButton() {
 
         if (document.getElementById("riddlemaster")) {
             document.getElementById("riddlemaster").value = "C";
-            document.querySelectorAll('img[src="/y/battle/answer.png"]')[0].onclick();
+            document.querySelectorAll('img[src*="/y/battle/answer.png"]')[0].onclick();
         }
     });
 
@@ -5020,8 +5021,11 @@ function addAnswerButton() {
     setInterval(function() {
 
         if (document.getElementById("riddlemaster")) {
+			if(settings.stopPlayAfterAutoAnswerPony){
+				GM_setValue("botSS", false);
+			}
 
-            document.querySelectorAll('img[src="/y/battle/answer.png"]')[0].click();
+            document.querySelectorAll('img[src*="/y/battle/answer.png"]')[0].click();
         }
 
     }, 16000);
