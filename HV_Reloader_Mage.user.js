@@ -475,7 +475,7 @@ function initialPageLoad() {
                 var round = logs.match(/Round ([\d\s\/]+)/)[1];
                 localStorage.setItem('rounds', round);
             }else if(/random encounter/.test(logs)){
-				var round = '1 / 1;
+				var round = '1 / 1';
 				localStorage.setItem('rounds', round);
 			}else {
                 var round = localStorage.getItem('rounds') || undefined;
