@@ -48,6 +48,7 @@ var settings = {
     effectDurations: true, // Show buff/debuff durations
     gemIcon: true, // Show gem/powerup, click on icon to use
     staminaControl: true, // Show Stamina Control
+	staminaShowMainPage: true, // Show Stamina Control on Main Page
     enableFocusDefend: false, // enable Focus Defend
     roundCounter: true, // Show current round and rounds remaining
     hvStateHP: false, // Show enemy HP value
@@ -1076,10 +1077,10 @@ function OnPageReload() {
                         btnSS.style.opacity = '0.8';
 
                         if (GM_getValue("botSS")) {
-                            btnSS.appendChild(document.createTextNode("-STOP-"));
+                            btnSS.appendChild(document.createTextNode("-NO-"));
                             btnSS.style.background = 'rgb(255, 76, 76)';
                         } else {
-                            btnSS.appendChild(document.createTextNode("-START-"));
+                            btnSS.appendChild(document.createTextNode("-YES-"));
                             btnSS.style.background = 'rgb(86, 195, 51)';
 
                         }
@@ -1087,11 +1088,11 @@ function OnPageReload() {
                         btnSS.addEventListener('click', function() {
                             if (GM_getValue("botSS")) {
                                 GM_setValue("botSS", false);
-                                btnSS.textContent = "-START-";
+                                btnSS.textContent = "-YES-";
                                 btnSS.style.background = 'rgb(86, 195, 51)';
                             } else {
                                 GM_setValue("botSS", true);
-                                btnSS.textContent = "-STOP-";
+                                btnSS.textContent = "-NO-";
                                 btnSS.style.background = 'rgb(255, 76, 76)';
                                 window.location.href = window.location.href;
                             }
@@ -2379,7 +2380,7 @@ function OnPageReload() {
                             textComclick = monArray[(i2 - 1)].getAttribute('onclick');
                             ctlHPMon = monArray[(i2 - 1)].children[2].children[0].children[0].firstElementChild.width * 5 / 6;
                         }
-                        console.log(textComclick);
+                        //console.log(textComclick);
 
                         if (bossHaveHealSkill.indexOf(ctlMonName) !== -1) {
 
@@ -5433,6 +5434,194 @@ function getPotionUsePrice() {
 /*================ SHOW USE POTION ZONE END ========*/
 
 
+/*============ SHOW STAMINA CONTROL ==========*/
+
+function showSTMNControl(){
+
+	if (!document.getElementById('stmnSelesID')) {
+
+		var currentStmnMain = GM_getValue('currentStmnMain');
+		if (!currentStmnMain) {
+			GM_setValue("currentStmnMain", "70");
+		}
+
+		var currentStmnMin = GM_getValue('currentStmnMin');
+		if (!currentStmnMin) {
+			GM_setValue("currentStmnMin", "50");
+		}
+
+		//== STMN Main #1 ============
+		var seles = document.createElement("select");
+		seles.id = 'stmnSelesID';
+		if(isFirefoxChk){
+			seles.style.width = '44px';
+		}else{
+			seles.style.width = '24px';
+		}
+		seles.style.textAlignLast = 'center';
+		seles.style.webkitAppearance = 'none';
+		seles.style.background = 'rgb(156, 210, 255)';
+		seles.setAttribute("title", "STOP and show skip button.");
+		seles.addEventListener('change', function() {
+			GM_setValue("currentStmnMain", seles.value);
+		});
+
+		var options1 = document.createElement("option");
+		options1.id = 'op11';
+		options1.value = 11;
+		if (currentStmnMain === 11) {
+			options1.setAttribute("selected", "true");
+		}
+		options1.appendChild(document.createTextNode('11'));
+
+		var options2 = document.createElement("option");
+		options2.id = 'op30';
+		options2.value = 30;
+		if (currentStmnMain === 30) {
+			options2.setAttribute("selected", "true");
+		}
+		options2.appendChild(document.createTextNode('30'));
+
+		var options3 = document.createElement("option");
+		options3.id = 'op50';
+		options3.value = 50;
+		if (currentStmnMain === 50) {
+			options3.setAttribute("selected", "true");
+		}
+		options3.appendChild(document.createTextNode('50'));
+
+		var options4 = document.createElement("option");
+		options4.id = 'op60';
+		options4.value = 60;
+		if (currentStmnMain === 60) {
+			options4.setAttribute("selected", "true");
+		}
+		options4.appendChild(document.createTextNode('60'));
+
+		var options5 = document.createElement("option");
+		options5.id = 'op70';
+		options5.value = 70;
+		if (currentStmnMain === 70) {
+			options5.setAttribute("selected", "true");
+		}
+		options5.appendChild(document.createTextNode('70'));
+
+		var options6 = document.createElement("option");
+		options6.id = 'op75';
+		options6.value = 75;
+		if (currentStmnMain === 75) {
+			options6.setAttribute("selected", "true");
+		}
+		options6.appendChild(document.createTextNode('75'));
+
+		seles.appendChild(options1);
+		seles.appendChild(options2);
+		seles.appendChild(options3);
+		seles.appendChild(options4);
+		seles.appendChild(options5);
+		seles.appendChild(options6);
+
+
+		//== STMN Min #2 ============
+		var selesM = document.createElement("select");
+		selesM.id = 'stmnselesMID';
+		if(isFirefoxChk){
+			selesM.style.width = '44px';
+		}else{
+			selesM.style.width = '24px';
+		}
+		selesM.style.textAlignLast = 'center';
+		selesM.style.webkitAppearance = 'none';
+		selesM.style.background = 'rgb(253, 115, 115)';
+		selesM.setAttribute("title", "STOP bot.");
+		selesM.addEventListener('change', function() {
+			GM_setValue("currentStmnMin", selesM.value);
+		});
+
+		var optionsM1 = document.createElement("option");
+		optionsM1.id = 'opm5';
+		optionsM1.value = 5;
+		if (currentStmnMin === 5) {
+			optionsM1.setAttribute("selected", "true");
+		}
+		optionsM1.appendChild(document.createTextNode('5'));
+
+		var optionsM2 = document.createElement("option");
+		optionsM2.id = 'opm10';
+		optionsM2.value = 10;
+		if (currentStmnMin === 10) {
+			optionsM2.setAttribute("selected", "true");
+		}
+		optionsM2.appendChild(document.createTextNode('10'));
+
+		var optionsM3 = document.createElement("option");
+		optionsM3.id = 'opm20';
+		optionsM3.value = 20;
+		if (currentStmnMin === 20) {
+			optionsM3.setAttribute("selected", "true");
+		}
+		optionsM3.appendChild(document.createTextNode('20'));
+
+		var optionsM4 = document.createElement("option");
+		optionsM4.id = 'opm30';
+		optionsM4.value = 30;
+		if (currentStmnMin === 30) {
+			optionsM4.setAttribute("selected", "true");
+		}
+		optionsM4.appendChild(document.createTextNode('30'));
+
+		var optionsM5 = document.createElement("option");
+		optionsM5.id = 'opm40';
+		optionsM5.value = 40;
+		if (currentStmnMin === 40) {
+			optionsM5.setAttribute("selected", "true");
+		}
+		optionsM5.appendChild(document.createTextNode('40'));
+
+		var optionsM6 = document.createElement("option");
+		optionsM6.id = 'opm50';
+		optionsM6.value = 50;
+		if (currentStmnMin === 50) {
+			optionsM6.setAttribute("selected", "true");
+		}
+		optionsM6.appendChild(document.createTextNode('50'));
+
+		selesM.appendChild(optionsM1);
+		selesM.appendChild(optionsM2);
+		selesM.appendChild(optionsM3);
+		selesM.appendChild(optionsM4);
+		selesM.appendChild(optionsM5);
+		selesM.appendChild(optionsM6);
+
+
+		var tsble = document.createElement("TABLE");
+		tsble.classList.add("cit");
+
+		var tstr1 = document.createElement("TR");
+		var tstd11 = document.createElement("TD");
+
+		tstd11.appendChild(seles);
+		tstr1.appendChild(tstd11);
+
+		var tstr2 = document.createElement("TR");
+		var tstd21 = document.createElement("TD");
+
+		tstd21.appendChild(selesM);
+		tstr2.appendChild(tstd21);
+
+		tsble.appendChild(tstr1);
+		tsble.appendChild(tstr2);
+
+		document.querySelector(".clb").appendChild(tsble);
+
+	}
+}
+
+
+
+/*============ SHOW STAMINA CONTROL END ======*/
+
+
 
 // Start script if in battle
 if (document.getElementById('togpane_log')) {
@@ -5553,6 +5742,15 @@ if (document.getElementById('togpane_log')) {
     //hv counter
     if (settings.counterPlus) {
         genAfterTurn();
+    }
+
+	//show stamina control
+    if (settings.staminaControl && settings.staminaShowMainPage) {
+        if (!document.getElementById('quickbar') && !document.querySelector('#riddleform div img[src*="riddlemaster.php"]') && !checkHaveOverchanrge()) {
+			//nothing..
+		} else {
+			showSTMNControl();
+		}
     }
 }
 
