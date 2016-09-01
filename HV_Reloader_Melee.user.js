@@ -5746,9 +5746,7 @@ if (document.getElementById('togpane_log')) {
 
 	//show stamina control
     if (settings.staminaControl && settings.staminaShowMainPage) {
-        if (!document.getElementById('quickbar') && !document.querySelector('#riddleform div img[src*="riddlemaster.php"]') && !checkHaveOverchanrge()) {
-			//nothing..
-		} else {
+        if (!checkHaveOverchanrge() && !checkHaveNoCurrentBattle()) {
 			showSTMNControl();
 		}
     }
