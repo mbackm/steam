@@ -445,7 +445,7 @@ function initialPageLoad() {
     }
 
     // Change page title to "HV"
-    document.title = 'THV-##--04--##';
+    document.title = 'THV-##--1H--##';
 
     // Insert stylesheet for Round Counter and Effect Duration
     var sheet = document.createElement('style');
