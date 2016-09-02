@@ -4,7 +4,7 @@
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @run-at      document-end
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version     1.3.3.48
+// @version     1.3.3.49
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @grant       none
@@ -34,6 +34,7 @@ var settings = {
     showUsePotion: true, // Show use potion
     spellControl: true, // Spell Control - use Scroll or normal buff
     showStopStartButton: true, // Show Stop Start button
+	showStopStartButtonMainPage: true, // Show Stop Start button on Main Page
     showBarListBattleItems: true, // Show list battle items
     trackDrop: true, // Track item drop
     enableCheckPony: true, // enable check alert pony
@@ -5221,6 +5222,74 @@ function showSTMNControl(){
 
 /*============ SHOW STAMINA CONTROL END ======*/
 
+/*============ SHOW STOP/START BUTTON ==========*/
+
+function showStopStartMainPage(){
+	if (!document.getElementById('btnSSid')) {
+
+		var btnSS = document.createElement("BUTTON");
+		btnSS.id = "btnSSid";
+		btnSS.style.background = 'rgb(255, 76, 76)'; //'#333';
+		btnSS.style.fontFamily = 'Tahoma, Geneva, sans-serif';
+		btnSS.style.fontSize = '12px';
+		btnSS.style.padding = '5px 10px 5px 10px';
+		btnSS.style.color = '#fff';
+		btnSS.style.fontWeight = 'bold';
+		btnSS.style.borderRadius = '6px';
+		btnSS.style.boxShadow = '0 1px 3px rgba(0,0,0,0.5)';
+		btnSS.style.textShadow = '0 -1px 1px rgba(0,0,0,0.25)';
+		btnSS.style.borderBottom = '1px solid rgba(0,0,0,0.25)';
+		btnSS.style.cursor = 'pointer';
+		btnSS.style.borderLeft = 'none';
+		btnSS.style.borderTop = 'none';
+		btnSS.style.margin = '10px 0 10px 0';
+		btnSS.style.opacity = '0.8';
+
+		if (GM_getValue("botSS")) {
+			btnSS.appendChild(document.createTextNode("-NO-"));
+			btnSS.style.background = 'rgb(255, 76, 76)';
+		} else {
+			btnSS.appendChild(document.createTextNode("-YES-"));
+			document.title = '(-WTF-)';
+			btnSS.style.background = 'rgb(86, 195, 51)';
+
+		}
+
+		btnSS.addEventListener('click', function() {
+			if (GM_getValue("botSS")) {
+				GM_setValue("botSS", false);
+				btnSS.textContent = "-YES-";
+				document.title = '(-WTF-)';
+				btnSS.style.background = 'rgb(86, 195, 51)';
+			} else {
+				GM_setValue("botSS", true);
+				btnSS.textContent = "-NO-";
+				btnSS.style.background = 'rgb(255, 76, 76)';
+				window.location.href = window.location.href;
+			}
+
+		});
+
+		//var ccter = document.createElement("CENTER");
+		//ccter.appendChild(btnSS);
+
+		var tsble = document.createElement("TABLE");
+		tsble.classList.add("cit");
+
+		var tstr1 = document.createElement("TR");
+		var tstd11 = document.createElement("TD");
+
+		tstd11.appendChild(btnSS);
+		tstr1.appendChild(tstd11);
+
+		tsble.appendChild(tstr1);
+
+		document.querySelector(".clb").appendChild(tsble);
+	}
+}
+
+/*============ SHOW STOP/START BUTTON END ======*/
+
 
 // Start script if in battle
 if (document.getElementById('togpane_log')) {
@@ -5346,6 +5415,13 @@ if (document.getElementById('togpane_log')) {
     if (settings.staminaControl && settings.staminaShowMainPage) {
         if (!checkHaveOverchanrge() && !checkHaveNoCurrentBattle()) {
 			showSTMNControl();
+		}
+    }
+
+	//show stop-start
+    if (settings.showStopStartButtonMainPage) {
+        if (!checkHaveOverchanrge() && !checkHaveNoCurrentBattle()) {
+			showStopStartMainPage();
 		}
     }
 
