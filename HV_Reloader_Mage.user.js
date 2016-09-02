@@ -4,7 +4,7 @@
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @run-at      document-end
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version     1.3.3.47
+// @version     1.3.3.48
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @grant       none
@@ -2516,6 +2516,32 @@ function OnPageReload() {
 
                 }
 
+				function chooseTargetBossForMAGE() {
+					var monArray = document.getElementById('monsterpane').querySelectorAll('div[id^="mkey_"][onclick*="battle"] div.btm2[style^="background"]');
+
+                    var x = -1;
+                    var textComclick;
+                    var ctlMonName = '';
+
+					for (var i2 = 1; i2 <= monArray.length; i2++) {
+
+						ctlMonName = monArray[(i2 - 1)].parentNode.querySelector('div.btm3').textContent;
+						textComclick = monArray[(i2 - 1)].parentNode.getAttribute('onclick');
+
+                        if (bossHaveHealSkill.indexOf(ctlMonName) !== -1) {
+
+                            if (textComclick.indexOf('commit_target(') !== -1) {
+                                x = textComclick.substring(textComclick.indexOf('commit_target(') + 14, (textComclick.length - 1));
+                            }
+
+                            break;
+                        }
+                    }
+
+					return x;
+
+				}
+
                 function selectSpellWithMonEff(idMon) {
 
                     var SPELL = [];
@@ -2707,7 +2733,11 @@ function OnPageReload() {
 
                         //Fight boss
                         //var bossId = chooseTargetBoss();
-                        var monForMage = chooseTargetForMAGE();
+                        var monForMage = chooseTargetBossForMAGE();
+							if(monForMage === -1){
+								monForMage = chooseTargetForMAGE();
+							}
+							
                         var spell_list = ['ragnarok', 'disintegrate', 'corruption']; // selectSpellWithMonEff(monForMage);
 
                         //Fight normal
@@ -3187,6 +3217,7 @@ function OnPageReload() {
                     }
 
                     actionBeep(false, false);
+					GM_setValue("botSS", false);
                     return;
                 }
 
@@ -3679,11 +3710,8 @@ function OnPageReload() {
                 }
 
                 if (!enableSound && !isBattleDone) {
-                    //var c = new Audio('https://dl.dropboxusercontent.com/u/10739586/Outkast%20-%20Hey%20Ya!%20(mp3cut.net).mp3');
-                    //c.loop = "true";
-                    //c.play()
-
-
+                    var c = Audio('https://www.freesound.org/data/previews/72/72128_1028972-lq.mp3');
+                    c.play()
                 }
             }
 
@@ -4652,8 +4680,8 @@ if (settings.enableCheckPony) {
         }
 
         if (settings.enablePopupAlert) {
-            window.open('http://danbooru.donmai.us/data/__kagamine_rin_aku_no_musume_vocaloid_evillious_nendaiki_and_vocaloid_drawn_by_chino_machiko__2638ce4e7c84eaa85040bcc3173bf42f.png', '_blank');
-
+            //window.open('http://danbooru.donmai.us/data/__kagamine_rin_aku_no_musume_vocaloid_evillious_nendaiki_and_vocaloid_drawn_by_chino_machiko__2638ce4e7c84eaa85040bcc3173bf42f.png', '_blank');
+			window.open('http://static.zerochan.net/Story.of.Evil.full.114358.jpg', '_blank');
             //window.open('https://ehwiki.org/images/5/53/Ponychart.jpg', '_blank');
 
         }
