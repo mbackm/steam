@@ -3,7 +3,7 @@
 // @namespace   HVRLD3
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @include		/^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version		2.0.0.47
+// @version		2.0.0.48
 // @updateURL      https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @downloadURL    https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @run-at      document-end
@@ -4848,8 +4848,8 @@ function addAnswerButton() {
     var newDivOptionsX = document.createElement("div");
     newDivOptionsX.id = "divAnswerClick";
     newDivOptionsX.style.position = "absolute";
-    newDivOptionsX.style.top = "40px";
-    newDivOptionsX.style.left = "1085px";
+    newDivOptionsX.style.top = "76px";
+    newDivOptionsX.style.left = "420px";
     newDivOptionsX.style.cursor = "pointer";
 
     newDivOptionsX.style.display = "inline-flex";
@@ -4877,8 +4877,7 @@ function addAnswerButton() {
     //A
     var btnAnswerA = document.createElement("BUTTON");
     btnAnswerA.id = "btnAnswerAID";
-    btnAnswerA.style.background = "#E01F1F";
-    btnAnswerA.style.color = "#white";
+    btnAnswerA.style.background = "rgb(93, 247, 246)";
 
     var btnSaveTxtNodeA = document.createTextNode("Answer A");
     btnAnswerA.appendChild(btnSaveTxtNodeA);
@@ -5001,9 +5000,9 @@ function addAnswerButton() {
     });
 
     var lb1 = document.createElement("LABEL");
-    lb1.style.width = "5px";
+    lb1.style.width = "150px";
     var lb2 = document.createElement("LABEL");
-    lb2.style.width = "5px";
+    lb2.style.width = "150px";
     newDivOptionsX.appendChild(btnAnswerA);
     newDivOptionsX.appendChild(lb1);
     newDivOptionsX.appendChild(btnAnswerB);
