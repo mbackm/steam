@@ -2113,24 +2113,24 @@ function OnPageReload() {
             var bossHaveHealSkill = ['Yggdrasil'];
 
             var bossNameEff = [
-                'Manbearpig', 'FIRE',
-                'White Bunneh', 'COLD',
-                'Mithra', 'HOLY',
-                'Dalek', 'ELEC',
-                'Konata', 'WIND',
-                'Mikuru Asahina', 'HOLY,DARK',
-                'Ryouko Asakura', 'HOLY,DARK',
-                'Yuki Nagato', 'HOLY,DARK',
-                'Skuld', 'ELEC',
-                'Urd', 'COLD',
-                'Verdandi', 'WIND',
-                'Yggdrasil', 'FIRE',
-                'Rhaegal', 'COLD',
-                'Viserion', 'COLD',
-                'Drogon', 'HOLY',
-                'Invisible Pink Unicorn', 'DARK',
+                'Real Life', 'FIRE,COLD,ELEC,WIND,HOLY,DARK',
                 'Flying Spaghetti Monster', 'HOLY',
-                'Real Life', 'FIRE,COLD,ELEC,WIND,HOLY,DARK'
+                'Invisible Pink Unicorn', 'DARK',
+                'Drogon', 'HOLY',
+                'Viserion', 'COLD',
+                'Rhaegal', 'COLD',
+                'Yggdrasil', 'FIRE',
+                'Verdandi', 'WIND',
+                'Urd', 'COLD',
+                'Skuld', 'ELEC',
+                'Yuki Nagato', 'HOLY,DARK',
+                'Ryouko Asakura', 'HOLY,DARK',
+                'Mikuru Asahina', 'HOLY,DARK',
+                'Konata', 'WIND',
+                'Dalek', 'ELEC',
+                'Mithra', 'HOLY',
+                'White Bunneh', 'COLD',
+                'Manbearpig', 'FIRE'
             ];
 
             var MODE_FIGHTING = "BG";
