@@ -3,7 +3,7 @@
 // @namespace   HVRLD3
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @include		/^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version		2.0.0.45
+// @version		2.0.0.46
 // @updateURL      https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @downloadURL    https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @run-at      document-end
@@ -2562,6 +2562,32 @@ function OnPageReload() {
 
                 }
 
+				function chooseTargetBossForMAGE() {
+					var monArray = document.getElementById('monsterpane').querySelectorAll('div[id^="mkey_"][onclick*="battle"] div.btm2[style^="background"]');
+
+                    var x = -1;
+                    var textComclick;
+                    var ctlMonName = '';
+
+					for (var i2 = 1; i2 <= monArray.length; i2++) {
+
+						ctlMonName = monArray[(i2 - 1)].parentNode.querySelector('div.btm3').textContent;
+						textComclick = monArray[(i2 - 1)].parentNode.getAttribute('onclick');
+
+                        if (bossHaveHealSkill.indexOf(ctlMonName) !== -1) {
+
+                            if (textComclick.indexOf('commit_target(') !== -1) {
+                                x = textComclick.substring(textComclick.indexOf('commit_target(') + 14, (textComclick.length - 1));
+                            }
+
+                            break;
+                        }
+                    }
+
+					return x;
+
+				}
+
                 function selectSpellWithMonEff(idMon) {
 
                     var SPELL = [];
@@ -3575,6 +3601,7 @@ function OnPageReload() {
                     }
 
                     actionBeep(false, false);
+					GM_setValue("botSS", false);
                     return;
 
                 }
