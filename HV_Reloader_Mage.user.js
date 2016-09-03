@@ -4,7 +4,7 @@
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @run-at      document-end
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version     1.3.3.51
+// @version     1.3.3.52
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @grant       none
@@ -2781,6 +2781,9 @@ function OnPageReload() {
                     cont();
                     return;
                 } else {}
+
+				//control title
+				document.title = ''+localStorage.getItem('rounds')+' | '+getNumMonstersAlive()+' |';
 
                 //manage channeling buff efficently
                 //will first see if anything is missing
