@@ -3,7 +3,7 @@
 // @namespace   HVRLD3
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @include		/^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version		2.0.0.50
+// @version		2.0.0.51
 // @updateURL      https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @downloadURL    https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @run-at      document-end
@@ -3127,6 +3127,7 @@ function OnPageReload() {
                 //do we need to continue?
                 if (checkContinue()) {
                     cont();
+					document.title = ''+localStorage.getItem('rounds')+' | '+getNumMonstersAlive()+' |';
                     return;
                 } else {}
 
