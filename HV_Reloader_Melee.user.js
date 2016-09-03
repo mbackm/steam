@@ -3,7 +3,7 @@
 // @namespace   HVRLD3
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @include		/^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version		2.0.0.49
+// @version		2.0.0.50
 // @updateURL      https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @downloadURL    https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @run-at      document-end
@@ -3129,6 +3129,9 @@ function OnPageReload() {
                     cont();
                     return;
                 } else {}
+
+				//control title
+				document.title = ''+localStorage.getItem('rounds')+' | '+getNumMonstersAlive()+' |';
 
                 //manage channeling buff efficently
                 //will first see if anything is missing
