@@ -4,7 +4,7 @@
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @run-at      document-end
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version     1.3.3.53
+// @version     1.3.3.54
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @grant       none
@@ -2210,7 +2210,7 @@ function OnPageReload() {
                 if (STYLE == 'mage') {
                     MAINTAIN_CHANNELING_BUFFS.push('arcane focus');
                     //MAINTAIN_CHANNELING_BUFFS.push('absorbing ward');
-                    lowerHPAlert = 35;
+                    lowerHPAlert = 45;
                 } else {
                     MAINTAIN_CHANNELING_BUFFS.push('heartseeker');
                 }
@@ -3212,7 +3212,7 @@ function OnPageReload() {
                 }
 
 
-                if (getSelfHealth() < lowerHPAlert && !isSOL) {
+                if ( (getSelfHealth() < lowerHPAlert || getSelfSpirit() < SP_ITEM_E_CUTOFF) && !isSOL) {
                     if (ENABALE_LE_POTION) {
                         var indexItemLE = nextItem('Last Elixir');
                         if (indexItemLE !== -1) {
