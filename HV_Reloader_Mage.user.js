@@ -4,7 +4,7 @@
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @run-at      document-end
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version     1.3.3.56
+// @version     1.3.3.57
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @grant       none
@@ -2129,10 +2129,6 @@ function OnPageReload() {
 
             var isSOL = false;
 
-            if (document.querySelector(".cwb2[src='/y/s/barsilver.png']")) {
-                isSOL = true;
-            }
-
             if (GM_getValue("enableSkipSTMN") !== null) {
                 enableSkipSTMN = GM_getValue("enableSkipSTMN");
             }
@@ -2141,6 +2137,10 @@ function OnPageReload() {
             // AI - that which actually decides what to do for a given situation //
             ///////////////////////////////////////////////////////////////////////
             function AI() {
+
+				if (document.querySelector(".cwb2[src='/y/s/barsilver.png']")) {
+					isSOL = true;
+				}
 
                 ///////////////////////////////////////////////////////////////////////
                 // DEFINITIONS POINT - should be filled in to tell the ai how to act //
@@ -3214,11 +3214,28 @@ function OnPageReload() {
 
                 if ( (getSelfHealth() < lowerHPAlert || getSelfSpirit() < SP_ITEM_E_CUTOFF) && !isSOL) {
                     if (ENABALE_LE_POTION) {
-                        var indexItemLE = nextItem('Last Elixir');
-                        if (indexItemLE !== -1) {
-                            useItem(indexItemLE);
-                            return;
-                        }
+						var indexItemLE = -1;
+						if(getSelfSpirit() < SP_ITEM_E_CUTOFF){
+							indexItemLE = nextItem('Spirit Elixir');
+							if (indexItemLE !== -1) {
+								useItem(indexItemLE);
+								return;
+							}
+
+							indexItemLE = nextItem('Last Elixir');
+							if (indexItemLE !== -1) {
+								useItem(indexItemLE);
+								return;
+							}
+						}else{
+							indexItemLE = nextItem('Last Elixir');
+							if (indexItemLE !== -1) {
+								useItem(indexItemLE);
+								return;
+							}
+						}
+
+                        
                     }
 
                     actionBeep(false, false);
