@@ -3,7 +3,7 @@
 // @namespace   HVRLD3
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @include		/^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version		2.0.0.51
+// @version		2.0.0.52
 // @updateURL      https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @downloadURL    https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @run-at      document-end
@@ -4002,9 +4002,11 @@ function OnPageReload() {
                 try {
 
                     var monEffArray = document.getElementById('monsterpane').children[2 + n].querySelectorAll('img[onmouseover*="_effect"]');
-                    if (monEffArray.length === 6) {
+                    /*
+					if (monEffArray.length === 6) {
                         return true;
                     }
+					*/
 
                     for (var i = 0; i < monEffArray.length; i++) {
                         if (txt === monEffArray[i].getAttribute('onmouseover').split("'")[1]) {
