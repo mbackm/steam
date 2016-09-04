@@ -3066,7 +3066,7 @@ function OnPageReload() {
 
 				//check for use health potion
                 if (ENABLE_HP_POTION) {
-					if( isSOL || (getSelfSpirit() > vSpiritUseBuff) ){
+					if( isSOL || (getSelfSpirit() > vSpiritUseBuff) || (getSelfHealth() < HP_ITEM_P_CUTOFF && !isSOL) ){
 						if (getSelfHealth() < HP_ITEM_P_CUTOFF) {
 							var indexItem4 = nextItem('Health Potion');
 							if (indexItem4 !== -1) {
