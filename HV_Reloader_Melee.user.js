@@ -3596,7 +3596,7 @@ function OnPageReload() {
                 }
 
 
-                if (getSelfHealth() < lowerHPAlert && !isSOL) {
+                if ( (getSelfHealth() < lowerHPAlert || getSelfSpirit() < SP_ITEM_E_CUTOFF) && !isSOL) {
                     if (ENABALE_LE_POTION) {
                         var indexItemLE = nextItem('Last Elixir');
                         if (indexItemLE !== -1) {
