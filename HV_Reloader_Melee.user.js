@@ -3,7 +3,7 @@
 // @namespace   HVRLD3
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @include		/^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version		2.0.0.52
+// @version		2.0.0.53
 // @updateURL      https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @downloadURL    https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @run-at      document-end
@@ -1982,6 +1982,7 @@ function OnPageReload() {
             }
 
             var vHealUseBuff = 35;
+			var vSpiritUseBuff = 35;
             var enableAutoJoinGrindfest = false;
 
             var stmnMain = 11;
@@ -3151,7 +3152,7 @@ function OnPageReload() {
                     'gods', 'Scroll of the Gods'
                 ];
 
-                if (GM_getValue('spellSelect') < 3 && getSelfHealth() > vHealUseBuff) {
+                if (GM_getValue('spellSelect') < 3 && getSelfHealth() > vHealUseBuff && getSelfSpirit() > vSpiritUseBuff) {
                     // user scroll
 
 
@@ -3288,7 +3289,7 @@ function OnPageReload() {
 
                 //["spirit shield", "spark of life", "shadow veil", "protection", "hastened", "infused flames"]
 
-                if (GM_getValue('checkInfusion') && getSelfHealth() > vHealUseBuff) {
+                if (GM_getValue('checkInfusion') && getSelfHealth() > vHealUseBuff && getSelfSpirit() > vSpiritUseBuff) {
                     //'Infusion of Flames','Infusion of Frost','Infusion of Lightning','Infusion of Storms','Infusion of Divinity','Infusion of Darkness'
                     var listUseInfus = []; //['infused flames','infused frost','infused lightning','infused storms','infused divinity','infused darkness'];
                     //GM_getValue('currentInfusion');
@@ -3334,7 +3335,7 @@ function OnPageReload() {
 	}
 	*/
 
-                if ((checkForBuff('channeling') && (isSOL || getSelfHealth() > vHealUseBuff)) || getSelfMana() > 90 || (getGem() == 'mana' && getSelfMana() > 60)) {
+                if ((checkForBuff('channeling') && (isSOL || (getSelfHealth() > vHealUseBuff  && getSelfSpirit() > vSpiritUseBuff) )) || getSelfMana() > 90 || (getGem() == 'mana' && getSelfMana() > 60)) {
                     for (var s in MAINTAIN_CHANNELING_BUFFS) {
                         var t = MAINTAIN_CHANNELING_BUFFS[s];
                         if (!(checkForBuff(t)) && (effScrollList.indexOf(MAINTAIN_CHANNELING_BUFFS[s]) === -1 || vUseScroll)) {
@@ -3388,7 +3389,7 @@ function OnPageReload() {
                         }
                     }
                 } else {
-                    if (isSOL || (getSelfHealth() > vHealUseBuff)) {
+                    if (isSOL || (getSelfHealth() > vHealUseBuff && getSelfSpirit() > vSpiritUseBuff)) {
                         if (getGem() == 'mystic') {
                             useGem();
                             return;
@@ -3398,7 +3399,7 @@ function OnPageReload() {
 
 
                 //check for use mana potion
-                if (ENABLE_MP_POTION && (isSOL || (getSelfHealth() > vHealUseBuff))) {
+                if (ENABLE_MP_POTION && (isSOL || (getSelfHealth() > vHealUseBuff && getSelfSpirit() > vSpiritUseBuff))) {
                     if (getSelfMana() < MP_ITEM_P_CUTOFF) {
                         console.log('decided to drink mana pot');
                         if (getGem() == 'mana') {
