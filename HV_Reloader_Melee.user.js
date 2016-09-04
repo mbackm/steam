@@ -2157,15 +2157,15 @@ function OnPageReload() {
 
             var isSOL = false;
 
-            if (document.querySelector(".cwb2[src='/y/s/barsilver.png']")) {
-                isSOL = true;
-            }
-
 
             ///////////////////////////////////////////////////////////////////////
             // AI - that which actually decides what to do for a given situation //
             ///////////////////////////////////////////////////////////////////////
             function AI() {
+
+				if (document.querySelector(".cwb2[src='/y/s/barsilver.png']")) {
+					isSOL = true;
+				}
 
                 ///////////////////////////////////////////////////////////////////////
                 // DEFINITIONS POINT - should be filled in to tell the ai how to act //
@@ -3399,43 +3399,45 @@ function OnPageReload() {
 
 
                 //check for use mana potion
-                if (ENABLE_MP_POTION && (isSOL || (getSelfHealth() > vHealUseBuff && getSelfSpirit() > vSpiritUseBuff))) {
-                    if (getSelfMana() < MP_ITEM_P_CUTOFF) {
-                        console.log('decided to drink mana pot');
-                        if (getGem() == 'mana') {
-                            useGem();
-                            return;
-                        } else {
-                            var indexItem = nextItem('Mana Potion');
-                            if (indexItem !== -1) {
-                                useItem(indexItem);
-                                return;
-                            }
-                        }
+                if (ENABLE_MP_POTION) {
+					if( isSOL || (getSelfHealth() > vHealUseBuff && getSelfSpirit() > vSpiritUseBuff) ){
+						if (getSelfMana() < MP_ITEM_P_CUTOFF) {
+							console.log('decided to drink mana pot');
+							if (getGem() == 'mana') {
+								useGem();
+								return;
+							} else {
+								var indexItem = nextItem('Mana Potion');
+								if (indexItem !== -1) {
+									useItem(indexItem);
+									return;
+								}
+							}
 
-                        if (getSelfMana() < MP_ITEM_E_CUTOFF) {
-                            var indexItem2 = nextItem('Mana Elixir');
-                            if (indexItem2 !== -1) {
-                                useItem(indexItem2);
-                                return;
-                            }
-                        }
+							if (getSelfMana() < MP_ITEM_E_CUTOFF) {
+								var indexItem2 = nextItem('Mana Elixir');
+								if (indexItem2 !== -1) {
+									useItem(indexItem2);
+									return;
+								}
+							}
 
 
-                    } else if (getSelfMana() < MP_ITEM_D_CUTOFF) {
-                        if (getGem() == 'mana' && getSelfMana() < 70 && ROUND_GEM > 10) {
-                            useGem();
-                            return;
-                        } else if (getGem() == 'mana') {
-                            GM_setValue('ROUND_GEM', (ROUND_GEM + 1));
-                        } else if (getBuffs().indexOf('replenishment') === -1) {
-                            var indexItem3 = nextItem('Mana Draught');
-                            if (indexItem3 !== -1) {
-                                useItem(indexItem3);
-                                return;
-                            }
-                        }
-                    }
+						} else if (getSelfMana() < MP_ITEM_D_CUTOFF) {
+							if (getGem() == 'mana' && getSelfMana() < 70 && ROUND_GEM > 10) {
+								useGem();
+								return;
+							} else if (getGem() == 'mana') {
+								GM_setValue('ROUND_GEM', (ROUND_GEM + 1));
+							} else if (getBuffs().indexOf('replenishment') === -1) {
+								var indexItem3 = nextItem('Mana Draught');
+								if (indexItem3 !== -1) {
+									useItem(indexItem3);
+									return;
+								}
+							}
+						}
+					}
                 } else if (getSelfMana() < MP_ITEM_D_CUTOFF) {
                     if (getGem() == 'mana' && getSelfMana() < 70 && ROUND_GEM > 10) {
                         useGem();
@@ -3468,8 +3470,8 @@ function OnPageReload() {
 	}
 	*/
 
-                //check for use health potion
-                if (getSelfHealth() < CURE_HP_CUTOFF) {
+                //check for use health skill
+                if (getSelfHealth() < CURE_HP_CUTOFF && (isSOL || getSelfSpirit() > vSpiritUseBuff) ) {
                     //console.log('decided to cast cure');
                     if (getGem() == 'health') {
                         useGem();
@@ -3486,37 +3488,38 @@ function OnPageReload() {
                     }
                 }
 
+				//check for use health potion
                 if (ENABLE_HP_POTION) {
-                    if (getSelfHealth() < HP_ITEM_P_CUTOFF) {
-                        var indexItem4 = nextItem('Health Potion');
-                        if (indexItem4 !== -1) {
-                            useItem(indexItem4);
-                            return;
-                        }
+					if( isSOL || (getSelfSpirit() > vSpiritUseBuff) || (getSelfHealth() < HP_ITEM_P_CUTOFF && !isSOL) ){
+						if (getSelfHealth() < HP_ITEM_P_CUTOFF) {
+							var indexItem4 = nextItem('Health Potion');
+							if (indexItem4 !== -1) {
+								useItem(indexItem4);
+								return;
+							}
 
-                        if (getSelfHealth() < HP_ITEM_E_CUTOFF) {
-                            var indexItem5 = nextItem('Health Elixir');
-                            if (indexItem5 !== -1) {
-                                useItem(indexItem5);
-                                return;
-                            }
-                        }
-
-
-                    } else if (getSelfHealth() < HP_ITEM_D_CUTOFF) {
-                        if (getGem() == 'health' && getSelfHealth() < 65 && ROUND_GEM > 10) {
-                            useGem();
-                            return;
-                        } else if (getGem() == 'health') {
-                            GM_setValue('ROUND_GEM', (ROUND_GEM + 1));
-                        } else if (getBuffs().indexOf('regeneration') === -1) {
-                            var indexItem6 = nextItem('Health Draught');
-                            if (indexItem6 !== -1) {
-                                useItem(indexItem6);
-                                return;
-                            }
-                        }
-                    }
+							if (getSelfHealth() < HP_ITEM_E_CUTOFF) {
+								var indexItem5 = nextItem('Health Elixir');
+								if (indexItem5 !== -1) {
+									useItem(indexItem5);
+									return;
+								}
+							}
+						} else if (getSelfHealth() < HP_ITEM_D_CUTOFF) {
+							if (getGem() == 'health' && getSelfHealth() < 65 && ROUND_GEM > 10) {
+								useGem();
+								return;
+							} else if (getGem() == 'health') {
+								GM_setValue('ROUND_GEM', (ROUND_GEM + 1));
+							} else if (getBuffs().indexOf('regeneration') === -1) {
+								var indexItem6 = nextItem('Health Draught');
+								if (indexItem6 !== -1) {
+									useItem(indexItem6);
+									return;
+								}
+							}
+						}
+					}
                 } else if (getSelfHealth() < HP_ITEM_D_CUTOFF) {
                     if (getGem() == 'health' && getSelfHealth() < 65 && ROUND_GEM > 10) {
                         useGem();
