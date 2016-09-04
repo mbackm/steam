@@ -3179,28 +3179,11 @@ function OnPageReload() {
 
                 if ( (getSelfHealth() < lowerHPAlert || getSelfSpirit() < SP_ITEM_E_CUTOFF) && !isSOL) {
                     if (ENABALE_LE_POTION) {
-						var indexItemLE = -1;
-						if(getSelfSpirit() < SP_ITEM_E_CUTOFF){
-							indexItemLE = nextItem('Spirit Elixir');
-							if (indexItemLE !== -1) {
-								useItem(indexItemLE);
-								return;
-							}
-
-							indexItemLE = nextItem('Last Elixir');
-							if (indexItemLE !== -1) {
-								useItem(indexItemLE);
-								return;
-							}
-						}else{
-							indexItemLE = nextItem('Last Elixir');
-							if (indexItemLE !== -1) {
-								useItem(indexItemLE);
-								return;
-							}
+						var indexItemLE = nextItem('Last Elixir');
+						if (indexItemLE !== -1) {
+							useItem(indexItemLE);
+							return;
 						}
-
-                        
                     }
 
                     actionBeep(false, false);
