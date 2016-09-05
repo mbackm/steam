@@ -4,7 +4,7 @@
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @run-at      document-end
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version     1.3.3.58
+// @version     1.3.3.59
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @grant       none
@@ -603,6 +603,14 @@ function OnPageReload() {
                     }
                     options1.appendChild(document.createTextNode('11'));
 
+					var options1a = document.createElement("option");
+                    options1a.id = 'op20';
+                    options1a.value = 20;
+                    if (currentStmnMain === 20) {
+                        options1a.setAttribute("selected", "true");
+                    }
+                    options1a.appendChild(document.createTextNode('20'));
+
                     var options2 = document.createElement("option");
                     options2.id = 'op30';
                     options2.value = 30;
@@ -610,6 +618,14 @@ function OnPageReload() {
                         options2.setAttribute("selected", "true");
                     }
                     options2.appendChild(document.createTextNode('30'));
+
+					var options1b = document.createElement("option");
+                    options1b.id = 'op40';
+                    options1b.value = 40;
+                    if (currentStmnMain === 40) {
+                        options1b.setAttribute("selected", "true");
+                    }
+                    options1b.appendChild(document.createTextNode('40'));
 
                     var options3 = document.createElement("option");
                     options3.id = 'op50';
@@ -644,7 +660,9 @@ function OnPageReload() {
                     options6.appendChild(document.createTextNode('75'));
 
                     seles.appendChild(options1);
+					seles.appendChild(options1a);
                     seles.appendChild(options2);
+					seles.appendChild(options1b);
                     seles.appendChild(options3);
                     seles.appendChild(options4);
                     seles.appendChild(options5);
@@ -5045,6 +5063,14 @@ function showSTMNControl(){
 		}
 		options1.appendChild(document.createTextNode('11'));
 
+		var options1a = document.createElement("option");
+		options1a.id = 'op20';
+		options1a.value = 20;
+		if (currentStmnMain === 20) {
+			options1a.setAttribute("selected", "true");
+		}
+		options1a.appendChild(document.createTextNode('20'));
+
 		var options2 = document.createElement("option");
 		options2.id = 'op30';
 		options2.value = 30;
@@ -5052,6 +5078,14 @@ function showSTMNControl(){
 			options2.setAttribute("selected", "true");
 		}
 		options2.appendChild(document.createTextNode('30'));
+
+		var options1b = document.createElement("option");
+		options1b.id = 'op40';
+		options1b.value = 40;
+		if (currentStmnMain === 40) {
+			options1b.setAttribute("selected", "true");
+		}
+		options1b.appendChild(document.createTextNode('40'));
 
 		var options3 = document.createElement("option");
 		options3.id = 'op50';
@@ -5086,7 +5120,9 @@ function showSTMNControl(){
 		options6.appendChild(document.createTextNode('75'));
 
 		seles.appendChild(options1);
+		seles.appendChild(options1a);
 		seles.appendChild(options2);
+		seles.appendChild(options1b);
 		seles.appendChild(options3);
 		seles.appendChild(options4);
 		seles.appendChild(options5);
@@ -5275,6 +5311,8 @@ if (document.getElementById('togpane_log')) {
     // Run all script modules
     OnPageReload();
 } else {
+
+	GM_setValue("enableSkipSTMN", false);
 
     //show potion
     if (settings.showUsePotion) {
