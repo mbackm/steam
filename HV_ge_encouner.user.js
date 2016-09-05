@@ -55,7 +55,8 @@ var enableNewTabBeep = false;
 var isBeepActive = false;
 var enableConfReload = false;
 
-var songURL = "https://dl.dropboxusercontent.com/u/10739586/Outkast%20-%20Hey%20Ya!%20(mp3cut.net).mp3";
+//var songURL = "https://dl.dropboxusercontent.com/u/10739586/Outkast%20-%20Hey%20Ya!%20(mp3cut.net).mp3";
+var songURL = "https://drive.google.com/uc?export=download&id=0B56AHXc3KN80U3dPRTVBTTRzQ00";
 var audio;
 
 function playAudio() {
