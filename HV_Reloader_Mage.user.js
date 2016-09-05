@@ -1978,7 +1978,7 @@ function OnPageReload() {
             }
 
             var vHealUseBuff = 35;
-			var vSpiritUseBuff = 35;
+			var vSpiritUseBuff = 30;
             var enableAutoJoinGrindfest = false;
 
             var stmnMain = 73;
@@ -2183,7 +2183,7 @@ function OnPageReload() {
                 var ENABLE_SP_POTION = true;
                 var SP_ITEM_D_CUTOFF = 75;
                 var SP_ITEM_P_CUTOFF = 50;
-                var SP_ITEM_E_CUTOFF = 38;
+                var SP_ITEM_E_CUTOFF = 30;
 
                 var ENABALE_LE_POTION = true;
 
