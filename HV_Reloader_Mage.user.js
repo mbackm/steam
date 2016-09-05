@@ -2065,7 +2065,8 @@ function OnPageReload() {
                 'backstab', 2402,
                 'frenzied blows', 2403,
                 'concussive strike', 2501,
-                'orbital friendship cannon', 1111
+                'orbital friendship cannon', 1111,
+				'fus ro dah', 1101
             ];
 
             var spellsEffect = [
