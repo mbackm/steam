@@ -3,7 +3,7 @@
 // @namespace   HVRLD3
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @include		/^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version		2.0.0.55
+// @version		2.0.0.56
 // @updateURL      https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @downloadURL    https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @run-at      document-end
@@ -33,13 +33,13 @@ var settings = {
     enableHaveAutoCast: true, // if you already unlock auto-cast please enable and go to LIST_AUTO_CAST for config.
     enableOFC: true, // use orbital friendship cannon
     enableBuffMon: false, // use debuff to monster
-    showUsePotion: true, // Show use poton
-    spellControl: true, // Spell Control - use Scroll or normal buff
+    showUsePotion: true, //#1/5# Show use poton
+    spellControl: true, //#2/5# Spell Control - use Scroll or normal buff
     stopSpiritWhenFoundBoss: false, //Stop spirit when found boss
     showStopStartButton: true, // Show Stop Start button
 	showStopStartButtonMainPage: true, // Show Stop Start button on Main Page
-    showBarListBattleItems: true, // Show list battle items
-    trackDrop: true, // Track item drop
+    showBarListBattleItems: true, //#3/5# Show list battle items
+    trackDrop: true, //#4/5# Track item drop
     enableCheckPony: true, // enable check alert pony
     stopPlayAfterAutoAnswerPony: true, // stop bot after auto answer pony
     enableBeepPopup: false, // enable beep popup
@@ -47,7 +47,7 @@ var settings = {
     enableGFslowGEM: true, // enable Grindfest use GEM slow
     hideWelcome: true, // Hide the "Welcome to the Hentaiverse" image/logo
     noBlinking: true, // Disable buff/debuff blinking
-    effectDurations: true, // Show buff/debuff durations
+    effectDurations: true, //#5/5# Show buff/debuff durations
     gemIcon: true, // Show gem/powerup, click on icon to use
     staminaControl: true, // Show Stamina Control
 	staminaShowMainPage: true, // Show Stamina Control on Main Page
@@ -72,7 +72,7 @@ var settings = {
     skipToNextRound: false, // Auto-advance to next round
     popupTime: 0, // after `popupTime`ms
 
-    counterPlus: true, // HV-Counter-Plus ; log and show turn/speed/time/exp/credits
+    counterPlus: true, // v3.6 HV-Counter-Plus ; log and show turn/speed/time/exp/credits
     counterPlusSave: false // Store additional datas for Income Summary by Superlatanium
 };
 
@@ -1342,119 +1342,100 @@ function OnPageReload() {
     /* ============ HV COUNTER PLUS =========== */
     if (settings.counterPlus) {
         (function() {
-            var record = (localStorage.record) ?
-                JSON.parse(localStorage.record) : {
-                    'turns': 0,
-                    'time': 0,
-                    'EXP': 0,
-                    'Credits': 0,
-                    'rounds': 0
-                };
 
-            var pop = document.getElementsByClassName('btcp')[0];
+			track = {
+			  display: function(record, pop) {
+				  if(!document.getElementById("trackCounterID")){
+						var num = 0,
+						  runTime = Math.floor((Date.now() - record.time) / 1000),
+						  text = pop.getElementsByClassName('fd4'),
+						  len = text.length,
+						  result = pop.appendChild(document.createElement('div'));
+						result.id = 'trackCounterID';
+						result.style.cssText = 'font-size:15px;font-weight:bold;margin-top:15px;';
+						for (i = 0; i < len; i++) text[i].firstChild.style.marginTop = '-4px';
+						pop.style.top = '23px';
+						if (len > 2) pop.style.height = len > 3? '190px': '170px';
 
-            function set() {
-                record.rounds++;
-                localStorage.setItem('record', JSON.stringify(record));
-            }
+						for (key in record) {
+						  var div = result.appendChild(document.createElement('div'));
+						  div.style.cssText = 'display:inline-block;margin-bottom:7px;';
+						  if (!(num % 2)) div.style.marginRight = '20px';
+						  if (key == 'time') {
+							var hour = ('0' + Math.floor(runTime / 3600) % 100).slice(-2),
+							  min = ('0' + Math.floor(runTime / 60) % 60).slice(-2),
+							  sec = ('0' + runTime % 60).slice(-2);
+							div.textContent = (hour != 0? hour + ' h ': '') + (min != 0? min + ' m ': '') + sec + ' s';
+							result.appendChild(document.createElement('br'));
+						  } else {
+							var total = record[key] + '';
+							while (total != (total = total.replace(/^(\d+)(\d{3})/, '$1,$2')));
+							div.textContent = total + ' ' + key.toLowerCase();
+							if (!num) div.textContent += ' (' + ((Math.floor((record[key] / runTime) * 1000)) / 1000).toFixed(2) + ' t/s)';
+						  }
+						  num++;
+						}
 
-            function build(item, point) {
-                record[item] = (parseInt(record[item]) || 0) + parseInt(point);
-                // parseInt(null) is NaN, add `NaN || 0` so it becomes 0.
-            }
+						try {
+							localStorage.setItem('lastData_turn', result.querySelectorAll('div')[0].textContent);
+							localStorage.setItem('lastData_time', result.querySelectorAll('div')[1].textContent);
+							localStorage.setItem('lastData_exp', result.querySelectorAll('div')[2].textContent);
+							localStorage.setItem('lastData_credit', result.querySelectorAll('div')[3].textContent);
 
-            if (!record.time) {
-                build('time', Date.now());
-                set();
-            }
+							if (settings.roundCounter) {
+								try {
+									localStorage.setItem('lastData_rounds', localStorage.getItem('rounds').split('/')[1].trim());
+								} catch (ee) {
+									console.log(ee.message);
+								}
+							}
+						} catch (err) {
+							//
+						}
 
-            // If there's a popup...
-            if (pop) {
 
-                // Fetch amount of turns taken to complete the round
-                var target, label, i = 0,
-                    textC = document.querySelectorAll('#togpane_log .t3b'),
-                    turn = document.querySelector('#togpane_log .t1').textContent;
-                build('turns', turn);
+						track.reset();
+					}
+			  },
+			  start: function() {
+				var record = localStorage.record? JSON.parse(localStorage.record): {'turns':0,'time':0,'EXP':0,'Credits':0},
+				  pop = document.getElementsByClassName('btcp')[0],
+				  set = function() {localStorage.setItem('record', JSON.stringify(record));},
+				  build = function(item, point) {record[item] = record[item] * 1 + point * 1;};
 
-                // And find for credit drops
-                while (i < textC.length) {
-                    target = textC[i].textContent;
-                    if (/Victorious.$|Fleeing.$/.test(target)) break; // stop at end
-                    label = target.match(/(\d+) ([EC]\w+).$/);
-                    if (label) build(label[2], label[1]);
-                    i++;
-                }
+				if (!record.time) {
+				  build('time', Date.now());
+				  set();
+				}
+				if (pop) {
+				  var target, label, i = 0,
+					text = document.querySelectorAll('#togpane_log .t3b'),
+					turn = document.querySelector('#togpane_log .t1').textContent;
+				  build('turns', turn);
+				  while (i < text.length) {
+					target = text[i].textContent;
+					if (/Victorious.$|Fleeing.$/.test(target)) break;
+					label = target.match(/(\d+) ([EC]\w+).$/);
+					if (label) build(label[2], label[1]);
+					i++;
+				  }
+				  if (pop.getElementsByTagName('img')[0]) set();
+				  else track.display(record, pop);
+				}
+			  },
+			  reset: function() {if(document.getElementById('navbar')) localStorage.removeItem('record');}
+			};
 
-                // If there's an image in the popup ( the continue button; signifying "not game end" )...
-                if (pop.getElementsByTagName('img')[0]) {
-                    // Save it to storage and we're done
-                    set();
-                } else {
-                    // No image! It's game end! Display the stats and then burn it.
-                    var num = 0,
-                        runTime = Math.floor((Date.now() - record.time) / 1000),
-                        text = pop.getElementsByClassName('fd4'),
-                        len = text.length,
-                        result = pop.appendChild(document.createElement('div'));
-                    result.style.cssText = 'font-size:15px;font-weight:bold;margin-top:15px;';
-                    for (i = 0; i < len; i++) text[i].firstChild.style.marginTop = '-4px';
-                    pop.style.top = '23px';
-                    if (len > 2) pop.style.height = len > 3 ? '190px' : '170px';
 
-                    for (var key in record) {
-                        var div = result.appendChild(document.createElement('div'));
-                        div.style.cssText = 'display:inline-block;margin-bottom:7px;';
-                        div.style.marginRight = '7px';
-                        div.style.marginLeft = '7px';
-                        if (key == 'time') {
-                            var hour = ('0' + Math.floor(runTime / 3600) % 100).slice(-2),
-                                min = ('0' + Math.floor(runTime / 60) % 60).slice(-2),
-                                sec = ('0' + runTime % 60).slice(-2);
-                            div.textContent = (hour !== 0 ? hour + ' h ' : '') + (min !== 0 ? min + ' m ' : '') + sec + ' s';
-                            result.appendChild(document.createElement('br'));
-                        } else {
-                            var total = record[key] + '';
-                            while (total != (total = total.replace(/^(\d+)(\d{3})/, '$1,$2')));
-                            div.textContent = total + ' ' + key.toLowerCase();
-                            if (!num) div.textContent += ' (' + ((Math.floor((record[key] / runTime) * 1000)) / 1000).toFixed(2) + ' t/s)';
-                        }
-                        num++;
-                    }
+			  if (document.getElementById('togpane_log')) {
+				 track.start();
+				// var mo = new MutationObserver(track.start);
+				 //mo.observe(document.getElementById("monsterpane"), {childList: true});
+			  }else{ 
+				  track.reset();
+			  }
 
-                    try {
-                        localStorage.setItem('lastData_turn', result.querySelectorAll('div')[0].textContent);
-                        localStorage.setItem('lastData_time', result.querySelectorAll('div')[1].textContent);
-                        localStorage.setItem('lastData_exp', result.querySelectorAll('div')[2].textContent);
-                        localStorage.setItem('lastData_credit', result.querySelectorAll('div')[3].textContent);
 
-                        if (settings.roundCounter) {
-                            try {
-                                localStorage.setItem('lastData_rounds', localStorage.getItem('rounds').split('/')[1].trim());
-                            } catch (ee) {
-                                console.log(ee.message);
-                            }
-                        }
-                    } catch (err) {
-                        //
-                    }
-
-                    // Counter Plus Save for _Income Summary_ by superlatanium
-                    if (settings.counterPlusSave) {
-                        var cpsLogs = (localStorage.counterPlusSaveLogs) ?
-                            JSON.parse(localStorage.counterPlusSaveLogs) : [];
-
-                        cpsLogs.push({
-                            rounds: record.rounds,
-                            turns: record.turns,
-                            runTime: runTime,
-                            timestamp: Date.now()
-                        });
-
-                        localStorage.counterPlusSaveLogs = JSON.stringify(cpsLogs);
-                    }
-                }
-            }
         })();
     }
     /* ========== HV COUNTER PLUS END ========= */
