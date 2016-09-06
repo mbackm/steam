@@ -4,7 +4,7 @@
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @run-at      document-end
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version     1.3.3.62
+// @version     1.3.3.63
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @grant       none
@@ -36,12 +36,12 @@
 var settings = {
     godAuto: true, // God Mode
     enableHaveAutoCast: true, // if you already unlock auto-cast please enable and go to LIST_AUTO_CAST for config.
-    showUsePotion: true, //#1/5# Show use potion
+    showUsePotion: false, //#1/5# Show use potion
     spellControl: true, //#2/5# Spell Control - use Scroll or normal buff
     showStopStartButton: true, // Show Stop Start button
     showStopStartButtonMainPage: true, // Show Stop Start button on Main Page
-    showBarListBattleItems: true, //#3/5# Show list battle items
-    trackDrop: true, //#4/5# Track item drop
+    showBarListBattleItems: false, //#3/5# Show list battle items
+    trackDrop: false, //#4/5# Track item drop
     enableCheckPony: true, // enable check alert pony
     stopPlayAfterAutoAnswerPony: true, // stop bot after auto answer pony
     enableOfflineSong: true, // enable offline song
@@ -49,7 +49,7 @@ var settings = {
     enableGFslowGEM: true, // enable Grindfest use GEM slow
     hideWelcome: true, // Hide the "Welcome to the Hentaiverse" image/logo
     noBlinking: false, // Disable buff/debuff blinking
-    effectDurations: true, //#5/5# Show buff/debuff durations
+    effectDurations: false, //#5/5# Show buff/debuff durations
     gemIcon: true, // Show gem/powerup, click on icon to use
     staminaControl: true, // Show Stamina Control
     staminaShowMainPage: true, // Show Stamina Control on Main Page
@@ -2789,12 +2789,14 @@ function OnPageReload() {
                         //Fight normal
 
                         if (!GM_getValue('meleeMode')) {
-                            for (var s = 0; s < (spell_list.length * 5); s++) {
+                            /*
+							for (var s = 0; s < (spell_list.length * 5); s++) {
                                 var iRdSpell = getRandomInt(0, (spell_list.length - 1));
                                 if (castSpell(spell_list[iRdSpell], monForMage)) {
                                     return;
                                 }
                             }
+							*/
 
                             for (var sz = 0; sz < spell_list.length; sz++) {
                                 if (castSpell(spell_list[sz], monForMage)) {
@@ -3099,6 +3101,12 @@ function OnPageReload() {
                         useGem();
                         return;
                     } else {
+
+						if (getSelfHealth() < 40) {
+                            if (castSpell('full cure', 0)) {
+                                return;
+                            }
+                        }
 
                         if (castSpell('cure', 0)) {
                             return;
