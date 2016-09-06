@@ -35,22 +35,10 @@ function main(){
 	}
 
 	var load = localStorage.getItem("BattleStateEx");
-	//if (load||resetNextBattle)
-	if (load){
-		/*
-		if(localStorage.getItem("BattleStateExReset")){
-			localStorage.setItem("BattleStateEx", JSON.stringify(data));
-		}else{
-			data = JSON.parse(load);
-		}
-		*/
-
-		data = JSON.parse(load);
-	}
+	if (load) data = JSON.parse(load);
 	
 	var now = Date.now();
 	var lastTime = data.lastTime;
-    data.lastTimeShow = lastTime;
 	data.lastTime = now;
 	
 	if (document.getElementById("togpane_log")){
