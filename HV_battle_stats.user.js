@@ -169,7 +169,8 @@ function main(){
 				div2.style.bottom = "0px";
 				div.style.paddingBottom = "20px";
 			}
-			div2.style.left = "2px";
+			//div2.style.left = "2px";
+			div2.style.paddingLeft = "62px";
 			div2.style.backgroundColor = "#edebdf";
 			div.appendChild(div2);
 			
