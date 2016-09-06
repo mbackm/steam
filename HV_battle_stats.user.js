@@ -10,7 +10,7 @@
 // @exclude  http://hentaiverse.org/?s=Forge*
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_battle_stats.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_battle_stats.user.js
-// @version  1.1.0.6
+// @version  1.1.0.7
 // ==/UserScript==
 
 if (window === window.parent){
@@ -277,9 +277,12 @@ function main(){
 		var min = Math.floor((totalTime-(hour*3600)) / 60);
 		var sec = Math.floor((totalTime-(hour*3600)-(min*60)));
 		var timeValue = String(hour+100).slice(1) + ":" + String(min+100).slice(1) + ":" + String(sec+100).slice(1);
-		
+		var tPers = 0.00;
+
+		tPers = data.turn/( (hour*60*60)+(min*60)+(sec) );
 		//button.value = data.turn + " turns\n" + timeValue  + " (" + (1000/(now-lastTime)).toFixed(2) + " t/s)";
-		button.innerHTML = "<b>[Turn]</b> " +data.turn + " turns\n" + timeValue  + " (" + (1000/(now-lastTime)).toFixed(2) + " t/s)";
+		//button.innerHTML = "<b>[Turn]</b> " +data.turn + " turns\n" + timeValue  + " (" + (1000/(now-lastTime)).toFixed(2) + " t/s)";
+		button.innerHTML = "<b>[Turn]</b> " +data.turn + " turns\n" + timeValue  + " (" + (tPers).toFixed(2) + " t/s)";
 		
 	}
 
