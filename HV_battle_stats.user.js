@@ -164,7 +164,7 @@ function main(){
 			div.style.zIndex = 9999;
 			
 			var div2 = document.createElement("div");
-			div2.style.position = "absolute";
+			//div2.style.position = "relative";
 			if (!document.getElementById("togpane_log")){
 				div2.style.bottom = "0px";
 			}
