@@ -8,8 +8,8 @@
 // @exclude  http://hentaiverse.org/?s=Character&ss=in
 // @exclude  http://hentaiverse.org/?s=Character&ss=se
 // @exclude  http://hentaiverse.org/?s=Forge*
-// @updateURL       https://github.com/
-// @downloadURL     https://github.com/
+// @updateURL       https://github.com/suvidev/hv/raw/master/HV_battle_stats.user.js
+// @downloadURL     https://github.com/suvidev/hv/raw/master/HV_battle_stats.user.js
 // @version  1.1.0.1
 // ==/UserScript==
 
