@@ -10,7 +10,7 @@
 // @exclude  http://hentaiverse.org/?s=Forge*
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_battle_stats.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_battle_stats.user.js
-// @version  1.1.0.5
+// @version  1.1.0.6
 // ==/UserScript==
 
 if (window === window.parent){
@@ -50,6 +50,7 @@ function main(){
 	
 	var now = Date.now();
 	var lastTime = data.lastTime;
+	var lastTimeShow = data.lastTimeShow;
     data.lastTimeShow = lastTime;
 	data.lastTime = now;
 	
@@ -66,7 +67,7 @@ function main(){
 			//now-lastTime
 			//lastTime - lastTimeShow
 			now = lastTime;
-			lastTime = data.lastTimeShow;
+			lastTime = lastTimeShow;
 			//data.lastTime = now;
 		}
 		show();
