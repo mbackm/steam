@@ -3,7 +3,7 @@
 // @namespace   HVRLD3
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @include		/^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version		2.0.0.56
+// @version		2.0.0.57
 // @updateURL      https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @downloadURL    https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @run-at      document-end
@@ -25,6 +25,11 @@
 // HV Counter Plus          : OMP, Superlatanium
 // HV State HP              : tatarime
 // BOT						: ?? bAttack(t)
+// ------------------------
+// Config allow popup
+// [*.]g.e-hentai.org
+// [*.]e-hentai.org
+// [*.]hentaiverse.org
 /* ======================================== *\
  * ============= CONFIGURATION ============ *
 \* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
@@ -37,7 +42,7 @@ var settings = {
     spellControl: true, //#2/5# Spell Control - use Scroll or normal buff
     stopSpiritWhenFoundBoss: false, //Stop spirit when found boss
     showStopStartButton: true, // Show Stop Start button
-	showStopStartButtonMainPage: true, // Show Stop Start button on Main Page
+    showStopStartButtonMainPage: true, // Show Stop Start button on Main Page
     showBarListBattleItems: true, //#3/5# Show list battle items
     trackDrop: true, //#4/5# Track item drop
     enableCheckPony: true, // enable check alert pony
@@ -46,11 +51,11 @@ var settings = {
     enableOfflineSong: true, // enable offline song
     enableGFslowGEM: true, // enable Grindfest use GEM slow
     hideWelcome: true, // Hide the "Welcome to the Hentaiverse" image/logo
-    noBlinking: true, // Disable buff/debuff blinking
+    noBlinking: false, // Disable buff/debuff blinking
     effectDurations: true, //#5/5# Show buff/debuff durations
     gemIcon: true, // Show gem/powerup, click on icon to use
     staminaControl: true, // Show Stamina Control
-	staminaShowMainPage: true, // Show Stamina Control on Main Page
+    staminaShowMainPage: true, // Show Stamina Control on Main Page
     enableFocusDefend: false, // enable Focus Defend
     roundCounter: true, // Show current round and rounds remaining
     hvStateHP: false, // Show enemy HP value
@@ -83,15 +88,15 @@ var isChromeChk = false;
 var isIEChk = false;
 
 try {
-	isOperaChk = !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
-	    // Opera 8.0+ (UA detection to detect Blink/v8-powered Opera)
-	isFirefoxChk = typeof InstallTrigger !== 'undefined';   // Firefox 1.0+
-	isSafariChk = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
-	    // At least Safari 3+: "[object HTMLElementConstructor]"
-	isChromeChk = !!window.chrome && !isOperaChk;              // Chrome 1+
-	isIEChk = /*@cc_on!@*/false || !!document.documentMode; // At least IE6
+    isOperaChk = !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
+    // Opera 8.0+ (UA detection to detect Blink/v8-powered Opera)
+    isFirefoxChk = typeof InstallTrigger !== 'undefined'; // Firefox 1.0+
+    isSafariChk = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
+    // At least Safari 3+: "[object HTMLElementConstructor]"
+    isChromeChk = !!window.chrome && !isOperaChk; // Chrome 1+
+    isIEChk = /*@cc_on!@*/ false || !!document.documentMode; // At least IE6
 
-}catch(err) {
+} catch (err) {
     //console.log( err.message );
 }
 
@@ -482,15 +487,15 @@ function initialPageLoad() {
             if (/Round/.test(logs)) {
                 var round = logs.match(/Round ([\d\s\/]+)/)[1];
                 localStorage.setItem('rounds', round);
-            }else if(/random encounter/.test(logs)){
-				var round = '1 / 1';
-				localStorage.setItem('rounds', round);
-			}else {
+            } else if (/random encounter/.test(logs)) {
+                var round = '1 / 1';
+                localStorage.setItem('rounds', round);
+            } else {
                 var round = localStorage.getItem('rounds') || undefined;
             }
 
-			// Change page title to "HV"
-			document.title = ''+localStorage.getItem('rounds')+' [THV]';
+            // Change page title to "HV"
+            document.title = '' + localStorage.getItem('rounds') + ' [THV]';
 
             if (round !== undefined) {
                 var x = document.getElementById('mainpane').appendChild(document.createElement('div'));
@@ -509,65 +514,6 @@ function initialPageLoad() {
         })();
     }
     /* =========== ROUND COUNTER END ========== */
-
-}
-
-/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ *\
- * =========== INITIAL LOAD END =========== *
-\* ======================================== */
-
-
-
-/* ======================================== *\
- * ============ ON PAGE RELOAD ============ *
-\* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-// Stuffs to be executed after the xhr request is sent
-// and the page is loaded with new content.
-
-function OnPageReload() {
-    // Reinitialize the battle manager
-    window.battle = new window.Battle();
-    window.battle.clear_infopane();
-
-    // TODO: Anything that needs to trigger when a new battle page starts should go here
-    //  i.e. Stat tracking, log parsing, battle-UI changes, etc.
-
-    /* ============ DEFAULT ACTION ============ */
-    function changeDefault(id) {
-        var caller = document.getElementById(id.toString());
-        window.battle.lock_action(caller, 1, 'magic', id);
-        window.battle.set_hostile_subattack(id);
-    }
-    switch (settings.defaultAction) {
-        //Default (Attack)
-        case 0:
-            break;
-        case 1:
-            //Fiery Blast
-            changeDefault(111);
-            break;
-        case 2:
-            //Freeze
-            changeDefault(121);
-            break;
-        case 3:
-            //Shockblast
-            changeDefault(131);
-            break;
-        case 4:
-            //Gale
-            changeDefault(141);
-            break;
-        case 5:
-            //Smite
-            changeDefault(151);
-            break;
-        case 6:
-            //Corruption
-            changeDefault(161);
-            break;
-    }
-    /* ========== DEFAULT ACTION END ========== */
 
     /* ============ STAMINA CONTROL ============ */
     if (settings.staminaControl) {
@@ -588,11 +534,11 @@ function OnPageReload() {
                     //== STMN Main #1 ============
                     var seles = document.createElement("select");
                     seles.id = 'stmnSelesID';
-                    if(isFirefoxChk){
-						seles.style.width = '44px';
-					}else{
-						seles.style.width = '24px';
-					}
+                    if (isFirefoxChk) {
+                        seles.style.width = '44px';
+                    } else {
+                        seles.style.width = '24px';
+                    }
                     seles.style.textAlignLast = 'center';
                     seles.style.webkitAppearance = 'none';
                     seles.style.background = 'rgb(156, 210, 255)';
@@ -609,7 +555,7 @@ function OnPageReload() {
                     }
                     options1.appendChild(document.createTextNode('11'));
 
-					var options1a = document.createElement("option");
+                    var options1a = document.createElement("option");
                     options1a.id = 'op20';
                     options1a.value = 20;
                     if (currentStmnMain === 20) {
@@ -625,7 +571,7 @@ function OnPageReload() {
                     }
                     options2.appendChild(document.createTextNode('30'));
 
-					var options1b = document.createElement("option");
+                    var options1b = document.createElement("option");
                     options1b.id = 'op40';
                     options1b.value = 40;
                     if (currentStmnMain === 40) {
@@ -666,9 +612,9 @@ function OnPageReload() {
                     options6.appendChild(document.createTextNode('75'));
 
                     seles.appendChild(options1);
-					seles.appendChild(options1a);
+                    seles.appendChild(options1a);
                     seles.appendChild(options2);
-					seles.appendChild(options1b);
+                    seles.appendChild(options1b);
                     seles.appendChild(options3);
                     seles.appendChild(options4);
                     seles.appendChild(options5);
@@ -678,11 +624,11 @@ function OnPageReload() {
                     //== STMN Min #2 ============
                     var selesM = document.createElement("select");
                     selesM.id = 'stmnselesMID';
-					if(isFirefoxChk){
-						selesM.style.width = '44px';
-					}else{
-						selesM.style.width = '24px';
-					}
+                    if (isFirefoxChk) {
+                        selesM.style.width = '44px';
+                    } else {
+                        selesM.style.width = '24px';
+                    }
                     selesM.style.textAlignLast = 'center';
                     selesM.style.webkitAppearance = 'none';
                     selesM.style.background = 'rgb(253, 115, 115)';
@@ -827,17 +773,17 @@ function OnPageReload() {
                     aDIscpc.style.width = '80px';
 
                     if (document.getElementById('2501')) {
-                        if(isFirefoxChk){
-							aDIscpc.style.height = '170px';
-						}else{
-							aDIscpc.style.height = '150px';
-						}
+                        if (isFirefoxChk) {
+                            aDIscpc.style.height = '170px';
+                        } else {
+                            aDIscpc.style.height = '150px';
+                        }
                     } else {
-                        if(isFirefoxChk){
-							aDIscpc.style.height = '170px';
-						}else{
-							aDIscpc.style.height = '150px';
-						}
+                        if (isFirefoxChk) {
+                            aDIscpc.style.height = '170px';
+                        } else {
+                            aDIscpc.style.height = '150px';
+                        }
                     }
 
                     /*
@@ -1107,7 +1053,7 @@ function OnPageReload() {
                             btnSS.style.background = 'rgb(255, 76, 76)';
                         } else {
                             btnSS.appendChild(document.createTextNode("-YES-"));
-							document.title = '(-WTF-)';
+                            document.title = '(-WTF-)';
                             btnSS.style.background = 'rgb(86, 195, 51)';
 
                         }
@@ -1116,7 +1062,7 @@ function OnPageReload() {
                             if (GM_getValue("botSS")) {
                                 GM_setValue("botSS", false);
                                 btnSS.textContent = "-YES-";
-								document.title = '(-WTF-)';
+                                document.title = '(-WTF-)';
                                 btnSS.style.background = 'rgb(86, 195, 51)';
                             } else {
                                 GM_setValue("botSS", true);
@@ -1150,8 +1096,64 @@ function OnPageReload() {
     }
     /* ========== SPELL Control END ========== */
 
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ *\
+ * =========== INITIAL LOAD END =========== *
+\* ======================================== */
 
 
+
+/* ======================================== *\
+ * ============ ON PAGE RELOAD ============ *
+\* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+// Stuffs to be executed after the xhr request is sent
+// and the page is loaded with new content.
+
+function OnPageReload() {
+    // Reinitialize the battle manager
+    window.battle = new window.Battle();
+    window.battle.clear_infopane();
+
+    // TODO: Anything that needs to trigger when a new battle page starts should go here
+    //  i.e. Stat tracking, log parsing, battle-UI changes, etc.
+
+    /* ============ DEFAULT ACTION ============ */
+    function changeDefault(id) {
+        var caller = document.getElementById(id.toString());
+        window.battle.lock_action(caller, 1, 'magic', id);
+        window.battle.set_hostile_subattack(id);
+    }
+    switch (settings.defaultAction) {
+        //Default (Attack)
+        case 0:
+            break;
+        case 1:
+            //Fiery Blast
+            changeDefault(111);
+            break;
+        case 2:
+            //Freeze
+            changeDefault(121);
+            break;
+        case 3:
+            //Shockblast
+            changeDefault(131);
+            break;
+        case 4:
+            //Gale
+            changeDefault(141);
+            break;
+        case 5:
+            //Smite
+            changeDefault(151);
+            break;
+        case 6:
+            //Corruption
+            changeDefault(161);
+            break;
+    }
+    /* ========== DEFAULT ACTION END ========== */
 
     /* ============= SHOW USE POTION ============ */
     if (settings.showUsePotion) {
@@ -1343,97 +1345,108 @@ function OnPageReload() {
     if (settings.counterPlus) {
         (function() {
 
-			track = {
-			  display: function(record, pop) {
-				  if(!document.getElementById("trackCounterID")){
-						var num = 0,
-						  runTime = Math.floor((Date.now() - record.time) / 1000),
-						  text = pop.getElementsByClassName('fd4'),
-						  len = text.length,
-						  result = pop.appendChild(document.createElement('div'));
-						result.id = 'trackCounterID';
-						result.style.cssText = 'font-size:15px;font-weight:bold;margin-top:15px;';
-						for (i = 0; i < len; i++) text[i].firstChild.style.marginTop = '-4px';
-						pop.style.top = '23px';
-						if (len > 2) pop.style.height = len > 3? '190px': '170px';
+            track = {
+                display: function(record, pop) {
+                    if (!document.getElementById("trackCounterID")) {
+                        var num = 0,
+                            runTime = Math.floor((Date.now() - record.time) / 1000),
+                            text = pop.getElementsByClassName('fd4'),
+                            len = text.length,
+                            result = pop.appendChild(document.createElement('div'));
+                        result.id = 'trackCounterID';
+                        result.style.cssText = 'font-size:15px;font-weight:bold;margin-top:15px;';
+                        for (i = 0; i < len; i++) text[i].firstChild.style.marginTop = '-4px';
+                        pop.style.top = '23px';
+                        if (len > 2) pop.style.height = len > 3 ? '190px' : '170px';
 
-						for (key in record) {
-						  var div = result.appendChild(document.createElement('div'));
-						  div.style.cssText = 'display:inline-block;margin-bottom:7px;';
-						  if (!(num % 2)) div.style.marginRight = '20px';
-						  if (key == 'time') {
-							var hour = ('0' + Math.floor(runTime / 3600) % 100).slice(-2),
-							  min = ('0' + Math.floor(runTime / 60) % 60).slice(-2),
-							  sec = ('0' + runTime % 60).slice(-2);
-							div.textContent = (hour != 0? hour + ' h ': '') + (min != 0? min + ' m ': '') + sec + ' s';
-							result.appendChild(document.createElement('br'));
-						  } else {
-							var total = record[key] + '';
-							while (total != (total = total.replace(/^(\d+)(\d{3})/, '$1,$2')));
-							div.textContent = total + ' ' + key.toLowerCase();
-							if (!num) div.textContent += ' (' + ((Math.floor((record[key] / runTime) * 1000)) / 1000).toFixed(2) + ' t/s)';
-						  }
-						  num++;
-						}
+                        for (key in record) {
+                            var div = result.appendChild(document.createElement('div'));
+                            div.style.cssText = 'display:inline-block;margin-bottom:7px;';
+                            if (!(num % 2)) div.style.marginRight = '20px';
+                            if (key == 'time') {
+                                var hour = ('0' + Math.floor(runTime / 3600) % 100).slice(-2),
+                                    min = ('0' + Math.floor(runTime / 60) % 60).slice(-2),
+                                    sec = ('0' + runTime % 60).slice(-2);
+                                div.textContent = (hour != 0 ? hour + ' h ' : '') + (min != 0 ? min + ' m ' : '') + sec + ' s';
+                                result.appendChild(document.createElement('br'));
+                            } else {
+                                var total = record[key] + '';
+                                while (total != (total = total.replace(/^(\d+)(\d{3})/, '$1,$2')));
+                                div.textContent = total + ' ' + key.toLowerCase();
+                                if (!num) div.textContent += ' (' + ((Math.floor((record[key] / runTime) * 1000)) / 1000).toFixed(2) + ' t/s)';
+                            }
+                            num++;
+                        }
 
-						try {
-							localStorage.setItem('lastData_turn', result.querySelectorAll('div')[0].textContent);
-							localStorage.setItem('lastData_time', result.querySelectorAll('div')[1].textContent);
-							localStorage.setItem('lastData_exp', result.querySelectorAll('div')[2].textContent);
-							localStorage.setItem('lastData_credit', result.querySelectorAll('div')[3].textContent);
+                        try {
+                            localStorage.setItem('lastData_turn', result.querySelectorAll('div')[0].textContent);
+                            localStorage.setItem('lastData_time', result.querySelectorAll('div')[1].textContent);
+                            localStorage.setItem('lastData_exp', result.querySelectorAll('div')[2].textContent);
+                            localStorage.setItem('lastData_credit', result.querySelectorAll('div')[3].textContent);
 
-							if (settings.roundCounter) {
-								try {
-									localStorage.setItem('lastData_rounds', localStorage.getItem('rounds').split('/')[1].trim());
-								} catch (ee) {
-									console.log(ee.message);
-								}
-							}
-						} catch (err) {
-							//
-						}
-
-
-						track.reset();
-					}
-			  },
-			  start: function() {
-				var record = localStorage.record? JSON.parse(localStorage.record): {'turns':0,'time':0,'EXP':0,'Credits':0},
-				  pop = document.getElementsByClassName('btcp')[0],
-				  set = function() {localStorage.setItem('record', JSON.stringify(record));},
-				  build = function(item, point) {record[item] = record[item] * 1 + point * 1;};
-
-				if (!record.time) {
-				  build('time', Date.now());
-				  set();
-				}
-				if (pop) {
-				  var target, label, i = 0,
-					text = document.querySelectorAll('#togpane_log .t3b'),
-					turn = document.querySelector('#togpane_log .t1').textContent;
-				  build('turns', turn);
-				  while (i < text.length) {
-					target = text[i].textContent;
-					if (/Victorious.$|Fleeing.$/.test(target)) break;
-					label = target.match(/(\d+) ([EC]\w+).$/);
-					if (label) build(label[2], label[1]);
-					i++;
-				  }
-				  if (pop.getElementsByTagName('img')[0]) set();
-				  else track.display(record, pop);
-				}
-			  },
-			  reset: function() {if(document.getElementById('navbar')) localStorage.removeItem('record');}
-			};
+                            if (settings.roundCounter) {
+                                try {
+                                    localStorage.setItem('lastData_rounds', localStorage.getItem('rounds').split('/')[1].trim());
+                                } catch (ee) {
+                                    console.log(ee.message);
+                                }
+                            }
+                        } catch (err) {
+                            //
+                        }
 
 
-			  if (document.getElementById('togpane_log')) {
-				 track.start();
-				// var mo = new MutationObserver(track.start);
-				 //mo.observe(document.getElementById("monsterpane"), {childList: true});
-			  }else{ 
-				  track.reset();
-			  }
+                        track.reset();
+                    }
+                },
+                start: function() {
+                    var record = localStorage.record ? JSON.parse(localStorage.record) : {
+                            'turns': 0,
+                            'time': 0,
+                            'EXP': 0,
+                            'Credits': 0
+                        },
+                        pop = document.getElementsByClassName('btcp')[0],
+                        set = function() {
+                            localStorage.setItem('record', JSON.stringify(record));
+                        },
+                        build = function(item, point) {
+                            record[item] = record[item] * 1 + point * 1;
+                        };
+
+                    if (!record.time) {
+                        build('time', Date.now());
+                        set();
+                    }
+                    if (pop) {
+                        var target, label, i = 0,
+                            text = document.querySelectorAll('#togpane_log .t3b'),
+                            turn = document.querySelector('#togpane_log .t1').textContent;
+                        build('turns', turn);
+                        while (i < text.length) {
+                            target = text[i].textContent;
+                            if (/Victorious.$|Fleeing.$/.test(target)) break;
+                            label = target.match(/(\d+) ([EC]\w+).$/);
+                            if (label) build(label[2], label[1]);
+                            i++;
+                        }
+                        if (pop.getElementsByTagName('img')[0]) set();
+                        else track.display(record, pop);
+                    }
+                },
+                reset: function() {
+                    if (document.getElementById('navbar')) localStorage.removeItem('record');
+                }
+            };
+
+
+            if (document.getElementById('togpane_log')) {
+                track.start();
+                // var mo = new MutationObserver(track.start);
+                //mo.observe(document.getElementById("monsterpane"), {childList: true});
+            } else {
+                track.reset();
+            }
 
 
         })();
@@ -1551,117 +1564,145 @@ function OnPageReload() {
                 var clorI = 'rgb(128, 122, 0)';
                 var clorS = 'rgb(6, 138, 27)';
 
-                if (xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Health Draught") {
-                    xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "D- HP";
-                    xDivItem.querySelector('div.fd2').childNodes[0].style.color = "#FF0E1A";
-                    xDivItem.querySelector('div.fd2').childNodes[0].style.fontWeight = "bolder";
-                    itPosition = true;
-                } else if (xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Health Potion") {
-                    xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "[P] HP";
-                    xDivItem.querySelector('div.fd2').childNodes[0].style.color = "#FF0E1A";
-                    xDivItem.querySelector('div.fd2').childNodes[0].style.fontWeight = "bolder";
-                    itPosition = true;
-                } else if (xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Health Elixir") {
-                    xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "(E) HP";
-                    xDivItem.querySelector('div.fd2').childNodes[0].style.color = "#FF0E1A";
-                    xDivItem.querySelector('div.fd2').childNodes[0].style.fontWeight = "bolder";
-                    itPosition = true;
-                    isElixir = true;
-                } else if (xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Mana Draught") {
-                    xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "D- MP";
-                    xDivItem.querySelector('div.fd2').childNodes[0].style.color = "#6374FF";
-                    xDivItem.querySelector('div.fd2').childNodes[0].style.fontWeight = "bolder";
-                    itPosition = true;
-                } else if (xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Mana Potion") {
-                    xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "[P] MP";
-                    xDivItem.querySelector('div.fd2').childNodes[0].style.color = "#6374FF";
-                    xDivItem.querySelector('div.fd2').childNodes[0].style.fontWeight = "bolder";
-                    itPosition = true;
-                } else if (xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Mana Elixir") {
-                    xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "(E) MP";
-                    xDivItem.querySelector('div.fd2').childNodes[0].style.color = "#6374FF";
-                    xDivItem.querySelector('div.fd2').childNodes[0].style.fontWeight = "bolder";
-                    itPosition = true;
-                    isElixir = true;
-                } else if (xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Spirit Draught") {
-                    xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "D- SP";
-                    xDivItem.querySelector('div.fd2').childNodes[0].style.color = "#B3820A";
-                    xDivItem.querySelector('div.fd2').childNodes[0].style.fontWeight = "bolder";
-                    itPosition = true;
-                } else if (xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Spirit Potion") {
-                    xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "[P] SP";
-                    xDivItem.querySelector('div.fd2').childNodes[0].style.color = "#7D5A03";
-                    xDivItem.querySelector('div.fd2').childNodes[0].style.fontWeight = "bolder";
-                    itPosition = true;
-                } else if (xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Spirit Elixir") {
-                    xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "(E) SP";
-                    xDivItem.querySelector('div.fd2').childNodes[0].style.color = "#7D5A03";
-                    xDivItem.querySelector('div.fd2').childNodes[0].style.fontWeight = "bolder";
-                    itPosition = true;
-                    isElixir = true;
-                } else if (xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Last Elixir") {
-                    xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "(LE)";
-                    xDivItem.querySelector('div.fd2').childNodes[0].style.color = "rgb(210, 113, 16)";
-                    xDivItem.querySelector('div.fd2').childNodes[0].style.fontWeight = "bolder";
-                    itPosition = true;
-                    isElixir = true;
-                } else if (xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Energy Drink") {
-                    xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "(EG)";
-                    xDivItem.querySelector('div.fd2').childNodes[0].style.color = "#5cecf9";
-                    xDivItem.querySelector('div.fd2').childNodes[0].style.fontWeight = "bolder";
-                    itPosition = true;
-                    isElixir = true;
-                } else if (xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Infusion of Flames") {
-                    xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "(I-Flames)";
-                    xDivItem.querySelector('div.fd2').childNodes[0].style.color = clorI;
-                    itPosition = true;
-                } else if (xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Infusion of Frost") {
-                    xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "(I-Frost)";
-                    xDivItem.querySelector('div.fd2').childNodes[0].style.color = clorI;
-                    itPosition = true;
-                } else if (xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Infusion of Lightning") {
-                    xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "(I-Light)";
-                    xDivItem.querySelector('div.fd2').childNodes[0].style.color = clorI;
-                    itPosition = true;
-                } else if (xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Infusion of Storms") {
-                    xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "(I-Storm)";
-                    xDivItem.querySelector('div.fd2').childNodes[0].style.color = clorI;
-                    itPosition = true;
-                } else if (xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Infusion of Divinity") {
-                    xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "(I-Divin)";
-                    xDivItem.querySelector('div.fd2').childNodes[0].style.color = clorI;
-                    itPosition = true;
-                } else if (xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Infusion of Darkness") {
-                    xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "(I-Dark)";
-                    xDivItem.querySelector('div.fd2').childNodes[0].style.color = clorI;
-                } else if (xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Scroll of Swiftness") {
-                    xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "(S-Swift)";
-                    xDivItem.querySelector('div.fd2').childNodes[0].style.color = clorS;
-                    itPosition = true;
-                } else if (xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Scroll of Protection") {
-                    xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "(S-Prot)";
-                    xDivItem.querySelector('div.fd2').childNodes[0].style.color = clorS;
-                    itPosition = true;
-                } else if (xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Scroll of the Avatar") {
-                    xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "(S-Avat)";
-                    xDivItem.querySelector('div.fd2').childNodes[0].style.color = clorS;
-                    itPosition = true;
-                } else if (xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Scroll of Absorption") {
-                    xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "(S-Abs)";
-                    xDivItem.querySelector('div.fd2').childNodes[0].style.color = clorS;
-                    itPosition = true;
-                } else if (xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Scroll of Shadows") {
-                    xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "(S-Shad)";
-                    xDivItem.querySelector('div.fd2').childNodes[0].style.color = clorS;
-                    itPosition = true;
-                } else if (xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Scroll of Life") {
-                    xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "(S-Life)";
-                    xDivItem.querySelector('div.fd2').childNodes[0].style.color = clorS;
-                    itPosition = true;
-                } else if (xDivItem.querySelector('div.fd2').childNodes[0].innerHTML === "Scroll of the Gods") {
-                    xDivItem.querySelector('div.fd2').childNodes[0].innerHTML = "(S-Gods)";
-                    xDivItem.querySelector('div.fd2').childNodes[0].style.color = clorS;
-                    itPosition = true;
+                var xDivChildNodes0 = xDivItem.querySelector('div.fd2').childNodes[0];
+
+                switch (xDivChildNodes0.innerHTML) {
+                    case "Health Draught":
+                        xDivChildNodes0.innerHTML = "D- HP";
+                        xDivChildNodes0.style.color = "#FF0E1A";
+                        xDivChildNodes0.style.fontWeight = "bolder";
+                        itPosition = true;
+                        break;
+                    case "Health Potion":
+                        xDivChildNodes0.innerHTML = "[P] HP";
+                        xDivChildNodes0.style.color = "#FF0E1A";
+                        xDivChildNodes0.style.fontWeight = "bolder";
+                        itPosition = true;
+                        break;
+                    case "Health Elixir":
+                        xDivChildNodes0.innerHTML = "(E) HP";
+                        xDivChildNodes0.style.color = "#FF0E1A";
+                        xDivChildNodes0.style.fontWeight = "bolder";
+                        itPosition = true;
+                        isElixir = true;
+                        break;
+                    case "Mana Draught":
+                        xDivChildNodes0.innerHTML = "D- MP";
+                        xDivChildNodes0.style.color = "#6374FF";
+                        xDivChildNodes0.style.fontWeight = "bolder";
+                        itPosition = true;
+                        break;
+                    case "Mana Potion":
+                        xDivChildNodes0.innerHTML = "[P] MP";
+                        xDivChildNodes0.style.color = "#6374FF";
+                        xDivChildNodes0.style.fontWeight = "bolder";
+                        itPosition = true;
+                        break;
+                    case "Mana Elixir":
+                        xDivChildNodes0.innerHTML = "(E) MP";
+                        xDivChildNodes0.style.color = "#6374FF";
+                        xDivChildNodes0.style.fontWeight = "bolder";
+                        itPosition = true;
+                        isElixir = true;
+                        break;
+                    case "Spirit Draught":
+                        xDivChildNodes0.innerHTML = "D- SP";
+                        xDivChildNodes0.style.color = "#B3820A";
+                        xDivChildNodes0.style.fontWeight = "bolder";
+                        itPosition = true;
+                        break;
+                    case "Spirit Potion":
+                        xDivChildNodes0.innerHTML = "[P] SP";
+                        xDivChildNodes0.style.color = "#7D5A03";
+                        xDivChildNodes0.style.fontWeight = "bolder";
+                        itPosition = true;
+                        break;
+                    case "Spirit Elixir":
+                        xDivChildNodes0.innerHTML = "(E) SP";
+                        xDivChildNodes0.style.color = "#7D5A03";
+                        xDivChildNodes0.style.fontWeight = "bolder";
+                        itPosition = true;
+                        isElixir = true;
+                        break;
+                    case "Last Elixir":
+                        xDivChildNodes0.innerHTML = "(LE)";
+                        xDivChildNodes0.style.color = "rgb(210, 113, 16)";
+                        xDivChildNodes0.style.fontWeight = "bolder";
+                        itPosition = true;
+                        isElixir = true;
+                        break;
+                    case "Energy Drink":
+                        xDivChildNodes0.innerHTML = "(ED)";
+                        xDivChildNodes0.style.color = "#39c520";
+                        xDivChildNodes0.style.fontWeight = "bolder";
+                        itPosition = true;
+                        isElixir = true;
+                        break;
+                    case "Infusion of Flames":
+                        xDivChildNodes0.innerHTML = "(I-Flames)";
+                        xDivChildNodes0.style.color = clorI;
+                        itPosition = true;
+                        break;
+                    case "Infusion of Frost":
+                        xDivChildNodes0.innerHTML = "(I-Frost)";
+                        xDivChildNodes0.style.color = clorI;
+                        itPosition = true;
+                        break;
+                    case "Infusion of Lightning":
+                        xDivChildNodes0.innerHTML = "(I-Light)";
+                        xDivChildNodes0.style.color = clorI;
+                        itPosition = true;
+                        break;
+                    case "Infusion of Storms":
+                        xDivChildNodes0.innerHTML = "(I-Storm)";
+                        xDivChildNodes0.style.color = clorI;
+                        itPosition = true;
+                        break;
+                    case "Infusion of Divinity":
+                        xDivChildNodes0.innerHTML = "(I-Divin)";
+                        xDivChildNodes0.style.color = clorI;
+                        itPosition = true;
+                        break;
+                    case "Infusion of Darkness":
+                        xDivChildNodes0.innerHTML = "(I-Dark)";
+                        xDivChildNodes0.style.color = clorI;
+                        itPosition = true;
+                        break;
+                    case "Scroll of Swiftness":
+                        xDivChildNodes0.innerHTML = "(S-Swift)";
+                        xDivChildNodes0.style.color = clorS;
+                        itPosition = true;
+                        break;
+                    case "Scroll of Protection":
+                        xDivChildNodes0.innerHTML = "(S-Prot)";
+                        xDivChildNodes0.style.color = clorS;
+                        itPosition = true;
+                        break;
+                    case "Scroll of the Avatar":
+                        xDivChildNodes0.innerHTML = "(S-Avat)";
+                        xDivChildNodes0.style.color = clorS;
+                        itPosition = true;
+                        break;
+                    case "Scroll of Absorption":
+                        xDivChildNodes0.innerHTML = "(S-Abs)";
+                        xDivChildNodes0.style.color = clorS;
+                        itPosition = true;
+                        break;
+                    case "Scroll of Shadows":
+                        xDivChildNodes0.innerHTML = "(S-Shad)";
+                        xDivChildNodes0.style.color = clorS;
+                        itPosition = true;
+                        break;
+                    case "Scroll of Life":
+                        xDivChildNodes0.innerHTML = "(S-Life)";
+                        xDivChildNodes0.style.color = clorS;
+                        itPosition = true;
+                        break;
+                    case "Scroll of the Gods":
+                        xDivChildNodes0.innerHTML = "(S-Gods)";
+                        xDivChildNodes0.style.color = clorS;
+                        itPosition = true;
+                        break;
                 }
 
 
@@ -1721,17 +1762,17 @@ function OnPageReload() {
             newDivShowItems.id = "divShowItems";
             newDivShowItems.style.position = "absolute";
             if (document.getElementById('2501')) {
-				if(isFirefoxChk){
-					newDivShowItems.style.top = "180px";
-				}else{
-					newDivShowItems.style.top = "160px";
-				}
+                if (isFirefoxChk) {
+                    newDivShowItems.style.top = "180px";
+                } else {
+                    newDivShowItems.style.top = "160px";
+                }
             } else {
-                if(isFirefoxChk){
-					newDivShowItems.style.top = "180px";
-				}else{
-					newDivShowItems.style.top = "160px";
-				}
+                if (isFirefoxChk) {
+                    newDivShowItems.style.top = "180px";
+                } else {
+                    newDivShowItems.style.top = "160px";
+                }
             }
             newDivShowItems.style.left = "1240px";
             newDivShowItems.style.width = "80pxpx";
@@ -1981,7 +2022,7 @@ function OnPageReload() {
             }
 
             var vHealUseBuff = 35;
-			var vSpiritUseBuff = 35;
+            var vSpiritUseBuff = 35;
             var enableAutoJoinGrindfest = false;
 
             var stmnMain = 11;
@@ -2073,7 +2114,7 @@ function OnPageReload() {
                 'frenzied blows', 2403,
                 'concussive strike', 2501,
                 'orbital friendship cannon', 1111,
-				'fus ro dah', 1101
+                'fus ro dah', 1101
             ];
 
             var spellsEffect = [
@@ -2163,9 +2204,9 @@ function OnPageReload() {
             ///////////////////////////////////////////////////////////////////////
             function AI() {
 
-				if (document.querySelector(".cwb2[src='/y/s/barsilver.png']")) {
-					isSOL = true;
-				}
+                if (document.querySelector(".cwb2[src='/y/s/barsilver.png']")) {
+                    isSOL = true;
+                }
 
                 ///////////////////////////////////////////////////////////////////////
                 // DEFINITIONS POINT - should be filled in to tell the ai how to act //
@@ -2564,17 +2605,17 @@ function OnPageReload() {
 
                 }
 
-				function chooseTargetBossForMAGE() {
-					var monArray = document.getElementById('monsterpane').querySelectorAll('div[id^="mkey_"][onclick*="battle"] div.btm2[style^="background"]');
+                function chooseTargetBossForMAGE() {
+                    var monArray = document.getElementById('monsterpane').querySelectorAll('div[id^="mkey_"][onclick*="battle"] div.btm2[style^="background"]');
 
                     var x = -1;
                     var textComclick;
                     var ctlMonName = '';
 
-					for (var i2 = 1; i2 <= monArray.length; i2++) {
+                    for (var i2 = 1; i2 <= monArray.length; i2++) {
 
-						ctlMonName = monArray[(i2 - 1)].parentNode.querySelector('div.btm3').textContent;
-						textComclick = monArray[(i2 - 1)].parentNode.getAttribute('onclick');
+                        ctlMonName = monArray[(i2 - 1)].parentNode.querySelector('div.btm3').textContent;
+                        textComclick = monArray[(i2 - 1)].parentNode.getAttribute('onclick');
 
                         if (bossHaveHealSkill.indexOf(ctlMonName) !== -1) {
 
@@ -2586,9 +2627,9 @@ function OnPageReload() {
                         }
                     }
 
-					return x;
+                    return x;
 
-				}
+                }
 
                 function selectSpellWithMonEff(idMon) {
 
@@ -3118,22 +3159,24 @@ function OnPageReload() {
 
                 //make sure there's no pony to ban us
                 //beep if there is
-                if (checkPony()) {
+                /*
+				if (checkPony()) {
                     //http://www.soundsnap.com/audio/play/17604
                     a = new Audio('http://www.soundsnap.com/themes/soundsnap2/assets/mp3/please-refresh.mp3');
                     a.play();
                     return;
                 } else {}
+				*/
 
                 //do we need to continue?
                 if (checkContinue()) {
                     cont();
-					document.title = ''+localStorage.getItem('rounds')+' | '+getNumMonstersAlive()+' |';
+                    document.title = '' + localStorage.getItem('rounds') + ' | ' + getNumMonstersAlive() + ' |';
                     return;
-                } else {}
+                }
 
-				//control title
-				document.title = ''+localStorage.getItem('rounds')+' | '+getNumMonstersAlive()+' |';
+                //control title
+                document.title = '' + localStorage.getItem('rounds') + ' | ' + getNumMonstersAlive() + ' |';
 
                 //manage channeling buff efficently
                 //will first see if anything is missing
@@ -3335,7 +3378,7 @@ function OnPageReload() {
 	}
 	*/
 
-                if ((checkForBuff('channeling') && (isSOL || (getSelfHealth() > vHealUseBuff  && getSelfSpirit() > vSpiritUseBuff) )) || getSelfMana() > 90 || (getGem() == 'mana' && getSelfMana() > 60)) {
+                if ((checkForBuff('channeling') && (isSOL || (getSelfHealth() > vHealUseBuff && getSelfSpirit() > vSpiritUseBuff))) || getSelfMana() > 90 || (getGem() == 'mana' && getSelfMana() > 60)) {
                     for (var s in MAINTAIN_CHANNELING_BUFFS) {
                         var t = MAINTAIN_CHANNELING_BUFFS[s];
                         if (!(checkForBuff(t)) && (effScrollList.indexOf(MAINTAIN_CHANNELING_BUFFS[s]) === -1 || vUseScroll)) {
@@ -3400,44 +3443,44 @@ function OnPageReload() {
 
                 //check for use mana potion
                 if (ENABLE_MP_POTION) {
-					if( isSOL || (getSelfHealth() > vHealUseBuff && getSelfSpirit() > vSpiritUseBuff) ){
-						if (getSelfMana() < MP_ITEM_P_CUTOFF) {
-							console.log('decided to drink mana pot');
-							if (getGem() == 'mana') {
-								useGem();
-								return;
-							} else {
-								var indexItem = nextItem('Mana Potion');
-								if (indexItem !== -1) {
-									useItem(indexItem);
-									return;
-								}
-							}
+                    if (isSOL || (getSelfHealth() > vHealUseBuff && getSelfSpirit() > vSpiritUseBuff)) {
+                        if (getSelfMana() < MP_ITEM_P_CUTOFF) {
+                            console.log('decided to drink mana pot');
+                            if (getGem() == 'mana') {
+                                useGem();
+                                return;
+                            } else {
+                                var indexItem = nextItem('Mana Potion');
+                                if (indexItem !== -1) {
+                                    useItem(indexItem);
+                                    return;
+                                }
+                            }
 
-							if (getSelfMana() < MP_ITEM_E_CUTOFF) {
-								var indexItem2 = nextItem('Mana Elixir');
-								if (indexItem2 !== -1) {
-									useItem(indexItem2);
-									return;
-								}
-							}
+                            if (getSelfMana() < MP_ITEM_E_CUTOFF) {
+                                var indexItem2 = nextItem('Mana Elixir');
+                                if (indexItem2 !== -1) {
+                                    useItem(indexItem2);
+                                    return;
+                                }
+                            }
 
 
-						} else if (getSelfMana() < MP_ITEM_D_CUTOFF) {
-							if (getGem() == 'mana' && getSelfMana() < 70 && ROUND_GEM > 10) {
-								useGem();
-								return;
-							} else if (getGem() == 'mana') {
-								GM_setValue('ROUND_GEM', (ROUND_GEM + 1));
-							} else if (getBuffs().indexOf('replenishment') === -1) {
-								var indexItem3 = nextItem('Mana Draught');
-								if (indexItem3 !== -1) {
-									useItem(indexItem3);
-									return;
-								}
-							}
-						}
-					}
+                        } else if (getSelfMana() < MP_ITEM_D_CUTOFF) {
+                            if (getGem() == 'mana' && getSelfMana() < 70 && ROUND_GEM > 10) {
+                                useGem();
+                                return;
+                            } else if (getGem() == 'mana') {
+                                GM_setValue('ROUND_GEM', (ROUND_GEM + 1));
+                            } else if (getBuffs().indexOf('replenishment') === -1) {
+                                var indexItem3 = nextItem('Mana Draught');
+                                if (indexItem3 !== -1) {
+                                    useItem(indexItem3);
+                                    return;
+                                }
+                            }
+                        }
+                    }
                 } else if (getSelfMana() < MP_ITEM_D_CUTOFF) {
                     if (getGem() == 'mana' && getSelfMana() < 70 && ROUND_GEM > 10) {
                         useGem();
@@ -3471,7 +3514,7 @@ function OnPageReload() {
 	*/
 
                 //check for use health skill
-                if (getSelfHealth() < CURE_HP_CUTOFF && (isSOL || getSelfSpirit() > vSpiritUseBuff) ) {
+                if (getSelfHealth() < CURE_HP_CUTOFF && (isSOL || getSelfSpirit() > vSpiritUseBuff)) {
                     //console.log('decided to cast cure');
                     if (getGem() == 'health') {
                         useGem();
@@ -3488,38 +3531,38 @@ function OnPageReload() {
                     }
                 }
 
-				//check for use health potion
+                //check for use health potion
                 if (ENABLE_HP_POTION) {
-					if( isSOL || (getSelfSpirit() > vSpiritUseBuff) || (getSelfHealth() < HP_ITEM_P_CUTOFF && !isSOL) ){
-						if (getSelfHealth() < HP_ITEM_P_CUTOFF) {
-							var indexItem4 = nextItem('Health Potion');
-							if (indexItem4 !== -1) {
-								useItem(indexItem4);
-								return;
-							}
+                    if (isSOL || (getSelfSpirit() > vSpiritUseBuff) || (getSelfHealth() < HP_ITEM_P_CUTOFF && !isSOL)) {
+                        if (getSelfHealth() < HP_ITEM_P_CUTOFF) {
+                            var indexItem4 = nextItem('Health Potion');
+                            if (indexItem4 !== -1) {
+                                useItem(indexItem4);
+                                return;
+                            }
 
-							if (getSelfHealth() < HP_ITEM_E_CUTOFF) {
-								var indexItem5 = nextItem('Health Elixir');
-								if (indexItem5 !== -1) {
-									useItem(indexItem5);
-									return;
-								}
-							}
-						} else if (getSelfHealth() < HP_ITEM_D_CUTOFF) {
-							if (getGem() == 'health' && getSelfHealth() < 65 && ROUND_GEM > 10) {
-								useGem();
-								return;
-							} else if (getGem() == 'health') {
-								GM_setValue('ROUND_GEM', (ROUND_GEM + 1));
-							} else if (getBuffs().indexOf('regeneration') === -1) {
-								var indexItem6 = nextItem('Health Draught');
-								if (indexItem6 !== -1) {
-									useItem(indexItem6);
-									return;
-								}
-							}
-						}
-					}
+                            if (getSelfHealth() < HP_ITEM_E_CUTOFF) {
+                                var indexItem5 = nextItem('Health Elixir');
+                                if (indexItem5 !== -1) {
+                                    useItem(indexItem5);
+                                    return;
+                                }
+                            }
+                        } else if (getSelfHealth() < HP_ITEM_D_CUTOFF) {
+                            if (getGem() == 'health' && getSelfHealth() < 65 && ROUND_GEM > 10) {
+                                useGem();
+                                return;
+                            } else if (getGem() == 'health') {
+                                GM_setValue('ROUND_GEM', (ROUND_GEM + 1));
+                            } else if (getBuffs().indexOf('regeneration') === -1) {
+                                var indexItem6 = nextItem('Health Draught');
+                                if (indexItem6 !== -1) {
+                                    useItem(indexItem6);
+                                    return;
+                                }
+                            }
+                        }
+                    }
                 } else if (getSelfHealth() < HP_ITEM_D_CUTOFF) {
                     if (getGem() == 'health' && getSelfHealth() < 65 && ROUND_GEM > 10) {
                         useGem();
@@ -3600,7 +3643,7 @@ function OnPageReload() {
                 }
 
 
-                if ( (getSelfHealth() < lowerHPAlert || getSelfSpirit() < SP_ITEM_E_CUTOFF) && !isSOL) {
+                if ((getSelfHealth() < lowerHPAlert || getSelfSpirit() < SP_ITEM_E_CUTOFF) && !isSOL) {
                     if (ENABALE_LE_POTION) {
                         var indexItemLE = nextItem('Last Elixir');
                         if (indexItemLE !== -1) {
@@ -3610,7 +3653,7 @@ function OnPageReload() {
                     }
 
                     actionBeep(false, false);
-					GM_setValue("botSS", false);
+                    GM_setValue("botSS", false);
                     return;
 
                 }
@@ -4006,12 +4049,12 @@ function OnPageReload() {
                 try {
 
                     var monEffArray = document.getElementById('monsterpane').children[2 + n].querySelectorAll('img[onmouseover*="_effect"]');
-                    
-					if (monEffArray.length === 6) {
-						var monEffOpac = document.getElementById('monsterpane').children[2 + n].querySelectorAll('img[onmouseover*="_effect"][style*="opacity"]');
-						if(monEffOpac.length > 1){
-							return true;
-						}
+
+                    if (monEffArray.length === 6) {
+                        var monEffOpac = document.getElementById('monsterpane').children[2 + n].querySelectorAll('img[onmouseover*="_effect"][style*="opacity"]');
+                        if (monEffOpac.length > 1) {
+                            return true;
+                        }
                     }
 
                     for (var i = 0; i < monEffArray.length; i++) {
@@ -5062,9 +5105,9 @@ function addAnswerButton() {
     setInterval(function() {
 
         if (document.getElementById("riddlemaster")) {
-			if(settings.stopPlayAfterAutoAnswerPony){
-				GM_setValue("botSS", false);
-			}
+            if (settings.stopPlayAfterAutoAnswerPony) {
+                GM_setValue("botSS", false);
+            }
 
             document.querySelectorAll('img[src*="/y/battle/answer.png"]')[0].click();
         }
@@ -5114,7 +5157,7 @@ function playAudio() {
 
 if (settings.enableCheckPony) {
     if (checkPony()) {
-		document.title = '** PONY **';
+        document.title = '** PONY **';
         //http://www.soundsnap.com/audio/play/17604
         //a = new Audio('http://www.soundsnap.com/themes/soundsnap2/assets/mp3/please-refresh.mp3');
         //a.play();
@@ -5488,203 +5531,203 @@ function getPotionUsePrice() {
 
 /*============ SHOW STAMINA CONTROL ==========*/
 
-function showSTMNControl(){
+function showSTMNControl() {
 
-	if (!document.getElementById('stmnSelesID')) {
+    if (!document.getElementById('stmnSelesID')) {
 
-		var currentStmnMain = GM_getValue('currentStmnMain');
-		if (!currentStmnMain) {
-			GM_setValue("currentStmnMain", "70");
-		}
+        var currentStmnMain = GM_getValue('currentStmnMain');
+        if (!currentStmnMain) {
+            GM_setValue("currentStmnMain", "70");
+        }
 
-		var currentStmnMin = GM_getValue('currentStmnMin');
-		if (!currentStmnMin) {
-			GM_setValue("currentStmnMin", "50");
-		}
+        var currentStmnMin = GM_getValue('currentStmnMin');
+        if (!currentStmnMin) {
+            GM_setValue("currentStmnMin", "50");
+        }
 
-		//== STMN Main #1 ============
-		var seles = document.createElement("select");
-		seles.id = 'stmnSelesID';
-		if(isFirefoxChk){
-			seles.style.width = '44px';
-		}else{
-			seles.style.width = '24px';
-		}
-		seles.style.textAlignLast = 'center';
-		seles.style.webkitAppearance = 'none';
-		seles.style.background = 'rgb(156, 210, 255)';
-		seles.setAttribute("title", "STOP and show skip button.");
-		seles.addEventListener('change', function() {
-			GM_setValue("currentStmnMain", seles.value);
-		});
+        //== STMN Main #1 ============
+        var seles = document.createElement("select");
+        seles.id = 'stmnSelesID';
+        if (isFirefoxChk) {
+            seles.style.width = '44px';
+        } else {
+            seles.style.width = '24px';
+        }
+        seles.style.textAlignLast = 'center';
+        seles.style.webkitAppearance = 'none';
+        seles.style.background = 'rgb(156, 210, 255)';
+        seles.setAttribute("title", "STOP and show skip button.");
+        seles.addEventListener('change', function() {
+            GM_setValue("currentStmnMain", seles.value);
+        });
 
-		var options1 = document.createElement("option");
-		options1.id = 'op11';
-		options1.value = 11;
-		if (currentStmnMain === 11) {
-			options1.setAttribute("selected", "true");
-		}
-		options1.appendChild(document.createTextNode('11'));
+        var options1 = document.createElement("option");
+        options1.id = 'op11';
+        options1.value = 11;
+        if (currentStmnMain === 11) {
+            options1.setAttribute("selected", "true");
+        }
+        options1.appendChild(document.createTextNode('11'));
 
-		var options1a = document.createElement("option");
-		options1a.id = 'op20';
-		options1a.value = 20;
-		if (currentStmnMain === 20) {
-			options1a.setAttribute("selected", "true");
-		}
-		options1a.appendChild(document.createTextNode('20'));
+        var options1a = document.createElement("option");
+        options1a.id = 'op20';
+        options1a.value = 20;
+        if (currentStmnMain === 20) {
+            options1a.setAttribute("selected", "true");
+        }
+        options1a.appendChild(document.createTextNode('20'));
 
-		var options2 = document.createElement("option");
-		options2.id = 'op30';
-		options2.value = 30;
-		if (currentStmnMain === 30) {
-			options2.setAttribute("selected", "true");
-		}
-		options2.appendChild(document.createTextNode('30'));
+        var options2 = document.createElement("option");
+        options2.id = 'op30';
+        options2.value = 30;
+        if (currentStmnMain === 30) {
+            options2.setAttribute("selected", "true");
+        }
+        options2.appendChild(document.createTextNode('30'));
 
-		var options1b = document.createElement("option");
-		options1b.id = 'op40';
-		options1b.value = 40;
-		if (currentStmnMain === 40) {
-			options1b.setAttribute("selected", "true");
-		}
-		options1b.appendChild(document.createTextNode('40'));
+        var options1b = document.createElement("option");
+        options1b.id = 'op40';
+        options1b.value = 40;
+        if (currentStmnMain === 40) {
+            options1b.setAttribute("selected", "true");
+        }
+        options1b.appendChild(document.createTextNode('40'));
 
-		var options3 = document.createElement("option");
-		options3.id = 'op50';
-		options3.value = 50;
-		if (currentStmnMain === 50) {
-			options3.setAttribute("selected", "true");
-		}
-		options3.appendChild(document.createTextNode('50'));
+        var options3 = document.createElement("option");
+        options3.id = 'op50';
+        options3.value = 50;
+        if (currentStmnMain === 50) {
+            options3.setAttribute("selected", "true");
+        }
+        options3.appendChild(document.createTextNode('50'));
 
-		var options4 = document.createElement("option");
-		options4.id = 'op60';
-		options4.value = 60;
-		if (currentStmnMain === 60) {
-			options4.setAttribute("selected", "true");
-		}
-		options4.appendChild(document.createTextNode('60'));
+        var options4 = document.createElement("option");
+        options4.id = 'op60';
+        options4.value = 60;
+        if (currentStmnMain === 60) {
+            options4.setAttribute("selected", "true");
+        }
+        options4.appendChild(document.createTextNode('60'));
 
-		var options5 = document.createElement("option");
-		options5.id = 'op70';
-		options5.value = 70;
-		if (currentStmnMain === 70) {
-			options5.setAttribute("selected", "true");
-		}
-		options5.appendChild(document.createTextNode('70'));
+        var options5 = document.createElement("option");
+        options5.id = 'op70';
+        options5.value = 70;
+        if (currentStmnMain === 70) {
+            options5.setAttribute("selected", "true");
+        }
+        options5.appendChild(document.createTextNode('70'));
 
-		var options6 = document.createElement("option");
-		options6.id = 'op75';
-		options6.value = 75;
-		if (currentStmnMain === 75) {
-			options6.setAttribute("selected", "true");
-		}
-		options6.appendChild(document.createTextNode('75'));
+        var options6 = document.createElement("option");
+        options6.id = 'op75';
+        options6.value = 75;
+        if (currentStmnMain === 75) {
+            options6.setAttribute("selected", "true");
+        }
+        options6.appendChild(document.createTextNode('75'));
 
-		seles.appendChild(options1);
-		seles.appendChild(options1a);
-		seles.appendChild(options2);
-		seles.appendChild(options1b);
-		seles.appendChild(options3);
-		seles.appendChild(options4);
-		seles.appendChild(options5);
-		seles.appendChild(options6);
-
-
-		//== STMN Min #2 ============
-		var selesM = document.createElement("select");
-		selesM.id = 'stmnselesMID';
-		if(isFirefoxChk){
-			selesM.style.width = '44px';
-		}else{
-			selesM.style.width = '24px';
-		}
-		selesM.style.textAlignLast = 'center';
-		selesM.style.webkitAppearance = 'none';
-		selesM.style.background = 'rgb(253, 115, 115)';
-		selesM.setAttribute("title", "STOP bot.");
-		selesM.addEventListener('change', function() {
-			GM_setValue("currentStmnMin", selesM.value);
-		});
-
-		var optionsM1 = document.createElement("option");
-		optionsM1.id = 'opm5';
-		optionsM1.value = 5;
-		if (currentStmnMin === 5) {
-			optionsM1.setAttribute("selected", "true");
-		}
-		optionsM1.appendChild(document.createTextNode('5'));
-
-		var optionsM2 = document.createElement("option");
-		optionsM2.id = 'opm10';
-		optionsM2.value = 10;
-		if (currentStmnMin === 10) {
-			optionsM2.setAttribute("selected", "true");
-		}
-		optionsM2.appendChild(document.createTextNode('10'));
-
-		var optionsM3 = document.createElement("option");
-		optionsM3.id = 'opm20';
-		optionsM3.value = 20;
-		if (currentStmnMin === 20) {
-			optionsM3.setAttribute("selected", "true");
-		}
-		optionsM3.appendChild(document.createTextNode('20'));
-
-		var optionsM4 = document.createElement("option");
-		optionsM4.id = 'opm30';
-		optionsM4.value = 30;
-		if (currentStmnMin === 30) {
-			optionsM4.setAttribute("selected", "true");
-		}
-		optionsM4.appendChild(document.createTextNode('30'));
-
-		var optionsM5 = document.createElement("option");
-		optionsM5.id = 'opm40';
-		optionsM5.value = 40;
-		if (currentStmnMin === 40) {
-			optionsM5.setAttribute("selected", "true");
-		}
-		optionsM5.appendChild(document.createTextNode('40'));
-
-		var optionsM6 = document.createElement("option");
-		optionsM6.id = 'opm50';
-		optionsM6.value = 50;
-		if (currentStmnMin === 50) {
-			optionsM6.setAttribute("selected", "true");
-		}
-		optionsM6.appendChild(document.createTextNode('50'));
-
-		selesM.appendChild(optionsM1);
-		selesM.appendChild(optionsM2);
-		selesM.appendChild(optionsM3);
-		selesM.appendChild(optionsM4);
-		selesM.appendChild(optionsM5);
-		selesM.appendChild(optionsM6);
+        seles.appendChild(options1);
+        seles.appendChild(options1a);
+        seles.appendChild(options2);
+        seles.appendChild(options1b);
+        seles.appendChild(options3);
+        seles.appendChild(options4);
+        seles.appendChild(options5);
+        seles.appendChild(options6);
 
 
-		var tsble = document.createElement("TABLE");
-		tsble.classList.add("cit");
+        //== STMN Min #2 ============
+        var selesM = document.createElement("select");
+        selesM.id = 'stmnselesMID';
+        if (isFirefoxChk) {
+            selesM.style.width = '44px';
+        } else {
+            selesM.style.width = '24px';
+        }
+        selesM.style.textAlignLast = 'center';
+        selesM.style.webkitAppearance = 'none';
+        selesM.style.background = 'rgb(253, 115, 115)';
+        selesM.setAttribute("title", "STOP bot.");
+        selesM.addEventListener('change', function() {
+            GM_setValue("currentStmnMin", selesM.value);
+        });
 
-		var tstr1 = document.createElement("TR");
-		var tstd11 = document.createElement("TD");
+        var optionsM1 = document.createElement("option");
+        optionsM1.id = 'opm5';
+        optionsM1.value = 5;
+        if (currentStmnMin === 5) {
+            optionsM1.setAttribute("selected", "true");
+        }
+        optionsM1.appendChild(document.createTextNode('5'));
 
-		tstd11.appendChild(seles);
-		tstr1.appendChild(tstd11);
+        var optionsM2 = document.createElement("option");
+        optionsM2.id = 'opm10';
+        optionsM2.value = 10;
+        if (currentStmnMin === 10) {
+            optionsM2.setAttribute("selected", "true");
+        }
+        optionsM2.appendChild(document.createTextNode('10'));
 
-		var tstr2 = document.createElement("TR");
-		var tstd21 = document.createElement("TD");
+        var optionsM3 = document.createElement("option");
+        optionsM3.id = 'opm20';
+        optionsM3.value = 20;
+        if (currentStmnMin === 20) {
+            optionsM3.setAttribute("selected", "true");
+        }
+        optionsM3.appendChild(document.createTextNode('20'));
 
-		tstd21.appendChild(selesM);
-		tstr2.appendChild(tstd21);
+        var optionsM4 = document.createElement("option");
+        optionsM4.id = 'opm30';
+        optionsM4.value = 30;
+        if (currentStmnMin === 30) {
+            optionsM4.setAttribute("selected", "true");
+        }
+        optionsM4.appendChild(document.createTextNode('30'));
 
-		tsble.appendChild(tstr1);
-		tsble.appendChild(tstr2);
+        var optionsM5 = document.createElement("option");
+        optionsM5.id = 'opm40';
+        optionsM5.value = 40;
+        if (currentStmnMin === 40) {
+            optionsM5.setAttribute("selected", "true");
+        }
+        optionsM5.appendChild(document.createTextNode('40'));
 
-		document.querySelector(".clb").appendChild(tsble);
+        var optionsM6 = document.createElement("option");
+        optionsM6.id = 'opm50';
+        optionsM6.value = 50;
+        if (currentStmnMin === 50) {
+            optionsM6.setAttribute("selected", "true");
+        }
+        optionsM6.appendChild(document.createTextNode('50'));
 
-	}
+        selesM.appendChild(optionsM1);
+        selesM.appendChild(optionsM2);
+        selesM.appendChild(optionsM3);
+        selesM.appendChild(optionsM4);
+        selesM.appendChild(optionsM5);
+        selesM.appendChild(optionsM6);
+
+
+        var tsble = document.createElement("TABLE");
+        tsble.classList.add("cit");
+
+        var tstr1 = document.createElement("TR");
+        var tstd11 = document.createElement("TD");
+
+        tstd11.appendChild(seles);
+        tstr1.appendChild(tstd11);
+
+        var tstr2 = document.createElement("TR");
+        var tstd21 = document.createElement("TD");
+
+        tstd21.appendChild(selesM);
+        tstr2.appendChild(tstd21);
+
+        tsble.appendChild(tstr1);
+        tsble.appendChild(tstr2);
+
+        document.querySelector(".clb").appendChild(tsble);
+
+    }
 }
 
 
@@ -5693,68 +5736,68 @@ function showSTMNControl(){
 
 /*============ SHOW STOP/START BUTTON ==========*/
 
-function showStopStartMainPage(){
-	if (!document.getElementById('btnSSid')) {
+function showStopStartMainPage() {
+    if (!document.getElementById('btnSSid')) {
 
-		var btnSS = document.createElement("BUTTON");
-		btnSS.id = "btnSSid";
-		btnSS.style.background = 'rgb(255, 76, 76)'; //'#333';
-		btnSS.style.fontFamily = 'Tahoma, Geneva, sans-serif';
-		btnSS.style.fontSize = '12px';
-		btnSS.style.padding = '5px 10px 5px 10px';
-		btnSS.style.color = '#fff';
-		btnSS.style.fontWeight = 'bold';
-		btnSS.style.borderRadius = '6px';
-		btnSS.style.boxShadow = '0 1px 3px rgba(0,0,0,0.5)';
-		btnSS.style.textShadow = '0 -1px 1px rgba(0,0,0,0.25)';
-		btnSS.style.borderBottom = '1px solid rgba(0,0,0,0.25)';
-		btnSS.style.cursor = 'pointer';
-		btnSS.style.borderLeft = 'none';
-		btnSS.style.borderTop = 'none';
-		btnSS.style.margin = '10px 0 10px 0';
-		btnSS.style.opacity = '0.8';
+        var btnSS = document.createElement("BUTTON");
+        btnSS.id = "btnSSid";
+        btnSS.style.background = 'rgb(255, 76, 76)'; //'#333';
+        btnSS.style.fontFamily = 'Tahoma, Geneva, sans-serif';
+        btnSS.style.fontSize = '12px';
+        btnSS.style.padding = '5px 10px 5px 10px';
+        btnSS.style.color = '#fff';
+        btnSS.style.fontWeight = 'bold';
+        btnSS.style.borderRadius = '6px';
+        btnSS.style.boxShadow = '0 1px 3px rgba(0,0,0,0.5)';
+        btnSS.style.textShadow = '0 -1px 1px rgba(0,0,0,0.25)';
+        btnSS.style.borderBottom = '1px solid rgba(0,0,0,0.25)';
+        btnSS.style.cursor = 'pointer';
+        btnSS.style.borderLeft = 'none';
+        btnSS.style.borderTop = 'none';
+        btnSS.style.margin = '10px 0 10px 0';
+        btnSS.style.opacity = '0.8';
 
-		if (GM_getValue("botSS")) {
-			btnSS.appendChild(document.createTextNode("-NO-"));
-			btnSS.style.background = 'rgb(255, 76, 76)';
-		} else {
-			btnSS.appendChild(document.createTextNode("-YES-"));
-			document.title = '(-WTF-)';
-			btnSS.style.background = 'rgb(86, 195, 51)';
+        if (GM_getValue("botSS")) {
+            btnSS.appendChild(document.createTextNode("-NO-"));
+            btnSS.style.background = 'rgb(255, 76, 76)';
+        } else {
+            btnSS.appendChild(document.createTextNode("-YES-"));
+            document.title = '(-WTF-)';
+            btnSS.style.background = 'rgb(86, 195, 51)';
 
-		}
+        }
 
-		btnSS.addEventListener('click', function() {
-			if (GM_getValue("botSS")) {
-				GM_setValue("botSS", false);
-				btnSS.textContent = "-YES-";
-				document.title = '(-WTF-)';
-				btnSS.style.background = 'rgb(86, 195, 51)';
-			} else {
-				GM_setValue("botSS", true);
-				btnSS.textContent = "-NO-";
-				btnSS.style.background = 'rgb(255, 76, 76)';
-				window.location.href = window.location.href;
-			}
+        btnSS.addEventListener('click', function() {
+            if (GM_getValue("botSS")) {
+                GM_setValue("botSS", false);
+                btnSS.textContent = "-YES-";
+                document.title = '(-WTF-)';
+                btnSS.style.background = 'rgb(86, 195, 51)';
+            } else {
+                GM_setValue("botSS", true);
+                btnSS.textContent = "-NO-";
+                btnSS.style.background = 'rgb(255, 76, 76)';
+                window.location.href = window.location.href;
+            }
 
-		});
+        });
 
-		//var ccter = document.createElement("CENTER");
-		//ccter.appendChild(btnSS);
+        //var ccter = document.createElement("CENTER");
+        //ccter.appendChild(btnSS);
 
-		var tsble = document.createElement("TABLE");
-		tsble.classList.add("cit");
+        var tsble = document.createElement("TABLE");
+        tsble.classList.add("cit");
 
-		var tstr1 = document.createElement("TR");
-		var tstd11 = document.createElement("TD");
+        var tstr1 = document.createElement("TR");
+        var tstd11 = document.createElement("TD");
 
-		tstd11.appendChild(btnSS);
-		tstr1.appendChild(tstd11);
+        tstd11.appendChild(btnSS);
+        tstr1.appendChild(tstd11);
 
-		tsble.appendChild(tstr1);
+        tsble.appendChild(tstr1);
 
-		document.querySelector(".clb").appendChild(tsble);
-	}
+        document.querySelector(".clb").appendChild(tsble);
+    }
 }
 
 /*============ SHOW STOP/START BUTTON END ======*/
@@ -5777,7 +5820,7 @@ if (document.getElementById('togpane_log')) {
     OnPageReload();
 } else {
 
-	GM_setValue("enableSkipSTMN", false);
+    GM_setValue("enableSkipSTMN", false);
 
     //show potion
     if (settings.showUsePotion) {
@@ -5884,18 +5927,18 @@ if (document.getElementById('togpane_log')) {
         genAfterTurn();
     }
 
-	//show stamina control
+    //show stamina control
     if (settings.staminaControl && settings.staminaShowMainPage) {
         if (!checkHaveOverchanrge() && !checkHaveNoCurrentBattle()) {
-			showSTMNControl();
-		}
+            showSTMNControl();
+        }
     }
 
-	//show stop-start
+    //show stop-start
     if (settings.showStopStartButtonMainPage) {
         if (!checkHaveOverchanrge() && !checkHaveNoCurrentBattle()) {
-			showStopStartMainPage();
-		}
+            showStopStartMainPage();
+        }
     }
 }
 
