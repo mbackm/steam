@@ -25,7 +25,7 @@ if (window === window.parent){
 
 function main(){
 
-	var data = {last:0, count:0, total:0, countATK:0, totalATK:0, turn:0, beginTime: Date.now(), lastTime: 0};
+	var data = {last:0, count:0, total:0, countATK:0, totalATK:0, turn:0, beginTime: Date.now(), lastTime: 0, now: 0};
 	var nglist = /^(Shield Bash|Vital Strike|Merciful Blow|Great Cleave|Rending Blow|Shatter Strike|Iris Strike|Backstab|Frenzied Blows|Skyward Sword|Concussive Strike|FUS RO DAH|Orbital Friendship Cannon)$/;
 	
 	if (document.getElementById("togpane_log")){
@@ -61,6 +61,8 @@ function main(){
 	} else if (location.href.indexOf("Battle&ss=ar")!==-1 || location.href.indexOf("Battle&ss=gr") || location.href.indexOf("Battle&ss=rb")!==-1){
 		if (!document.querySelector('#riddleform div img[src*="riddlemaster.php"]')) {
 			localStorage.setItem("BattleStateExReset", true);
+			now = data.now;
+			data.lastTime = now;
 		}
 		show();
 	}
@@ -71,6 +73,7 @@ function main(){
 		var last = tr[0].children[0].textContent;
 		if (last == data.last) return;
 		data.last = last;
+		data.now = now;
 		
 		data.turn++;
 		
