@@ -4,7 +4,7 @@
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @run-at      document-end
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version     1.3.3.63
+// @version     1.3.3.64
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @grant       none
@@ -36,12 +36,12 @@
 var settings = {
     godAuto: true, // God Mode
     enableHaveAutoCast: true, // if you already unlock auto-cast please enable and go to LIST_AUTO_CAST for config.
-    showUsePotion: false, //#1/5# Show use potion
-    spellControl: true, //#2/5# Spell Control - use Scroll or normal buff
+    showUsePotion: false, //#1/4# Show use potion
+    spellControl: true, // Spell Control - use Scroll or normal buff
     showStopStartButton: true, // Show Stop Start button
     showStopStartButtonMainPage: true, // Show Stop Start button on Main Page
-    showBarListBattleItems: false, //#3/5# Show list battle items
-    trackDrop: false, //#4/5# Track item drop
+    showBarListBattleItems: false, //#2/4# Show list battle items
+    trackDrop: false, //#3/4# Track item drop
     enableCheckPony: true, // enable check alert pony
     stopPlayAfterAutoAnswerPony: true, // stop bot after auto answer pony
     enableOfflineSong: true, // enable offline song
@@ -49,7 +49,7 @@ var settings = {
     enableGFslowGEM: true, // enable Grindfest use GEM slow
     hideWelcome: true, // Hide the "Welcome to the Hentaiverse" image/logo
     noBlinking: false, // Disable buff/debuff blinking
-    effectDurations: false, //#5/5# Show buff/debuff durations
+    effectDurations: false, //#4/4# Show buff/debuff durations
     gemIcon: true, // Show gem/powerup, click on icon to use
     staminaControl: true, // Show Stamina Control
     staminaShowMainPage: true, // Show Stamina Control on Main Page
@@ -5454,7 +5454,10 @@ if (document.getElementById('togpane_log')) {
 
     //hv counter
     if (settings.counterPlus) {
-        genAfterTurn();
+        if (document.getElementById('riddleform') || document.getElementById('equipment') || document.querySelector('img[src $= "derpy.gif"]')) return;
+        if (!checkHaveOverchanrge() && !checkHaveNoCurrentBattle()) {
+            genAfterTurn();
+        }
     }
 
     //show stamina control
