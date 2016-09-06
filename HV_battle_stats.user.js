@@ -167,6 +167,7 @@ function main(){
 			//div2.style.position = "relative";
 			if (!document.getElementById("togpane_log")){
 				div2.style.bottom = "0px";
+				div.style.paddingBottom = "20px";
 			}
 			div2.style.left = "2px";
 			div2.style.backgroundColor = "#edebdf";
