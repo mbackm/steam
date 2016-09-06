@@ -10,7 +10,7 @@
 // @exclude  http://hentaiverse.org/?s=Forge*
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_battle_stats.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_battle_stats.user.js
-// @version  1.1.0.3
+// @version  1.1.0.4
 // ==/UserScript==
 
 if (window === window.parent){
@@ -25,7 +25,7 @@ if (window === window.parent){
 
 function main(){
 
-	var data = {last:0, count:0, total:0, turn:0, beginTime: Date.now(), lastTime: 0};
+	var data = {last:0, count:0, total:0, countATK:0, totalATK:0, turn:0, beginTime: Date.now(), lastTime: 0};
 	var nglist = /^(Shield Bash|Vital Strike|Merciful Blow|Great Cleave|Rending Blow|Shatter Strike|Iris Strike|Backstab|Frenzied Blows|Skyward Sword|Concussive Strike|FUS RO DAH|Orbital Friendship Cannon)$/;
 	
 	if (document.getElementById("togpane_log")){
@@ -76,7 +76,7 @@ function main(){
 		
 		for (var i=0; i<tr.length && tr[i].children[0].textContent==last; i++){
 			
-			// ダメージ
+			// damage
 			var d = tr[i].children[2].textContent.match(/you for (\d+) (\w+) damage/);
 			if (d){
 				var tag = "#" + d[2];
@@ -101,7 +101,7 @@ function main(){
 				}
 			}
 			
-			// アイテム
+			// list potion
 			d = tr[i].children[2].textContent.match(/You (use|cast) (.+)\./);
 			if (d){
 				var tag;
@@ -117,11 +117,51 @@ function main(){
 				data[tag]++;
 				continue;
 			}
+			
+
+			//								["You crit Memorabilia Of Darksage for 9274 void damage", "You", "crit", "Memorabilia Of Darksage", "9274", "void damage"]
+			// attack					   //.match(/you for (\d+) (\w+) damage/);
+			d = tr[i].children[2].textContent.match(/([A-Za-z0-9_ ]*) (crit|hit|hits|crits) ([A-Za-z0-9_ ]*) for (\d*) ([A-Za-z0-9_ ]*)/);
+			if (d){
+				var tagLL = "@";
+
+				switch (d[2]) {
+					case "hits":
+							if(d[1].startsWith('Your')){
+								tagLL = "@" + (d[1].substring(5));
+							}else{
+								tagLL = "@" + (d[1]);
+							}
+							break;
+					case "crits":
+							if(d[1].startsWith('Your')){
+								tagLL = "@" + (d[1].substring(5));
+							}else{
+								tagLL = "@" + (d[1]);
+							}
+							break;
+					case "crit":
+							tagLL = "@Crit";
+							break;
+					case "hit":
+							tagLL = "@Hit";
+							break;
+				}
+
+				var tag = tagLL;//"@" + (d[1]+'_'+d[2]);
+				if (!data[tag]) data[tag] = 0;
+				data[tag] += d[4]*1;
+				
+				data.totalATK += d[4]*1;
+				data.countATK++;
+				continue;
+			}
+
 		}
 	}
 
 
-	// 描画用
+	// display
 	function show(){
 		
 		var div = document.getElementById("battle_stats_ex");
@@ -152,6 +192,10 @@ function main(){
 			var dmg = document.createElement("div");
 			dmg.style.textAlign = "left";
 			div2.appendChild(dmg);
+
+			var atk = document.createElement("div");
+			atk.style.textAlign = "left";
+			div2.appendChild(atk);
 			
 			var item = document.createElement("div");
 			item.style.textAlign = "left";
@@ -185,7 +229,7 @@ function main(){
 				var tgLog = document.getElementById("leftpane");
 						div.style.position = "relative";
 						div.style.width = "669px";
-						div.style.height = "84px";
+						div.style.height = "100px";
 						div.style.clear = "both";
 						div.style.textAlign = "justify";
 						div.style.overflow = "auto";
@@ -199,14 +243,19 @@ function main(){
 		}
 		
 		var dmg = div.children[0].children[0];
-		var item = div.children[0].children[1];
-		var skill = div.children[0].children[2];
+		var atk = div.children[0].children[1];
+		var item = div.children[0].children[2];
+		var skill = div.children[0].children[3];
 		//var button = div.children[1].children[0];
-		var button = div.children[0].children[3];
+		var button = div.children[0].children[4];
 		
 		var avg = "Average: " + Math.floor(data.total / data.count) + " / ";
-		var str1 = "<b>[Damage]</b> " + avg + extData("#", true);
+		var str1 = "<b>[Damage]</b> " + avg + extData("#", true, 1);
 		dmg.innerHTML = str1;
+
+		var avgAtk = "Average: " + Math.floor(data.totalATK / data.countATK) + " / ";
+		var strAtk = "<b>[Attack]</b> " + avgAtk + extData("@", true, 0);
+		atk.innerHTML = strAtk;
 		
 		var str2 = "<b>[Used Item]</b> " + extData("$");
 		item.innerHTML = str2;
@@ -214,7 +263,7 @@ function main(){
 		var str3 = "<b>[Skill & Spell]</b> " + extData("&");
 		skill.innerHTML = str3;
 		
-		// 時間とターン数
+		// time and round
 		var totalTime = (now - data.beginTime) / 1000;
 		var hour = Math.floor(totalTime / 3600);
 		var min = Math.floor((totalTime-(hour*3600)) / 60);
@@ -228,7 +277,7 @@ function main(){
 
 
 
-	function extData(sign, per){
+	function extData(sign, per, type){
 		var ret = "";
 		var arr = [];
 		
@@ -237,7 +286,11 @@ function main(){
 				var d = [];
 				d[0] = key, d[1] = data[key], d[2] = "";
 				if (per) {
-					d[1] = Math.floor(d[1] / data.total * 100) * 1;
+					if(type === 1){
+						d[1] = Math.floor(d[1] / data.total * 100) * 1;
+					}else{
+						d[1] = Math.floor(d[1] / data.totalATK * 100) * 1;
+					}
 					d[2] = "%";
 				}
 				arr.push(d);
@@ -252,7 +305,7 @@ function main(){
 		}
 		return ret;
 		
-		// ソート関数
+		// sort data
 		function func(a, b){
 			if (a[1] > b[1]) return -1;
 			if (a[1] < b[1]) return 1;
