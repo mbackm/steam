@@ -160,7 +160,7 @@ function main(){
 		if (!div){
 			div = document.createElement("div");
 			div.id = "battle_stats_ex";
-			div.style.position = "relative";
+			div.style.position = "inherit";
 			div.style.zIndex = 9999;
 			
 			var div2 = document.createElement("div");
