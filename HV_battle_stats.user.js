@@ -28,8 +28,10 @@ function main(){
 	var data = {last:0, count:0, total:0, turn:0, beginTime: Date.now(), lastTime: 0};
 	var nglist = /^(Shield Bash|Vital Strike|Merciful Blow|Great Cleave|Rending Blow|Shatter Strike|Iris Strike|Backstab|Frenzied Blows|Skyward Sword|Concussive Strike|FUS RO DAH|Orbital Friendship Cannon)$/;
 	
-	if(localStorage.getItem("BattleStateExReset") === "true"){
-		localStorage.setItem("BattleStateEx", JSON.stringify(data));
+	if (document.getElementById("togpane_log")){
+		if(localStorage.getItem("BattleStateExReset") === "true"){
+			localStorage.setItem("BattleStateEx", JSON.stringify(data));
+		}
 	}
 
 	var load = localStorage.getItem("BattleStateEx");
