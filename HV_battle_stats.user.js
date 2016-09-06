@@ -183,18 +183,30 @@ function main(){
 			
 			var dmg = document.createElement("div");
 			dmg.style.textAlign = "left";
+			//dmg.style.paddingTop = "2px";
+			dmg.style.paddingBottom = "1.5px";
+			//dmg.style.borderBottom = "#fd3c3c solid 1px";
 			div2.appendChild(dmg);
 
 			var atk = document.createElement("div");
 			atk.style.textAlign = "left";
+			atk.style.paddingTop = "2.2px";
+			atk.style.paddingBottom = "1.5px";
+			//atk.style.borderBottom = "#37b528 solid 1px";
 			div2.appendChild(atk);
 			
 			var item = document.createElement("div");
 			item.style.textAlign = "left";
+			item.style.paddingTop = "2.2px";
+			item.style.paddingBottom = "1.5px";
+			//item.style.borderBottom = "#419eff solid 1px";
 			div2.appendChild(item);
 			
 			var skill = document.createElement("div");
 			skill.style.textAlign = "left";
+			skill.style.paddingTop = "2.2px";
+			skill.style.paddingBottom = "1.5px";
+			//skill.style.borderBottom = "#ff08ff solid 1px";
 			div2.appendChild(skill);
 			
 			/*var button = document.createElement("input");
@@ -211,6 +223,9 @@ function main(){
 			*/
 			var button = document.createElement("div");
 			button.style.textAlign = "left";
+			button.style.paddingTop = "2.2px";
+			button.style.paddingBottom = "1.5px";
+			//button.style.borderBottom = "#a6a900 solid 1px";
 			div2.appendChild(button);
 			//div3.appendChild(button);
 			
@@ -221,7 +236,7 @@ function main(){
 				var tgLog = document.getElementById("leftpane");
 						div.style.position = "relative";
 						div.style.width = "669px";
-						div.style.height = "100px";
+						div.style.height = "110px";
 						div.style.clear = "both";
 						div.style.textAlign = "justify";
 						div.style.overflow = "auto";
