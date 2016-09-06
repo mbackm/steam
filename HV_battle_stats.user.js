@@ -10,7 +10,7 @@
 // @exclude  http://hentaiverse.org/?s=Forge*
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_battle_stats.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_battle_stats.user.js
-// @version  1.1.0.1
+// @version  1.1.0.2
 // ==/UserScript==
 
 if (window === window.parent){
@@ -28,7 +28,7 @@ function main(){
 	var data = {last:0, count:0, total:0, turn:0, beginTime: Date.now(), lastTime: 0};
 	var nglist = /^(Shield Bash|Vital Strike|Merciful Blow|Great Cleave|Rending Blow|Shatter Strike|Iris Strike|Backstab|Frenzied Blows|Skyward Sword|Concussive Strike|FUS RO DAH|Orbital Friendship Cannon)$/;
 	
-	if(localStorage.getItem("BattleStateExReset") === true){
+	if(localStorage.getItem("BattleStateExReset") === "true"){
 		localStorage.setItem("BattleStateEx", JSON.stringify(data));
 	}
 
