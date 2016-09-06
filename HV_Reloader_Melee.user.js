@@ -3,7 +3,7 @@
 // @namespace   HVRLD3
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @include		/^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version		2.0.0.57
+// @version		2.0.0.58
 // @updateURL      https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @downloadURL    https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @run-at      document-end
@@ -38,13 +38,13 @@ var settings = {
     enableHaveAutoCast: true, // if you already unlock auto-cast please enable and go to LIST_AUTO_CAST for config.
     enableOFC: true, // use orbital friendship cannon
     enableBuffMon: false, // use debuff to monster
-    showUsePotion: true, //#1/5# Show use poton
-    spellControl: true, //#2/5# Spell Control - use Scroll or normal buff
+    showUsePotion: true, //#1/4# Show use poton
+    spellControl: true, // Spell Control - use Scroll or normal buff
     stopSpiritWhenFoundBoss: false, //Stop spirit when found boss
     showStopStartButton: true, // Show Stop Start button
     showStopStartButtonMainPage: true, // Show Stop Start button on Main Page
-    showBarListBattleItems: true, //#3/5# Show list battle items
-    trackDrop: true, //#4/5# Track item drop
+    showBarListBattleItems: true, //#2/4# Show list battle items
+    trackDrop: true, //#3/4# Track item drop
     enableCheckPony: true, // enable check alert pony
     stopPlayAfterAutoAnswerPony: true, // stop bot after auto answer pony
     enableBeepPopup: false, // enable beep popup
@@ -52,7 +52,7 @@ var settings = {
     enableGFslowGEM: true, // enable Grindfest use GEM slow
     hideWelcome: true, // Hide the "Welcome to the Hentaiverse" image/logo
     noBlinking: false, // Disable buff/debuff blinking
-    effectDurations: true, //#5/5# Show buff/debuff durations
+    effectDurations: true, //#4/4# Show buff/debuff durations
     gemIcon: true, // Show gem/powerup, click on icon to use
     staminaControl: true, // Show Stamina Control
     staminaShowMainPage: true, // Show Stamina Control on Main Page
@@ -5924,7 +5924,10 @@ if (document.getElementById('togpane_log')) {
 
     //hv counter
     if (settings.counterPlus) {
-        genAfterTurn();
+        if (document.getElementById('riddleform') || document.getElementById('equipment') || document.querySelector('img[src $= "derpy.gif"]')) return;
+        if (!checkHaveOverchanrge() && !checkHaveNoCurrentBattle()) {
+            genAfterTurn();
+        }
     }
 
     //show stamina control
