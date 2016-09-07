@@ -10,7 +10,7 @@
 // @exclude  http://hentaiverse.org/?s=Forge*
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_battle_stats.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_battle_stats.user.js
-// @version  1.1.0.10
+// @version  1.1.0.11
 // ==/UserScript==
 
 if (window === window.parent){
@@ -245,12 +245,12 @@ function main(){
 			
 			
 			if (document.getElementById("togpane_log")){
-				document.getElementById('infopane').style.height = '52px';
+				document.getElementById('infopane').style.height = '58px';
 
 				var tgLog = document.getElementById("leftpane");
 						div.style.position = "relative";
 						div.style.width = "669px";
-						div.style.height = "110px";
+						div.style.height = "20vh";
 						div.style.clear = "both";
 						div.style.textAlign = "justify";
 						div.style.overflow = "auto";
