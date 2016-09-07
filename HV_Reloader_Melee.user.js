@@ -3521,6 +3521,14 @@ function OnPageReload() {
                         return;
                     } else {
 
+						if (STYLE == 'mage') {
+							if (getSelfHealth() < 40) {
+								if (castSpell('full cure', 0)) {
+									return;
+								}
+							}
+						}
+
                         if (castSpell('cure', 0)) {
                             return;
                         } else if (getSelfHealth() < 40) {
