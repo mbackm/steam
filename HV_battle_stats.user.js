@@ -10,7 +10,7 @@
 // @exclude  http://hentaiverse.org/?s=Forge*
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_battle_stats.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_battle_stats.user.js
-// @version  1.1.0.13
+// @version  1.1.0.14
 // ==/UserScript==
 
 if (window === window.parent){
@@ -24,6 +24,17 @@ if (window === window.parent){
 }
 
 function main(){
+
+	Number.prototype.formatMoney = function(c, d, t){
+	var n = this, 
+		c = isNaN(c = Math.abs(c)) ? 2 : c, 
+		d = d == undefined ? "." : d, 
+		t = t == undefined ? "," : t, 
+		s = n < 0 ? "-" : "", 
+		i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", 
+		j = (j = i.length) > 3 ? j % 3 : 0;
+	   return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+	 };
 
 	var data = {last:0, count:0, total:0, countATK:0, totalATK:0, turn:0, beginTime: Date.now(), lastTime: 0, EXP: 0,Credits: 0};
 	var nglist = /^(Shield Bash|Vital Strike|Merciful Blow|Great Cleave|Rending Blow|Shatter Strike|Iris Strike|Backstab|Frenzied Blows|Skyward Sword|Concussive Strike|FUS RO DAH|Orbital Friendship Cannon)$/;
@@ -286,17 +297,17 @@ function main(){
 		//var button = div.children[1].children[0];
 		var button = div.children[0].children[4];
 
-		var vAvg = Math.floor(data.total / data.count)+'';
-        while (vAvg != (vAvg = vAvg.replace(/^(\d+)(\d{3})/, '$1,$2')));
+		var vAvg = Math.floor(data.total / data.count);
+        //while (vAvg != (vAvg = vAvg.replace(/^(\d+)(\d{3})/, '$1,$2')));
 		
-		var avg = "Average: " + vAvg + " / ";
+		var avg = "Average: " + vAvg.formatMoney(0, '.', ',') + " / ";
 		var str1 = "<b>[Damage]</b> " + avg + extData("#", true, 1);
 		dmg.innerHTML = str1;
 
-		var vAvgAtk = Math.floor(data.totalATK / data.countATK)+'';
-        while (vAvgAtk != (vAvgAtk = vAvgAtk.replace(/^(\d+)(\d{3})/, '$1,$2')));
+		var vAvgAtk = Math.floor(data.totalATK / data.countATK);
+        //while (vAvgAtk != (vAvgAtk = vAvgAtk.replace(/^(\d+)(\d{3})/, '$1,$2')));
 
-		var avgAtk = "Average: " + vAvgAtk + " / ";
+		var avgAtk = "Average: " + vAvgAtk.formatMoney(0, '.', ',') + " / ";
 		var strAtk = "<b>[Attack]</b> " + avgAtk + extData("@", true, 0);
 		atk.innerHTML = strAtk;
 		
@@ -317,13 +328,13 @@ function main(){
 		tPers = data.turn/( (hour*60*60)+(min*60)+(sec) );
 		//button.value = data.turn + " turns\n" + timeValue  + " (" + (1000/(now-lastTime)).toFixed(2) + " t/s)";
 		//button.innerHTML = "<b>[Turn]</b> " +data.turn + " turns\n" + timeValue  + " (" + (1000/(now-lastTime)).toFixed(2) + " t/s)";
-		var vEXP = data.EXP+'';
-        while (vEXP != (vEXP = vEXP.replace(/^(\d+)(\d{3})/, '$1,$2')));
+		var vEXP = data.EXP;
+        //while (vEXP != (vEXP = vEXP.replace(/^(\d+)(\d{3})/, '$1,$2')));
 
-		var vCredits = data.Credits+'';
-        while (vCredits != (vCredits = vCredits.replace(/^(\d+)(\d{3})/, '$1,$2')));
+		var vCredits = data.Credits;
+        //while (vCredits != (vCredits = vCredits.replace(/^(\d+)(\d{3})/, '$1,$2')));
 
-		button.innerHTML = "<b>[Data]</b> " +data.turn + " turns / " + timeValue  + " (" + (tPers).toFixed(2) + " t/s) / EXP: "+vEXP+" / Credits: "+vCredits;
+		button.innerHTML = "<b>[Data]</b> " +data.turn + " turns / " + timeValue  + " (" + (tPers).toFixed(2) + " t/s) / EXP: "+vEXP.formatMoney(0, '.', ',')+" / Credits: "+vCredits.formatMoney(0, '.', ',');
 		
 	}
 
