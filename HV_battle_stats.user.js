@@ -334,7 +334,7 @@ function main(){
 		var vCredits = data.Credits;
         //while (vCredits != (vCredits = vCredits.replace(/^(\d+)(\d{3})/, '$1,$2')));
 
-		button.innerHTML = "<b>[Data]</b> " +data.turn + " turns / " + timeValue  + " (" + (tPers).toFixed(2) + " t/s) / EXP: "+vEXP.formatMoney(0, '.', ',')+" / Credits: "+vCredits.formatMoney(0, '.', ',');
+		button.innerHTML = "<b>[Summary]</b> " +data.turn + " turns / " + timeValue  + " (" + (tPers).toFixed(2) + " t/s) / EXP: "+vEXP.formatMoney(0, '.', ',')+" / Credits: "+vCredits.formatMoney(0, '.', ',');
 		
 	}
 
