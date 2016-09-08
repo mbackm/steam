@@ -3,7 +3,7 @@
 // @namespace   HVRLD3
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @include		/^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version		2.0.0.60
+// @version		2.0.0.61
 // @updateURL      https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @downloadURL    https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @run-at      document-end
@@ -3004,7 +3004,7 @@ function OnPageReload() {
 										}
 									}
 								}else if(settings.enableFRD){
-									mainOvercharge = 48; //82.5
+									mainOvercharge = 41; //82.5
 									if (getNumMonstersAlive() > 0 || getNumBossMonsterAlive() > 0) {
 										if (getSelfOvercharge() >= mainOvercharge) {
 											if (castSpell('fus ro dah', chooseTarget(false))) {
