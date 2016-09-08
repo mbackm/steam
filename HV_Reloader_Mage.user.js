@@ -4662,6 +4662,10 @@ function addAnswerButton() {
                 GM_setValue("botSS", false);
             }
 
+			if (window.opener) {
+				window.opener.location = "https://ehwiki.org/wiki/Main_Page";
+			}
+
             document.querySelectorAll('img[src*="/y/battle/answer.png"]')[0].click();
         }
 
