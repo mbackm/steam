@@ -10,7 +10,7 @@
 // @exclude  http://hentaiverse.org/?s=Forge*
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_battle_stats.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_battle_stats.user.js
-// @version  1.1.0.12
+// @version  1.1.0.13
 // ==/UserScript==
 
 if (window === window.parent){
@@ -25,7 +25,7 @@ if (window === window.parent){
 
 function main(){
 
-	var data = {last:0, count:0, total:0, countATK:0, totalATK:0, turn:0, beginTime: Date.now(), lastTime: 0};
+	var data = {last:0, count:0, total:0, countATK:0, totalATK:0, turn:0, beginTime: Date.now(), lastTime: 0, EXP: 0,Credits: 0};
 	var nglist = /^(Shield Bash|Vital Strike|Merciful Blow|Great Cleave|Rending Blow|Shatter Strike|Iris Strike|Backstab|Frenzied Blows|Skyward Sword|Concussive Strike|FUS RO DAH|Orbital Friendship Cannon)$/;
 	
 	if (document.getElementById("togpane_log")){
@@ -159,6 +159,22 @@ function main(){
 				continue;
 			}
 
+			//EXP , Credit
+			//d = tr[i].children[2].textContent.match(/You (use|cast) (.+)\./);
+			d = tr[i].children[2].textContent.match(/(\d+) ([EC]\w+).$/);
+			if (d){
+
+				//["936758 EXP!", "936758", "EXP"]
+				//["293 Credits]", "293", "Credits"]
+				if(d[2] === "EXP"){
+					data.EXP += d[1]*1;
+				}else if(d[2] === "Credits"){
+					data.Credits += d[1]*1;
+				}
+				
+				continue;
+			}
+
 		}
 	}
 
@@ -269,12 +285,18 @@ function main(){
 		var skill = div.children[0].children[3];
 		//var button = div.children[1].children[0];
 		var button = div.children[0].children[4];
+
+		var vAvg = Math.floor(data.total / data.count)+'';
+        while (vAvg != (vAvg = vAvg.replace(/^(\d+)(\d{3})/, '$1,$2')));
 		
-		var avg = "Average: " + Math.floor(data.total / data.count) + " / ";
+		var avg = "Average: " + vAvg + " / ";
 		var str1 = "<b>[Damage]</b> " + avg + extData("#", true, 1);
 		dmg.innerHTML = str1;
 
-		var avgAtk = "Average: " + Math.floor(data.totalATK / data.countATK) + " / ";
+		var vAvgAtk = Math.floor(data.totalATK / data.countATK)+'';
+        while (vAvgAtk != (vAvgAtk = vAvgAtk.replace(/^(\d+)(\d{3})/, '$1,$2')));
+
+		var avgAtk = "Average: " + vAvgAtk + " / ";
 		var strAtk = "<b>[Attack]</b> " + avgAtk + extData("@", true, 0);
 		atk.innerHTML = strAtk;
 		
@@ -295,7 +317,13 @@ function main(){
 		tPers = data.turn/( (hour*60*60)+(min*60)+(sec) );
 		//button.value = data.turn + " turns\n" + timeValue  + " (" + (1000/(now-lastTime)).toFixed(2) + " t/s)";
 		//button.innerHTML = "<b>[Turn]</b> " +data.turn + " turns\n" + timeValue  + " (" + (1000/(now-lastTime)).toFixed(2) + " t/s)";
-		button.innerHTML = "<b>[Turn]</b> " +data.turn + " turns\n" + timeValue  + " (" + (tPers).toFixed(2) + " t/s)";
+		var vEXP = data.EXP+'';
+        while (vEXP != (vEXP = vEXP.replace(/^(\d+)(\d{3})/, '$1,$2')));
+
+		var vCredits = data.Credits+'';
+        while (vCredits != (vCredits = vCredits.replace(/^(\d+)(\d{3})/, '$1,$2')));
+
+		button.innerHTML = "<b>[Data]</b> " +data.turn + " turns / " + timeValue  + " (" + (tPers).toFixed(2) + " t/s) / EXP: "+vEXP+" / Credits: "+vCredits;
 		
 	}
 
