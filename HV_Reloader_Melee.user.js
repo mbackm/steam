@@ -3,7 +3,7 @@
 // @namespace   HVRLD3
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @include		/^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version		2.0.0.58
+// @version		2.0.0.60
 // @updateURL      https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @downloadURL    https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @run-at      document-end
@@ -37,14 +37,15 @@ var settings = {
     godAuto: true, // God Mode
     enableHaveAutoCast: true, // if you already unlock auto-cast please enable and go to LIST_AUTO_CAST for config.
     enableOFC: true, // use orbital friendship cannon
+	enableFRD: false, // FUS RO DAH
     enableBuffMon: false, // use debuff to monster
-    showUsePotion: true, //#1/4# Show use poton
+    showUsePotion: false, //#1/4# Show use poton
     spellControl: true, // Spell Control - use Scroll or normal buff
     stopSpiritWhenFoundBoss: false, //Stop spirit when found boss
     showStopStartButton: true, // Show Stop Start button
     showStopStartButtonMainPage: true, // Show Stop Start button on Main Page
-    showBarListBattleItems: true, //#2/4# Show list battle items
-    trackDrop: true, //#3/4# Track item drop
+    showBarListBattleItems: false, //#2/4# Show list battle items
+    trackDrop: false, //#3/4# Track item drop
     enableCheckPony: true, // enable check alert pony
     stopPlayAfterAutoAnswerPony: true, // stop bot after auto answer pony
     enableBeepPopup: false, // enable beep popup
@@ -52,7 +53,7 @@ var settings = {
     enableGFslowGEM: true, // enable Grindfest use GEM slow
     hideWelcome: true, // Hide the "Welcome to the Hentaiverse" image/logo
     noBlinking: false, // Disable buff/debuff blinking
-    effectDurations: true, //#4/4# Show buff/debuff durations
+    effectDurations: false, //#4/4# Show buff/debuff durations
     gemIcon: true, // Show gem/powerup, click on icon to use
     staminaControl: true, // Show Stamina Control
     staminaShowMainPage: true, // Show Stamina Control on Main Page
@@ -2990,17 +2991,28 @@ function OnPageReload() {
                             useOverchargeMode = true;
                         }
 
-                        if (useOverchargeMode || settings.enableOFC) {
+                        if (useOverchargeMode || settings.enableOFC || settings.enableFRD) {
                             var mainOvercharge = 10;
-                            if (settings.enableOFC) {
-                                mainOvercharge = 100; //82.5
-                                if (getNumMonstersAlive() > 0 || getNumBossMonsterAlive() > 0) {
-                                    if (getSelfOvercharge() >= mainOvercharge) {
-                                        if (castSpell('orbital friendship cannon', chooseTarget(false))) {
-                                            return;
-                                        }
-                                    }
-                                }
+                            if (settings.enableOFC || settings.enableFRD) {
+								if(settings.enableOFC){
+									mainOvercharge = 100; //82.5
+									if (getNumMonstersAlive() > 0 || getNumBossMonsterAlive() > 0) {
+										if (getSelfOvercharge() >= mainOvercharge) {
+											if (castSpell('orbital friendship cannon', chooseTarget(false))) {
+												return;
+											}
+										}
+									}
+								}else if(settings.enableFRD){
+									mainOvercharge = 48; //82.5
+									if (getNumMonstersAlive() > 0 || getNumBossMonsterAlive() > 0) {
+										if (getSelfOvercharge() >= mainOvercharge) {
+											if (castSpell('fus ro dah', chooseTarget(false))) {
+												return;
+											}
+										}
+									}
+								}
                             } else {
                                 if (MODE_FIGHTING === "1H") {
 
