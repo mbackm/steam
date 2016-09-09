@@ -6,7 +6,7 @@
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
-// @version     1.3.3.66
+// @version     1.3.3.67
 // @grant       none
 // ==/UserScript==
 // Vanilla Reloader:
@@ -752,18 +752,6 @@ function initialPageLoad() {
                     GM_setValue("meleeMode", false);
                 }
 
-                var checkSpecialSkill = GM_getValue('checkSpecialSkill');
-                if (!checkSpecialSkill) {
-                    GM_setValue("checkSpecialSkill", false);
-                }
-
-                var currentSpecialSkill = GM_getValue('currentSpecialSkill');
-                if (!currentSpecialSkill) {
-                    GM_setValue("currentSpecialSkill", "orbital friendship cannon");
-                }
-
-
-
                 function genShowSellControl() {
                     if (!document.getElementById('aDIscpcID')) {
                         var aDIscpc = document.createElement('DIV');
@@ -940,62 +928,6 @@ function initialPageLoad() {
                             selex.appendChild(option5);
                             selex.appendChild(option6);
 
-                            //special skill
-                            if (document.getElementById('1111') || document.getElementById('1101')) { // ofc , frd
-                                var cbOFCFRD = document.createElement("INPUT");
-                                cbOFCFRD.id = 'cbOFCFRDID';
-                                cbOFCFRD.setAttribute("type", "checkbox");
-                                if (checkSpecialSkill) {
-                                    cbOFCFRD.setAttribute("checked", "true");
-                                }
-                                cbOFCFRD.addEventListener('change', function() {
-                                    GM_setValue("checkSpecialSkill", cbOFCFRD.checked);
-                                });
-
-                                //'orbital friendship cannon','fus ro dah'
-                                var selspsk = document.createElement("select");
-                                selspsk.id = 'speSkillID';
-                                selspsk.style.width = '60px';
-                                selspsk.style.webkitAppearance = 'none';
-                                selspsk.style.background = '#ffc8c8';
-                                selspsk.setAttribute("title", "Special Skill");
-                                selspsk.addEventListener('change', function() {
-                                    GM_setValue("currentSpecialSkill", selspsk.value);
-                                });
-
-                                var option1 = document.createElement("option");
-                                option1.id = 'opOFC';
-                                option1.value = 'orbital friendship cannon';
-                                if (currentSpecialSkill === 'orbital friendship cannon') {
-                                    option1.setAttribute("selected", "true");
-                                }
-                                option1.appendChild(document.createTextNode('-OFC-'));
-
-                                var option2 = document.createElement("option");
-                                option2.id = 'opFRD';
-                                option2.value = 'fus ro dah';
-                                if (currentSpecialSkill === 'fus ro dah') {
-                                    option2.setAttribute("selected", "true");
-                                }
-                                option2.appendChild(document.createTextNode('+FRD+'));
-
-                                if (document.getElementById('1111')) {
-                                    selspsk.appendChild(option1);
-                                }
-                                if (document.getElementById('1111')) {
-                                    selspsk.appendChild(option2);
-                                }
-
-                                var tttr5 = document.createElement("TR");
-                                var tttd51 = document.createElement("TD");
-                                var tttd52 = document.createElement("TD");
-                                tttd51.appendChild(cbOFCFRD);
-                                tttd52.appendChild(selspsk);
-                                tttr5.appendChild(tttd51);
-                                tttr5.appendChild(tttd52);
-                            }
-
-
                             //meleeMode zone
                             if (document.getElementById('2501')) {
                                 var cbMelee = document.createElement("INPUT");
@@ -1069,10 +1001,6 @@ function initialPageLoad() {
                                 ttble.appendChild(tttr3m);
                             }
                             ttble.appendChild(tttr4);
-
-                            if (document.getElementById('1111') || document.getElementById('1101')){
-                                ttble.appendChild(tttr5);
-							}
 
 							aDIscpc.appendChild(ttble);
                     }
