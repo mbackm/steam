@@ -94,6 +94,15 @@ function main(){
 
         data.turn++;
 
+		var logs = document.querySelector('#togpane_log tr:nth-last-child(2)').textContent;
+		if (/Round/.test(logs)) {
+			var round = logs.match(/Round ([\d\s\/]+)/)[1];
+			data.Rounds = round;
+		} else if (/random encounter/.test(logs)) {
+			var round = '1 / 1';
+			data.Rounds = round;
+		}
+
         for (var i=0; i<tr.length && tr[i].children[0].textContent==last; i++){
 
             // damage
@@ -191,15 +200,6 @@ function main(){
                 }
 
                 continue;
-            }
-
-			var logs = document.querySelector('#togpane_log tr:nth-last-child(2)').textContent;
-            if (/Round/.test(logs)) {
-                var round = logs.match(/Round ([\d\s\/]+)/)[1];
-                data.Rounds = round;
-            } else if (/random encounter/.test(logs)) {
-                var round = '1 / 1';
-                data.Rounds = round;
             }
 
         }
