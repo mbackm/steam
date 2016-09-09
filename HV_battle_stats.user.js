@@ -10,7 +10,7 @@
 // @exclude  http://hentaiverse.org/?s=Forge*
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_battle_stats.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_battle_stats.user.js
-// @version  1.1.0.16
+// @version  1.1.0.17
 // ==/UserScript==
 
 if (window === window.parent){
@@ -36,7 +36,7 @@ function main(){
         return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
     };
 
-    var data = {last:0, count:0, total:0, countATK:0, totalATK:0, turn:0, beginTime: Date.now(), lastTime: 0, EXP: 0,Credits: 0};
+    var data = {last:0, count:0, total:0, countATK:0, totalATK:0, turn:0, beginTime: Date.now(), lastTime: 0, EXP: 0,Credits: 0,Rounds: 0};
     var nglist = /^(Shield Bash|Vital Strike|Merciful Blow|Great Cleave|Rending Blow|Shatter Strike|Iris Strike|Backstab|Frenzied Blows|Skyward Sword|Concussive Strike|FUS RO DAH|Orbital Friendship Cannon)$/;
 
     if (document.getElementById("togpane_log")){
@@ -193,6 +193,15 @@ function main(){
                 continue;
             }
 
+			var logs = document.querySelector('#togpane_log tr:nth-last-child(2)').textContent;
+            if (/Round/.test(logs)) {
+                var round = logs.match(/Round ([\d\s\/]+)/)[1];
+                data.Rounds = round;
+            } else if (/random encounter/.test(logs)) {
+                var round = '1 / 1';
+                data.Rounds = round;
+            }
+
         }
     }
 
@@ -341,7 +350,7 @@ function main(){
         var vCredits = data.Credits;
         //while (vCredits != (vCredits = vCredits.replace(/^(\d+)(\d{3})/, '$1,$2')));
 
-        button.innerHTML = "<b>[Summary]</b> " +data.turn + " turns / " + timeValue  + " (" + (tPers).toFixed(2) + " t/s) / EXP: "+vEXP.formatMoney(0, '.', ',')+" / Credits: "+vCredits.formatMoney(0, '.', ',');
+        button.innerHTML = "<b>[Summary]</b> "+data.Rounds+" Rounds / " +data.turn + " turns / " + timeValue  + " (" + (tPers).toFixed(2) + " t/s) / EXP: "+vEXP.formatMoney(0, '.', ',')+" / Credits: "+vCredits.formatMoney(0, '.', ',');
 
     }
 
