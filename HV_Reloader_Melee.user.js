@@ -3,7 +3,7 @@
 // @namespace   HVRLD3
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @include		/^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version		2.0.0.61
+// @version		2.0.0.62
 // @updateURL      https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @downloadURL    https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @run-at      document-end
@@ -36,8 +36,6 @@
 var settings = {
     godAuto: true, // God Mode
     enableHaveAutoCast: true, // if you already unlock auto-cast please enable and go to LIST_AUTO_CAST for config.
-    enableOFC: true, // use orbital friendship cannon
-	enableFRD: false, // FUS RO DAH
     enableBuffMon: false, // use debuff to monster
     showUsePotion: false, //#1/4# Show use poton
     spellControl: true, // Spell Control - use Scroll or normal buff
@@ -229,12 +227,16 @@ function checkHaveOverchanrge() {
 
 }
 
-if (!GM_getValue("botSS")) {
+if (GM_getValue("botSS") === null) {
     GM_setValue("botSS", false);
 }
 
-if (!GM_getValue("offOverWaitLine")) {
+if (GM_getValue("offOverWaitLine") === null) {
     GM_setValue("offOverWaitLine", false);
+}
+
+if (GM_getValue("botSSChkAnswer") === null) {
+    GM_setValue("botSSChkAnswer", false);
 }
 
 var enableDel = GM_getValue('enableDel');
@@ -736,58 +738,73 @@ function initialPageLoad() {
     if (settings.spellControl || settings.showStopStartButton) {
         (function() {
 
-            var spellSelect = GM_getValue('spellSelect');
-            if (!spellSelect) {
-                GM_setValue("spellSelect", 3);
-            }
+                var spellSelect = GM_getValue('spellSelect');
+                if (!spellSelect) {
+                    GM_setValue("spellSelect", 3);
+                }
 
-            var checkInfusion = GM_getValue('checkInfusion');
-            if (!checkInfusion) {
-                GM_setValue("checkInfusion", false);
-            }
+                var checkInfusion = GM_getValue('checkInfusion');
+                if (!checkInfusion) {
+                    GM_setValue("checkInfusion", false);
+                }
 
-            var currentInfusion = GM_getValue('currentInfusion');
-            if (!currentInfusion) {
-                GM_setValue("currentInfusion", "infused flames");
-            }
+                var currentInfusion = GM_getValue('currentInfusion');
+                if (!currentInfusion) {
+                    GM_setValue("currentInfusion", "infused flames");
+                }
 
-            var meleeMode = GM_getValue('meleeMode');
-            if (!meleeMode) {
-                GM_setValue("meleeMode", false);
-            }
+                var meleeMode = GM_getValue('meleeMode');
+                if (!meleeMode) {
+                    GM_setValue("meleeMode", false);
+                }
 
-            var spiritMode = GM_getValue('spiritMode');
-            if (!spiritMode) {
-                GM_setValue("spiritMode", false);
-            }
+                var spiritMode = GM_getValue('spiritMode');
+                if (!spiritMode) {
+                    GM_setValue("spiritMode", false);
+                }
 
-            function genShowSellControl() {
-                if (!document.getElementById('aDIscpcID')) {
-                    var aDIscpc = document.createElement('DIV');
-                    aDIscpc.id = "aDIscpcID";
-                    aDIscpc.style.position = "absolute";
-                    aDIscpc.style.top = "8px";
-                    //aDIscpc.style.right = "20px";
-                    aDIscpc.style.left = "1240px";
-                    aDIscpc.style.backgroundColor = '#E3E0D1';
-                    aDIscpc.style.opacity = '1';
-                    aDIscpc.style.width = '80px';
+                var checkSpecialSkill = GM_getValue('checkSpecialSkill');
+                if (!checkSpecialSkill) {
+                    GM_setValue("checkSpecialSkill", false);
+                }
 
-                    if (document.getElementById('2501')) {
-                        if (isFirefoxChk) {
-                            aDIscpc.style.height = '170px';
+                var currentSpecialSkill = GM_getValue('currentSpecialSkill');
+                if (!currentSpecialSkill) {
+                    GM_setValue("currentSpecialSkill", "orbital friendship cannon");
+                }
+
+                function genShowSellControl() {
+                    if (!document.getElementById('aDIscpcID')) {
+                        var aDIscpc = document.createElement('DIV');
+                        aDIscpc.id = "aDIscpcID";
+                        aDIscpc.style.position = "absolute";
+                        aDIscpc.style.top = "8px";
+                        //aDIscpc.style.right = "20px";
+                        aDIscpc.style.left = "1240px";
+                        aDIscpc.style.backgroundColor = '#E3E0D1';
+                        aDIscpc.style.opacity = '1';
+                        aDIscpc.style.width = '80px';
+
+						var heiPx = 170;
+						if (document.getElementById('1111') || document.getElementById('1101')) { 
+							heiPx = 190;
+						}
+
+                        if (document.getElementById('2501')) {
+                            if (isFirefoxChk) {
+                                aDIscpc.style.height = heiPx+'px';
+                            } else {
+                                aDIscpc.style.height = (heiPx-20)+'px';
+                            }
                         } else {
-                            aDIscpc.style.height = '150px';
+                            if (isFirefoxChk) {
+                                aDIscpc.style.height = heiPx+'px';
+                            } else {
+                                aDIscpc.style.height = (heiPx-20)+'px'; //130
+                            }
                         }
-                    } else {
-                        if (isFirefoxChk) {
-                            aDIscpc.style.height = '170px';
-                        } else {
-                            aDIscpc.style.height = '150px';
-                        }
-                    }
 
-                    /*
+                        /*
 			aDIscpc.addEventListener('mouseover', function() {
 				//GB_BREAK_AUTO_BOT = false;
 			});
@@ -803,230 +820,289 @@ function initialPageLoad() {
 			});
 			*/
 
-                    if (settings.spellControl) {
+                        if (settings.spellControl) {
 
-                        // scroll 1
-                        var iRadio1 = document.createElement("INPUT");
-                        iRadio1.setAttribute("type", "radio");
-                        iRadio1.setAttribute("name", "spellCT");
-                        iRadio1.setAttribute("value", "1");
-                        if (spellSelect === 1) {
-                            iRadio1.setAttribute("checked", "true");
-                        }
-                        iRadio1.addEventListener('change', function() {
-                            GM_setValue("spellSelect", 1);
-                        });
-
-                        var lbRad1 = document.createElement("LABEL");
-                        lbRad1.style.color = '#5C0D11';
-                        lbRad1.style.fontFamily = "'Verdana','sans-serif'";
-                        lbRad1.setAttribute("title", "swiftness/shadow/protection/absorption/life");
-                        lbRad1.appendChild(document.createTextNode('SC #1'));
-
-                        // scroll 2
-                        var iRadio2 = document.createElement("INPUT");
-                        iRadio2.setAttribute("type", "radio");
-                        iRadio2.setAttribute("name", "spellCT");
-                        iRadio2.setAttribute("value", "2");
-                        if (spellSelect === 2) {
-                            iRadio2.setAttribute("checked", "true");
-                        }
-                        iRadio2.addEventListener('change', function() {
-                            GM_setValue("spellSelect", 2);
-                        });
-
-                        var lbRad2 = document.createElement("LABEL");
-                        lbRad2.style.color = '#5C0D11';
-                        lbRad2.style.fontFamily = "'Verdana','sans-serif'";
-                        lbRad2.setAttribute("title", "avatar/gods");
-                        lbRad2.appendChild(document.createTextNode('SC #2'));
-
-                        // normal
-                        var iRadio3 = document.createElement("INPUT");
-                        iRadio3.setAttribute("type", "radio");
-                        iRadio3.setAttribute("name", "spellCT");
-                        iRadio3.setAttribute("value", "3");
-                        if (spellSelect === 3) {
-                            iRadio3.setAttribute("checked", "true");
-                        }
-                        iRadio3.addEventListener('change', function() {
-                            GM_setValue("spellSelect", 3);
-                        });
-
-                        var lbRad3 = document.createElement("LABEL");
-                        lbRad3.style.color = '#5C0D11';
-                        lbRad3.style.fontFamily = "'Verdana','sans-serif'";
-                        lbRad3.setAttribute("title", "normal buff");
-                        lbRad3.appendChild(document.createTextNode('NM #3'));
-
-
-                        var cbInfu = document.createElement("INPUT");
-                        cbInfu.id = 'cbInfuID';
-                        cbInfu.setAttribute("type", "checkbox");
-                        if (checkInfusion) {
-                            cbInfu.setAttribute("checked", "true");
-                        }
-                        cbInfu.addEventListener('change', function() {
-                            GM_setValue("checkInfusion", cbInfu.checked);
-                        });
-
-                        //'infused flames','infused frost','infused lightning','infused storms','infused divinity','infused darkness'
-                        var selex = document.createElement("select");
-                        selex.id = 'infSelexID';
-                        selex.style.width = '60px';
-                        selex.style.webkitAppearance = 'none';
-                        selex.style.background = '#ffc8c8';
-                        selex.setAttribute("title", "infuse list");
-                        selex.addEventListener('change', function() {
-                            GM_setValue("currentInfusion", selex.value);
-                        });
-
-                        var option1 = document.createElement("option");
-                        option1.id = 'opFlames';
-                        option1.value = 'infused flames';
-                        if (currentInfusion === 'infused flames') {
-                            option1.setAttribute("selected", "true");
-                        }
-                        option1.appendChild(document.createTextNode('Flames'));
-
-                        var option2 = document.createElement("option");
-                        option2.id = 'opFrost';
-                        option2.value = 'infused frost';
-                        if (currentInfusion === 'infused frost') {
-                            option2.setAttribute("selected", "true");
-                        }
-                        option2.appendChild(document.createTextNode('Frost'));
-
-                        var option3 = document.createElement("option");
-                        option3.id = 'opLight';
-                        option3.value = 'infused lightning';
-                        if (currentInfusion === 'infused lightning') {
-                            option3.setAttribute("selected", "true");
-                        }
-                        option3.appendChild(document.createTextNode('Light'));
-
-                        var option4 = document.createElement("option");
-                        option4.id = 'opStorms';
-                        option4.value = 'infused storms';
-                        if (currentInfusion === 'infused storms') {
-                            option4.setAttribute("selected", "true");
-                        }
-                        option4.appendChild(document.createTextNode('Storms'));
-
-                        var option5 = document.createElement("option");
-                        option5.id = 'opDivinity';
-                        option5.value = 'infused divinity';
-                        if (currentInfusion === 'infused divinity') {
-                            option5.setAttribute("selected", "true");
-                        }
-                        option5.appendChild(document.createTextNode('Divinity'));
-
-                        var option6 = document.createElement("option");
-                        option6.id = 'opDarkness';
-                        option6.value = 'infused darkness';
-                        if (currentInfusion === 'infused darkness') {
-                            option6.setAttribute("selected", "true");
-                        }
-                        option6.appendChild(document.createTextNode('Darkness'));
-
-                        selex.appendChild(option1);
-                        selex.appendChild(option2);
-                        selex.appendChild(option3);
-                        selex.appendChild(option4);
-                        selex.appendChild(option5);
-                        selex.appendChild(option6);
-
-
-                        //meleeMode zone
-                        var cbMelee, lbMelee;
-                        if (document.getElementById('2501')) {
-                            cbMelee = document.createElement("INPUT");
-                            cbMelee.id = 'cbMeleeID';
-                            cbMelee.setAttribute("type", "checkbox");
-                            if (meleeMode) {
-                                cbMelee.setAttribute("checked", "true");
+                            // scroll 1
+                            var iRadio1 = document.createElement("INPUT");
+                            iRadio1.setAttribute("type", "radio");
+                            iRadio1.setAttribute("name", "spellCT");
+                            iRadio1.setAttribute("value", "1");
+                            if (spellSelect === 1) {
+                                iRadio1.setAttribute("checked", "true");
                             }
-                            cbMelee.addEventListener('change', function() {
-                                GM_setValue("meleeMode", cbMelee.checked);
+                            iRadio1.addEventListener('change', function() {
+                                GM_setValue("spellSelect", 1);
                             });
 
-                            lbMelee = document.createElement("LABEL");
-                            lbMelee.style.color = '#5C0D11';
-                            lbMelee.style.fontFamily = "'Verdana','sans-serif'";
-                            lbMelee.setAttribute("title", "Melee Mode");
-                            lbMelee.appendChild(document.createTextNode('Melee'));
-                        } else {
-                            cbMelee = document.createElement("INPUT");
-                            cbMelee.id = 'cbSPID';
-                            cbMelee.setAttribute("type", "checkbox");
-                            if (spiritMode) {
-                                cbMelee.setAttribute("checked", "true");
+                            var lbRad1 = document.createElement("LABEL");
+                            lbRad1.style.color = '#5C0D11';
+                            lbRad1.style.fontFamily = "'Verdana','sans-serif'";
+                            lbRad1.setAttribute("title", "swiftness/shadow/protection/absorption/life");
+                            lbRad1.appendChild(document.createTextNode('SC #1'));
+
+                            // scroll 2
+                            var iRadio2 = document.createElement("INPUT");
+                            iRadio2.setAttribute("type", "radio");
+                            iRadio2.setAttribute("name", "spellCT");
+                            iRadio2.setAttribute("value", "2");
+                            if (spellSelect === 2) {
+                                iRadio2.setAttribute("checked", "true");
                             }
-                            cbMelee.addEventListener('change', function() {
-                                GM_setValue("spiritMode", cbMelee.checked);
+                            iRadio2.addEventListener('change', function() {
+                                GM_setValue("spellSelect", 2);
                             });
 
-                            lbMelee = document.createElement("LABEL");
-                            lbMelee.style.color = '#5C0D11';
-                            lbMelee.style.fontFamily = "'Verdana','sans-serif'";
-                            lbMelee.setAttribute("title", "Spirit Trigger");
-                            lbMelee.appendChild(document.createTextNode('Spirit'));
-                        }
+                            var lbRad2 = document.createElement("LABEL");
+                            lbRad2.style.color = '#5C0D11';
+                            lbRad2.style.fontFamily = "'Verdana','sans-serif'";
+                            lbRad2.setAttribute("title", "avatar/gods");
+                            lbRad2.appendChild(document.createTextNode('SC #2'));
 
-                        // table zone
-                        var ttble = document.createElement("TABLE");
+                            // normal
+                            var iRadio3 = document.createElement("INPUT");
+                            iRadio3.setAttribute("type", "radio");
+                            iRadio3.setAttribute("name", "spellCT");
+                            iRadio3.setAttribute("value", "3");
+                            if (spellSelect === 3) {
+                                iRadio3.setAttribute("checked", "true");
+                            }
+                            iRadio3.addEventListener('change', function() {
+                                GM_setValue("spellSelect", 3);
+                            });
 
-                        var tttr1 = document.createElement("TR");
-                        var tttd11 = document.createElement("TD");
-                        var tttd12 = document.createElement("TD");
-                        tttd11.appendChild(iRadio1);
-                        tttd12.appendChild(lbRad1);
-                        tttr1.appendChild(tttd11);
-                        tttr1.appendChild(tttd12);
+                            var lbRad3 = document.createElement("LABEL");
+                            lbRad3.style.color = '#5C0D11';
+                            lbRad3.style.fontFamily = "'Verdana','sans-serif'";
+                            lbRad3.setAttribute("title", "normal buff");
+                            lbRad3.appendChild(document.createTextNode('NM #3'));
 
-                        var tttr2 = document.createElement("TR");
-                        var tttd21 = document.createElement("TD");
-                        var tttd22 = document.createElement("TD");
-                        tttd21.appendChild(iRadio2);
-                        tttd22.appendChild(lbRad2);
-                        tttr2.appendChild(tttd21);
-                        tttr2.appendChild(tttd22);
 
-                        var tttr3 = document.createElement("TR");
-                        var tttd31 = document.createElement("TD");
-                        var tttd32 = document.createElement("TD");
-                        tttd31.appendChild(iRadio3);
-                        tttd32.appendChild(lbRad3);
-                        tttr3.appendChild(tttd31);
-                        tttr3.appendChild(tttd32);
+                            var cbInfu = document.createElement("INPUT");
+                            cbInfu.id = 'cbInfuID';
+                            cbInfu.setAttribute("type", "checkbox");
+                            if (checkInfusion) {
+                                cbInfu.setAttribute("checked", "true");
+                            }
+                            cbInfu.addEventListener('change', function() {
+                                GM_setValue("checkInfusion", cbInfu.checked);
+                            });
 
-                        //if (document.getElementById('2501')) {
-                        var tttr3m = document.createElement("TR");
-                        var tttd3m1 = document.createElement("TD");
-                        var tttd3m2 = document.createElement("TD");
-                        tttd3m1.appendChild(cbMelee);
-                        tttd3m2.appendChild(lbMelee);
-                        tttr3m.appendChild(tttd3m1);
-                        tttr3m.appendChild(tttd3m2);
-                        //}
+                            //'infused flames','infused frost','infused lightning','infused storms','infused divinity','infused darkness'
+                            var selex = document.createElement("select");
+                            selex.id = 'infSelexID';
+                            selex.style.width = '60px';
+                            selex.style.webkitAppearance = 'none';
+                            selex.style.background = '#ffc8c8';
+                            selex.setAttribute("title", "infuse list");
+                            selex.addEventListener('change', function() {
+                                GM_setValue("currentInfusion", selex.value);
+                            });
 
-                        var tttr4 = document.createElement("TR");
-                        var tttd41 = document.createElement("TD");
-                        var tttd42 = document.createElement("TD");
-                        tttd41.appendChild(cbInfu);
-                        tttd42.appendChild(selex);
-                        tttr4.appendChild(tttd41);
-                        tttr4.appendChild(tttd42);
+                            var option1 = document.createElement("option");
+                            option1.id = 'opFlames';
+                            option1.value = 'infused flames';
+                            if (currentInfusion === 'infused flames') {
+                                option1.setAttribute("selected", "true");
+                            }
+                            option1.appendChild(document.createTextNode('Flames'));
 
-                        ttble.appendChild(tttr1);
-                        ttble.appendChild(tttr2);
-                        ttble.appendChild(tttr3);
-                        //if (document.getElementById('2501')) {
-                        ttble.appendChild(tttr3m);
-                        //}
-                        ttble.appendChild(tttr4);
+                            var option2 = document.createElement("option");
+                            option2.id = 'opFrost';
+                            option2.value = 'infused frost';
+                            if (currentInfusion === 'infused frost') {
+                                option2.setAttribute("selected", "true");
+                            }
+                            option2.appendChild(document.createTextNode('Frost'));
 
-                        aDIscpc.appendChild(ttble);
+                            var option3 = document.createElement("option");
+                            option3.id = 'opLight';
+                            option3.value = 'infused lightning';
+                            if (currentInfusion === 'infused lightning') {
+                                option3.setAttribute("selected", "true");
+                            }
+                            option3.appendChild(document.createTextNode('Light'));
+
+                            var option4 = document.createElement("option");
+                            option4.id = 'opStorms';
+                            option4.value = 'infused storms';
+                            if (currentInfusion === 'infused storms') {
+                                option4.setAttribute("selected", "true");
+                            }
+                            option4.appendChild(document.createTextNode('Storms'));
+
+                            var option5 = document.createElement("option");
+                            option5.id = 'opDivinity';
+                            option5.value = 'infused divinity';
+                            if (currentInfusion === 'infused divinity') {
+                                option5.setAttribute("selected", "true");
+                            }
+                            option5.appendChild(document.createTextNode('Divinity'));
+
+                            var option6 = document.createElement("option");
+                            option6.id = 'opDarkness';
+                            option6.value = 'infused darkness';
+                            if (currentInfusion === 'infused darkness') {
+                                option6.setAttribute("selected", "true");
+                            }
+                            option6.appendChild(document.createTextNode('Darkness'));
+
+                            selex.appendChild(option1);
+                            selex.appendChild(option2);
+                            selex.appendChild(option3);
+                            selex.appendChild(option4);
+                            selex.appendChild(option5);
+                            selex.appendChild(option6);
+
+                            //special skill
+                            if (document.getElementById('1111') || document.getElementById('1101')) { // ofc , frd
+                                var cbOFCFRD = document.createElement("INPUT");
+                                cbOFCFRD.id = 'cbOFCFRDID';
+                                cbOFCFRD.setAttribute("type", "checkbox");
+                                if (checkSpecialSkill) {
+                                    cbOFCFRD.setAttribute("checked", "true");
+                                }
+                                cbOFCFRD.addEventListener('change', function() {
+                                    GM_setValue("checkSpecialSkill", cbOFCFRD.checked);
+                                });
+
+                                //'orbital friendship cannon','fus ro dah'
+                                var selspsk = document.createElement("select");
+                                selspsk.id = 'speSkillID';
+                                selspsk.style.width = '60px';
+                                selspsk.style.webkitAppearance = 'none';
+                                selspsk.style.background = 'rgb(87, 218, 212)';
+                                selspsk.setAttribute("title", "Special Skill");
+                                selspsk.addEventListener('change', function() {
+                                    GM_setValue("currentSpecialSkill", selspsk.value);
+                                });
+
+                                var optionx1 = document.createElement("option");
+                                optionx1.id = 'opOFC';
+                                optionx1.value = 'orbital friendship cannon';
+                                if (currentSpecialSkill === 'orbital friendship cannon') {
+                                    optionx1.setAttribute("selected", "true");
+                                }
+                                optionx1.appendChild(document.createTextNode('-OFC-'));
+
+                                var optionx2 = document.createElement("option");
+                                optionx2.id = 'opFRD';
+                                optionx2.value = 'fus ro dah';
+                                if (currentSpecialSkill === 'fus ro dah') {
+                                    optionx2.setAttribute("selected", "true");
+                                }
+                                optionx2.appendChild(document.createTextNode('+FRD+'));
+
+                                if (document.getElementById('1111')) {
+                                    selspsk.appendChild(optionx1);
+                                }
+                                if (document.getElementById('1101')) {
+                                    selspsk.appendChild(optionx2);
+                                }
+
+                                var tttr5 = document.createElement("TR");
+                                var tttd51 = document.createElement("TD");
+                                var tttd52 = document.createElement("TD");
+                                tttd51.appendChild(cbOFCFRD);
+                                tttd52.appendChild(selspsk);
+                                tttr5.appendChild(tttd51);
+                                tttr5.appendChild(tttd52);
+                            }
+
+
+                            //meleeMode zone
+                            var cbMelee, lbMelee;
+                            if (document.getElementById('2501')) {
+                                cbMelee = document.createElement("INPUT");
+                                cbMelee.id = 'cbMeleeID';
+                                cbMelee.setAttribute("type", "checkbox");
+                                if (meleeMode) {
+                                    cbMelee.setAttribute("checked", "true");
+                                }
+                                cbMelee.addEventListener('change', function() {
+                                    GM_setValue("meleeMode", cbMelee.checked);
+                                });
+
+                                lbMelee = document.createElement("LABEL");
+                                lbMelee.style.color = '#5C0D11';
+                                lbMelee.style.fontFamily = "'Verdana','sans-serif'";
+                                lbMelee.setAttribute("title", "Melee Mode");
+                                lbMelee.appendChild(document.createTextNode('Melee'));
+                            } else {
+                                cbMelee = document.createElement("INPUT");
+                                cbMelee.id = 'cbSPID';
+                                cbMelee.setAttribute("type", "checkbox");
+                                if (spiritMode) {
+                                    cbMelee.setAttribute("checked", "true");
+                                }
+                                cbMelee.addEventListener('change', function() {
+                                    GM_setValue("spiritMode", cbMelee.checked);
+                                });
+
+                                lbMelee = document.createElement("LABEL");
+                                lbMelee.style.color = '#5C0D11';
+                                lbMelee.style.fontFamily = "'Verdana','sans-serif'";
+                                lbMelee.setAttribute("title", "Spirit Trigger");
+                                lbMelee.appendChild(document.createTextNode('Spirit'));
+                            }
+
+                            // table zone
+                            var ttble = document.createElement("TABLE");
+
+                            var tttr1 = document.createElement("TR");
+                            var tttd11 = document.createElement("TD");
+                            var tttd12 = document.createElement("TD");
+                            tttd11.appendChild(iRadio1);
+                            tttd12.appendChild(lbRad1);
+                            tttr1.appendChild(tttd11);
+                            tttr1.appendChild(tttd12);
+
+                            var tttr2 = document.createElement("TR");
+                            var tttd21 = document.createElement("TD");
+                            var tttd22 = document.createElement("TD");
+                            tttd21.appendChild(iRadio2);
+                            tttd22.appendChild(lbRad2);
+                            tttr2.appendChild(tttd21);
+                            tttr2.appendChild(tttd22);
+
+                            var tttr3 = document.createElement("TR");
+                            var tttd31 = document.createElement("TD");
+                            var tttd32 = document.createElement("TD");
+                            tttd31.appendChild(iRadio3);
+                            tttd32.appendChild(lbRad3);
+                            tttr3.appendChild(tttd31);
+                            tttr3.appendChild(tttd32);
+
+                            //if (document.getElementById('2501')) {
+                            var tttr3m = document.createElement("TR");
+                            var tttd3m1 = document.createElement("TD");
+                            var tttd3m2 = document.createElement("TD");
+                            tttd3m1.appendChild(cbMelee);
+                            tttd3m2.appendChild(lbMelee);
+                            tttr3m.appendChild(tttd3m1);
+                            tttr3m.appendChild(tttd3m2);
+                            //}
+
+                            var tttr4 = document.createElement("TR");
+                            var tttd41 = document.createElement("TD");
+                            var tttd42 = document.createElement("TD");
+                            tttd41.appendChild(cbInfu);
+                            tttd42.appendChild(selex);
+                            tttr4.appendChild(tttd41);
+                            tttr4.appendChild(tttd42);
+
+                            ttble.appendChild(tttr1);
+                            ttble.appendChild(tttr2);
+                            ttble.appendChild(tttr3);
+                            //if (document.getElementById('2501')) {
+                            ttble.appendChild(tttr3m);
+                            //}
+                            ttble.appendChild(tttr4);
+
+                            if (document.getElementById('1111') || document.getElementById('1101')){
+                                ttble.appendChild(tttr5);
+							}
+
+							aDIscpc.appendChild(ttble);
                     }
 
                     if (settings.spellControl || settings.showStopStartButton) {
@@ -1094,8 +1170,8 @@ function initialPageLoad() {
             }
 
         })();
-    }
-    /* ========== SPELL Control END ========== */
+}
+/* ========== SPELL Control END ========== */
 
 }
 
@@ -1762,19 +1838,26 @@ function OnPageReload() {
             var newDivShowItems = document.createElement("div");
             newDivShowItems.id = "divShowItems";
             newDivShowItems.style.position = "absolute";
+
+			var heiPx = 180;
+			if (document.getElementById('1111') || document.getElementById('1101')) { 
+				heiPx = 200;
+			}
+
             if (document.getElementById('2501')) {
                 if (isFirefoxChk) {
-                    newDivShowItems.style.top = "180px";
+                    newDivShowItems.style.top = heiPx+'px';
                 } else {
-                    newDivShowItems.style.top = "160px";
+                    newDivShowItems.style.top = (heiPx-20)+'px';
                 }
             } else {
                 if (isFirefoxChk) {
-                    newDivShowItems.style.top = "180px";
+                    newDivShowItems.style.top = heiPx+'px';
                 } else {
-                    newDivShowItems.style.top = "160px";
+                    newDivShowItems.style.top = (heiPx-20)+'px';
                 }
             }
+
             newDivShowItems.style.left = "1240px";
             newDivShowItems.style.width = "80pxpx";
             newDivShowItems.style.height = "100%";
@@ -2010,6 +2093,49 @@ function OnPageReload() {
 
 
     /* ============== GOD AUTO ============= */
+
+    function getPNBuffAt(n) {
+        try {
+            var ret = document.getElementById('mainpane').children[1].children[0].children[n].getAttribute('onmouseover').split("'")[1];
+            if (ret !== undefined) {
+                return ret;
+            } else {
+                return 'none';
+            }
+        } catch (e) {
+            return 'undefined';
+        }
+    }
+
+
+    function getPNBuffLength() {
+        return document.getElementById('mainpane').children[1].children[0].children.length;
+    }
+
+
+    function getPNBuffs() {
+        var r = [];
+        for (var i = 0; i < getPNBuffLength(); i++) {
+            r[i] = getPNBuffAt(i).toLowerCase();
+        }
+        return r;
+    }
+
+    if (GM_getValue("botSSChkAnswer")) {
+
+        if (getPNBuffs().indexOf('blessing of the riddlemaster') !== -1) {
+            GM_setValue("botSS", true);
+
+			if (window.opener) {
+                window.opener.location = "http://e-hentai.org/";
+				//window.open('http://e-hentai.org/', '_blank');
+            }
+        }
+
+        GM_setValue("botSSChkAnswer", false);
+
+    }
+
     if (settings.godAuto && GM_getValue("botSS")) {
         (function() {
 
@@ -2975,13 +3101,18 @@ function OnPageReload() {
                                 changeSpiritMode('OFF');
                                 useOverchargeMode = true;
                             } else {
-                                if (getSelfOvercharge() > 85 && getSelfSpirit() >= (SP_ITEM_D_CUTOFF)) {
+                                var spModeOn = 85;
+                                if (MODE_FIGHTING !== "1H") {
+                                    spModeOn = 40;
+                                }
+
+                                if (getSelfOvercharge() > spModeOn && getSelfSpirit() >= (SP_ITEM_D_CUTOFF)) {
                                     changeSpiritMode('ON');
                                 } else {
                                     if (getSelfOvercharge() < 10 && getSelfSpirit() < (SP_ITEM_D_CUTOFF - 15)) {
                                         changeSpiritMode('OFF');
                                         useOverchargeMode = true;
-                                    } else if (getSelfOvercharge() > 85) {
+                                    } else if (getSelfOvercharge() > spModeOn) {
                                         //changeSpiritMode('OFF');
                                         useOverchargeMode = true;
                                     }
@@ -2991,28 +3122,40 @@ function OnPageReload() {
                             useOverchargeMode = true;
                         }
 
-                        if (useOverchargeMode || settings.enableOFC || settings.enableFRD) {
+                        var enableOFC = false;
+                        var enableFRD = false;
+
+                        if (GM_getValue('checkSpecialSkill')) {
+                            if (GM_getValue('currentSpecialSkill') === 'orbital friendship cannon') {
+                                enableOFC = true;
+                            } else {
+                                enableFRD = true;
+                            }
+                        }
+
+                        if (useOverchargeMode || enableOFC || enableFRD) {
                             var mainOvercharge = 10;
-                            if (settings.enableOFC || settings.enableFRD) {
-								if(settings.enableOFC){
-									mainOvercharge = 100; //82.5
-									if (getNumMonstersAlive() > 0 || getNumBossMonsterAlive() > 0) {
-										if (getSelfOvercharge() >= mainOvercharge) {
-											if (castSpell('orbital friendship cannon', chooseTarget(false))) {
-												return;
-											}
-										}
-									}
-								}else if(settings.enableFRD){
-									mainOvercharge = 41; //82.5
-									if (getNumMonstersAlive() > 0 || getNumBossMonsterAlive() > 0) {
-										if (getSelfOvercharge() >= mainOvercharge) {
-											if (castSpell('fus ro dah', chooseTarget(false))) {
-												return;
-											}
-										}
-									}
-								}
+                            if (enableOFC || enableFRD) {
+                                if (settings.enableOFC) {
+                                    mainOvercharge = 100; //82.5
+                                    if (getNumMonstersAlive() > 0 || getNumBossMonsterAlive() > 0) {
+                                        if (getSelfOvercharge() >= mainOvercharge) {
+                                            if (castSpell('orbital friendship cannon', chooseTarget(false))) {
+                                                return;
+                                            }
+                                        }
+                                    }
+                                } else if (enableFRD) {
+                                    mainOvercharge = 80; //82.5
+                                    if (getNumMonstersAlive() > 0 || getNumBossMonsterAlive() > 0) {
+                                        if (getSelfOvercharge() >= mainOvercharge) {
+                                            if (castSpell('fus ro dah', chooseTarget(false))) {
+                                                return;
+                                            }
+                                        }
+                                    }
+                                }
+
                             } else {
                                 if (MODE_FIGHTING === "1H") {
 
@@ -3533,13 +3676,13 @@ function OnPageReload() {
                         return;
                     } else {
 
-						if (STYLE == 'mage') {
-							if (getSelfHealth() < 40) {
-								if (castSpell('full cure', 0)) {
-									return;
-								}
-							}
-						}
+                        if (STYLE == 'mage') {
+                            if (getSelfHealth() < 40) {
+                                if (castSpell('full cure', 0)) {
+                                    return;
+                                }
+                            }
+                        }
 
                         if (castSpell('cure', 0)) {
                             return;
@@ -5127,11 +5270,12 @@ function addAnswerButton() {
         if (document.getElementById("riddlemaster")) {
             if (settings.stopPlayAfterAutoAnswerPony) {
                 GM_setValue("botSS", false);
+                GM_setValue("botSSChkAnswer", true);
             }
 
-			if (window.opener) {
-				window.opener.location = "https://ehwiki.org/wiki/Main_Page";
-			}
+            if (window.opener) {
+                window.opener.location = "https://ehwiki.org/wiki/Main_Page";
+            }
 
             document.querySelectorAll('img[src*="/y/battle/answer.png"]')[0].click();
         }
