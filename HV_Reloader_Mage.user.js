@@ -6,7 +6,7 @@
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
-// @version     1.3.3.67
+// @version     1.3.3.68
 // @grant       none
 // ==/UserScript==
 // Vanilla Reloader:
@@ -733,22 +733,22 @@ function initialPageLoad() {
         (function() {
 
                 var spellSelect = GM_getValue('spellSelect');
-                if (!spellSelect) {
+                if (spellSelect === null) {
                     GM_setValue("spellSelect", 3);
                 }
 
                 var checkInfusion = GM_getValue('checkInfusion');
-                if (!checkInfusion) {
+                if (checkInfusion === null) {
                     GM_setValue("checkInfusion", false);
                 }
 
                 var currentInfusion = GM_getValue('currentInfusion');
-                if (!currentInfusion) {
+                if (currentInfusion === null) {
                     GM_setValue("currentInfusion", "infused flames");
                 }
 
                 var meleeMode = GM_getValue('meleeMode');
-                if (!meleeMode) {
+                if (meleeMode === null) {
                     GM_setValue("meleeMode", false);
                 }
 
