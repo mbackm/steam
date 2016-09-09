@@ -36,7 +36,7 @@
 var settings = {
     godAuto: true, // God Mode
     enableHaveAutoCast: true, // if you already unlock auto-cast please enable and go to LIST_AUTO_CAST for config.
-    enableWeaponSkill: true, // use Weapon Skills
+    enableWeaponSkill: false, // use Weapon Skills
     enableBuffMon: false, // use debuff to monster
     showUsePotion: false, //#1/4# Show use poton
     spellControl: true, // Spell Control - use Scroll or normal buff
