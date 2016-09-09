@@ -10,7 +10,7 @@
 // @exclude  http://hentaiverse.org/?s=Forge*
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_battle_stats.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_battle_stats.user.js
-// @version  1.1.0.14
+// @version  1.1.0.15
 // ==/UserScript==
 
 if (window === window.parent){
@@ -77,6 +77,15 @@ function main(){
 			localStorage.setItem("BattleStateExReset", true);
 		}
 	}
+
+	if (!document.getElementById('quickbar')) {
+		if ((location.href + "").indexOf('s=Battle&ss=ba&encounter=') !== -1) {
+			if (document.querySelector('img[src*="/y/battle/nocurrentbattle.png"]')) {
+				localStorage.setItem("BattleStateExReset", true);
+			}
+		}
+	}
+
 
 
 	function battle(){
