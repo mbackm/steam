@@ -10,7 +10,7 @@
 // @exclude  http://hentaiverse.org/?s=Forge*
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_battle_stats.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_battle_stats.user.js
-// @version  1.1.0.17
+// @version  1.1.0.18
 // ==/UserScript==
 
 if (window === window.parent){
@@ -350,7 +350,7 @@ function main(){
         var vCredits = data.Credits;
         //while (vCredits != (vCredits = vCredits.replace(/^(\d+)(\d{3})/, '$1,$2')));
 
-        button.innerHTML = "<b>[Summary]</b> "+data.Rounds+" Rounds / " +data.turn + " turns / " + timeValue  + " (" + (tPers).toFixed(2) + " t/s) / EXP: "+vEXP.formatMoney(0, '.', ',')+" / Credits: "+vCredits.formatMoney(0, '.', ',');
+        button.innerHTML = "<b>[Summary]</b> "+data.Rounds+" Rounds / " +data.turn.formatMoney(0, '.', ',') + " turns / " + timeValue  + " (" + (tPers).toFixed(2) + " t/s) / EXP: "+vEXP.formatMoney(0, '.', ',')+" / Credits: "+vCredits.formatMoney(0, '.', ',');
 
     }
 
