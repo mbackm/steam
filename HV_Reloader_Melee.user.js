@@ -3,7 +3,7 @@
 // @namespace   HVRLD3
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @include		/^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version		2.0.0.62
+// @version		2.0.0.63
 // @updateURL      https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @downloadURL    https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @run-at      document-end
@@ -36,6 +36,7 @@
 var settings = {
     godAuto: true, // God Mode
     enableHaveAutoCast: true, // if you already unlock auto-cast please enable and go to LIST_AUTO_CAST for config.
+    enableWeaponSkill: true, // use Weapon Skills
     enableBuffMon: false, // use debuff to monster
     showUsePotion: false, //#1/4# Show use poton
     spellControl: true, // Spell Control - use Scroll or normal buff
@@ -739,38 +740,38 @@ function initialPageLoad() {
         (function() {
 
                 var spellSelect = GM_getValue('spellSelect');
-                if (!spellSelect) {
+                if (spellSelect === null) {
                     GM_setValue("spellSelect", 3);
                 }
 
                 var checkInfusion = GM_getValue('checkInfusion');
-                if (!checkInfusion) {
+                if (checkInfusion === null) {
                     GM_setValue("checkInfusion", false);
                 }
 
                 var currentInfusion = GM_getValue('currentInfusion');
-                if (!currentInfusion) {
+                if (currentInfusion === null) {
                     GM_setValue("currentInfusion", "infused flames");
                 }
 
                 var meleeMode = GM_getValue('meleeMode');
-                if (!meleeMode) {
+                if (meleeMode === null) {
                     GM_setValue("meleeMode", false);
                 }
 
                 var spiritMode = GM_getValue('spiritMode');
-                if (!spiritMode) {
+                if (spiritMode === null) {
                     GM_setValue("spiritMode", false);
                 }
 
-                var checkSpecialSkill = GM_getValue('checkSpecialSkill');
-                if (!checkSpecialSkill) {
-                    GM_setValue("checkSpecialSkill", false);
+                var checkWeaponSkill = GM_getValue('checkWeaponSkill');
+                if (checkWeaponSkill === null) {
+                    GM_setValue("checkWeaponSkill", false);
                 }
 
-                var currentSpecialSkill = GM_getValue('currentSpecialSkill');
-                if (!currentSpecialSkill) {
-                    GM_setValue("currentSpecialSkill", "orbital friendship cannon");
+                var currentWeaponSkill = GM_getValue('currentWeaponSkill');
+                if (currentWeaponSkill === null) {
+                    GM_setValue("currentWeaponSkill", "orbital friendship cannon");
                 }
 
                 function genShowSellControl() {
@@ -958,11 +959,11 @@ function initialPageLoad() {
                                 var cbOFCFRD = document.createElement("INPUT");
                                 cbOFCFRD.id = 'cbOFCFRDID';
                                 cbOFCFRD.setAttribute("type", "checkbox");
-                                if (checkSpecialSkill) {
+                                if (checkWeaponSkill) {
                                     cbOFCFRD.setAttribute("checked", "true");
                                 }
                                 cbOFCFRD.addEventListener('change', function() {
-                                    GM_setValue("checkSpecialSkill", cbOFCFRD.checked);
+                                    GM_setValue("checkWeaponSkill", cbOFCFRD.checked);
                                 });
 
                                 //'orbital friendship cannon','fus ro dah'
@@ -973,13 +974,13 @@ function initialPageLoad() {
                                 selspsk.style.background = 'rgb(87, 218, 212)';
                                 selspsk.setAttribute("title", "Special Skill");
                                 selspsk.addEventListener('change', function() {
-                                    GM_setValue("currentSpecialSkill", selspsk.value);
+                                    GM_setValue("currentWeaponSkill", selspsk.value);
                                 });
 
                                 var optionx1 = document.createElement("option");
                                 optionx1.id = 'opOFC';
                                 optionx1.value = 'orbital friendship cannon';
-                                if (currentSpecialSkill === 'orbital friendship cannon') {
+                                if (currentWeaponSkill === 'orbital friendship cannon') {
                                     optionx1.setAttribute("selected", "true");
                                 }
                                 optionx1.appendChild(document.createTextNode('-OFC-'));
@@ -987,7 +988,7 @@ function initialPageLoad() {
                                 var optionx2 = document.createElement("option");
                                 optionx2.id = 'opFRD';
                                 optionx2.value = 'fus ro dah';
-                                if (currentSpecialSkill === 'fus ro dah') {
+                                if (currentWeaponSkill === 'fus ro dah') {
                                     optionx2.setAttribute("selected", "true");
                                 }
                                 optionx2.appendChild(document.createTextNode('+FRD+'));
@@ -3124,21 +3125,38 @@ function OnPageReload() {
 
                         var enableOFC = false;
                         var enableFRD = false;
+						var mainOvercharge = 10;
 
-                        if (GM_getValue('checkSpecialSkill')) {
-                            if (GM_getValue('currentSpecialSkill') === 'orbital friendship cannon') {
-                                enableOFC = true;
+                        if (GM_getValue('checkWeaponSkill')) {
+                            if (GM_getValue('currentWeaponSkill') === 'orbital friendship cannon') {
+								mainOvercharge = 100; //82.5
+								if (settings.enableWeaponSkill && getSelfOvercharge() >= mainOvercharge) {
+									if(document.getElementById('1111')){
+										if(document.getElementById('1111').getAttribute('onclick')){
+											enableOFC = true;
+										}
+									} 
+								}else{
+									enableOFC = true;
+								}
                             } else {
-                                enableFRD = true;
+								mainOvercharge = 80; //82.5
+								if (settings.enableWeaponSkill && getSelfOvercharge() >= mainOvercharge) {
+									if(document.getElementById('1101')){
+										if(document.getElementById('1101').getAttribute('onclick')){
+											enableFRD = true;
+										}
+									}
+								}else{
+									enableFRD = true;
+								}
                             }
                         }
 
                         if (useOverchargeMode || enableOFC || enableFRD) {
-                            var mainOvercharge = 10;
                             if (enableOFC || enableFRD) {
-                                if (settings.enableOFC) {
-                                    mainOvercharge = 100; //82.5
-                                    if (getNumMonstersAlive() > 0 || getNumBossMonsterAlive() > 0) {
+                                if (enableOFC) {
+                                    if (getNumMonstersAlive() > 1 || getNumBossMonsterAlive() > 0) {
                                         if (getSelfOvercharge() >= mainOvercharge) {
                                             if (castSpell('orbital friendship cannon', chooseTarget(false))) {
                                                 return;
@@ -3146,8 +3164,7 @@ function OnPageReload() {
                                         }
                                     }
                                 } else if (enableFRD) {
-                                    mainOvercharge = 80; //82.5
-                                    if (getNumMonstersAlive() > 0 || getNumBossMonsterAlive() > 0) {
+                                    if (getNumMonstersAlive() > 1 || getNumBossMonsterAlive() > 0) {
                                         if (getSelfOvercharge() >= mainOvercharge) {
                                             if (castSpell('fus ro dah', chooseTarget(false))) {
                                                 return;
@@ -3191,7 +3208,7 @@ function OnPageReload() {
                                         mainOvercharge = 80;
                                     }
 
-                                    if (getSelfOvercharge() > mainOvercharge) {
+                                    if (getSelfOvercharge() >= mainOvercharge) {
                                         if (canUseMerBlow) {
                                             var iMonterBlow = getMonsterWithConditionHPMP(7, 25, -1, 100);
                                             if (iMonterBlow > -1) {
@@ -3230,7 +3247,7 @@ function OnPageReload() {
                                         }
                                     }
 
-                                    if (getSelfOvercharge() > mainOvercharge) {
+                                    if (getSelfOvercharge() >= mainOvercharge) {
                                         if (useSkilllToMonster('shatter strike')) {
                                             return;
                                         } else if (useSkilllToMonster('rending blow')) {
@@ -3259,7 +3276,7 @@ function OnPageReload() {
                                         }
                                     }
 
-                                    if (getSelfOvercharge() > mainOvercharge) {
+                                    if (getSelfOvercharge() >= mainOvercharge) {
                                         if (useSkilllToMonster('frenzied blows')) {
                                             return;
                                         }
