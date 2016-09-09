@@ -3129,7 +3129,12 @@ function OnPageReload() {
 
                         if (GM_getValue('checkWeaponSkill')) {
                             if (GM_getValue('currentWeaponSkill') === 'orbital friendship cannon') {
-								mainOvercharge = 100; //82.5
+								if (MODE_FIGHTING !== "1H") {
+									mainOvercharge = 96; //82.5
+								}else{
+									mainOvercharge = 100;
+								}
+
 								if (settings.enableWeaponSkill && getSelfOvercharge() >= mainOvercharge) {
 									if(document.getElementById('1111')){
 										if(document.getElementById('1111').getAttribute('onclick')){
