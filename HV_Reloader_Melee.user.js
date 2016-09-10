@@ -3,7 +3,7 @@
 // @namespace   HVRLD3
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @include		/^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version		2.0.0.63
+// @version		2.0.0.64
 // @updateURL      https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @downloadURL    https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @run-at      document-end
@@ -37,6 +37,7 @@ var settings = {
     godAuto: true, // God Mode
     enableHaveAutoCast: true, // if you already unlock auto-cast please enable and go to LIST_AUTO_CAST for config.
     enableWeaponSkill: false, // use Weapon Skills
+    monsterForUseOFCFRD: [1,1], // count monster alive, count boss alive [ for special skill OFC , FRD ]
     enableBuffMon: false, // use debuff to monster
     showUsePotion: false, //#1/4# Show use poton
     spellControl: true, // Spell Control - use Scroll or normal buff
@@ -764,14 +765,14 @@ function initialPageLoad() {
                     GM_setValue("spiritMode", false);
                 }
 
-                var checkWeaponSkill = GM_getValue('checkWeaponSkill');
-                if (checkWeaponSkill === null) {
-                    GM_setValue("checkWeaponSkill", false);
+                var checkSpecialSkill = GM_getValue('checkSpecialSkill');
+                if (checkSpecialSkill === null) {
+                    GM_setValue("checkSpecialSkill", false);
                 }
 
-                var currentWeaponSkill = GM_getValue('currentWeaponSkill');
-                if (currentWeaponSkill === null) {
-                    GM_setValue("currentWeaponSkill", "orbital friendship cannon");
+                var currentSpecialSkill = GM_getValue('currentSpecialSkill');
+                if (currentSpecialSkill === null) {
+                    GM_setValue("currentSpecialSkill", "orbital friendship cannon");
                 }
 
                 function genShowSellControl() {
@@ -959,11 +960,11 @@ function initialPageLoad() {
                                 var cbOFCFRD = document.createElement("INPUT");
                                 cbOFCFRD.id = 'cbOFCFRDID';
                                 cbOFCFRD.setAttribute("type", "checkbox");
-                                if (checkWeaponSkill) {
+                                if (checkSpecialSkill) {
                                     cbOFCFRD.setAttribute("checked", "true");
                                 }
                                 cbOFCFRD.addEventListener('change', function() {
-                                    GM_setValue("checkWeaponSkill", cbOFCFRD.checked);
+                                    GM_setValue("checkSpecialSkill", cbOFCFRD.checked);
                                 });
 
                                 //'orbital friendship cannon','fus ro dah'
@@ -974,24 +975,24 @@ function initialPageLoad() {
                                 selspsk.style.background = 'rgb(87, 218, 212)';
                                 selspsk.setAttribute("title", "Special Skill");
                                 selspsk.addEventListener('change', function() {
-                                    GM_setValue("currentWeaponSkill", selspsk.value);
+                                    GM_setValue("currentSpecialSkill", selspsk.value);
                                 });
 
                                 var optionx1 = document.createElement("option");
                                 optionx1.id = 'opOFC';
                                 optionx1.value = 'orbital friendship cannon';
-                                if (currentWeaponSkill === 'orbital friendship cannon') {
+                                if (currentSpecialSkill === 'orbital friendship cannon') {
                                     optionx1.setAttribute("selected", "true");
                                 }
-                                optionx1.appendChild(document.createTextNode('-OFC-'));
+                                optionx1.appendChild(document.createTextNode('- OFC -'));
 
                                 var optionx2 = document.createElement("option");
                                 optionx2.id = 'opFRD';
                                 optionx2.value = 'fus ro dah';
-                                if (currentWeaponSkill === 'fus ro dah') {
+                                if (currentSpecialSkill === 'fus ro dah') {
                                     optionx2.setAttribute("selected", "true");
                                 }
-                                optionx2.appendChild(document.createTextNode('+FRD+'));
+                                optionx2.appendChild(document.createTextNode('+ FRD +'));
 
                                 if (document.getElementById('1111')) {
                                     selspsk.appendChild(optionx1);
@@ -3127,8 +3128,8 @@ function OnPageReload() {
                         var enableFRD = false;
 						var mainOvercharge = 10;
 
-                        if (GM_getValue('checkWeaponSkill')) {
-                            if (GM_getValue('currentWeaponSkill') === 'orbital friendship cannon') {
+                        if (GM_getValue('checkSpecialSkill')) {
+                            if (GM_getValue('currentSpecialSkill') === 'orbital friendship cannon') {
 								if (MODE_FIGHTING !== "1H") {
 									mainOvercharge = 96; //82.5
 								}else{
@@ -3161,7 +3162,7 @@ function OnPageReload() {
                         if (useOverchargeMode || enableOFC || enableFRD) {
                             if (enableOFC || enableFRD) {
                                 if (enableOFC) {
-                                    if (getNumMonstersAlive() > 1 || getNumBossMonsterAlive() > 0) {
+                                    if (getNumMonstersAlive() >= settings.monsterForUseOFCFRD[0] || getNumBossMonsterAlive() >= settings.monsterForUseOFCFRD[1]) {
                                         if (getSelfOvercharge() >= mainOvercharge) {
                                             if (castSpell('orbital friendship cannon', chooseTarget(false))) {
                                                 return;
@@ -3169,7 +3170,7 @@ function OnPageReload() {
                                         }
                                     }
                                 } else if (enableFRD) {
-                                    if (getNumMonstersAlive() > 1 || getNumBossMonsterAlive() > 0) {
+                                    if (getNumMonstersAlive() >= settings.monsterForUseOFCFRD[0] || getNumBossMonsterAlive() >= settings.monsterForUseOFCFRD[1]) {
                                         if (getSelfOvercharge() >= mainOvercharge) {
                                             if (castSpell('fus ro dah', chooseTarget(false))) {
                                                 return;
