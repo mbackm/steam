@@ -10,7 +10,7 @@
 // @exclude  http://hentaiverse.org/?s=Forge*
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_battle_stats.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_battle_stats.user.js
-// @version  1.1.0.18
+// @version  1.1.0.19
 // ==/UserScript==
 
 if (window === window.parent){
@@ -36,7 +36,7 @@ function main(){
         return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
     };
 
-    var data = {last:0, count:0, total:0, countATK:0, totalATK:0, turn:0, beginTime: Date.now(), lastTime: 0, EXP: 0,Credits: 0,Rounds: 0};
+    var data = {last:0, count:0, total:0, countATK:0, totalATK:0, turn:0, beginTime: Date.now(), lastTime: 0, EXP: 0,Credits: 0,Rounds: 0,Ponys: 0};
     var nglist = /^(Shield Bash|Vital Strike|Merciful Blow|Great Cleave|Rending Blow|Shatter Strike|Iris Strike|Backstab|Frenzied Blows|Skyward Sword|Concussive Strike|FUS RO DAH|Orbital Friendship Cannon)$/;
 
     if (document.getElementById("togpane_log")){
@@ -53,7 +53,10 @@ function main(){
     data.lastTime = now;
 
     if (document.getElementById("togpane_log")){
-        if (!document.querySelector('#riddleform div img[src*="riddlemaster.php"]')) {
+		if(document.querySelector('#riddleform div img[src*="riddlemaster.php"]')){
+			data.Ponys = (data.Ponys*1)+1;
+			localStorage.setItem("BattleStateEx", JSON.stringify(data));
+		}else{
             battle();
             localStorage.setItem("BattleStateExReset", false);
             localStorage.setItem("BattleStateEx", JSON.stringify(data));
@@ -61,7 +64,8 @@ function main(){
         }
 
     } else if (location.href.indexOf("Battle&ss=ar")!==-1 || location.href.indexOf("Battle&ss=gr") || location.href.indexOf("Battle&ss=rb")!==-1){
-        if (!document.querySelector('#riddleform div img[src*="riddlemaster.php"]')) {
+
+		if(!document.querySelector('#riddleform div img[src*="riddlemaster.php"]')){
             localStorage.setItem("BattleStateExReset", true);
             now = lastTime;
         }
@@ -350,7 +354,7 @@ function main(){
         var vCredits = data.Credits;
         //while (vCredits != (vCredits = vCredits.replace(/^(\d+)(\d{3})/, '$1,$2')));
 
-        button.innerHTML = "<b>[Summary]</b> "+data.Rounds+" Rounds / " +data.turn.formatMoney(0, '.', ',') + " turns / " + timeValue  + " (" + (tPers).toFixed(2) + " t/s) / EXP: "+vEXP.formatMoney(0, '.', ',')+" / Credits: "+vCredits.formatMoney(0, '.', ',');
+        button.innerHTML = "<b>[Summary]</b> "+data.Rounds+" Rounds / " +data.turn.formatMoney(0, '.', ',') + " turns / " + timeValue  + " (" + (tPers).toFixed(2) + " t/s) / EXP: "+vEXP.formatMoney(0, '.', ',')+" / Credits: "+vCredits.formatMoney(0, '.', ',')+" / Ponys: "+data.Ponys;
 
     }
 
