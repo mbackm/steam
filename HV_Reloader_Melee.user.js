@@ -3,7 +3,7 @@
 // @namespace   HVRLD3
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @include		/^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version		2.0.0.65
+// @version		2.0.0.66
 // @updateURL      https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @downloadURL    https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @run-at      document-end
@@ -3618,6 +3618,12 @@ function OnPageReload() {
                     }
                 }
 
+				var isHaveCloakOfTheFallen = false;
+
+				if(checkForBuff('cloak of the fallen')){
+					isHaveCloakOfTheFallen = true;
+				}
+
 
                 //check for use mana potion
                 if (ENABLE_MP_POTION) {
@@ -3692,7 +3698,7 @@ function OnPageReload() {
 	*/
 
                 //check for use health skill
-                if (getSelfHealth() < CURE_HP_CUTOFF && (isSOL || getSelfSpirit() > vSpiritUseBuff)) {
+                if (getSelfHealth() < CURE_HP_CUTOFF && (isSOL || getSelfSpirit() > vSpiritUseBuff || isHaveCloakOfTheFallen)) {
                     //console.log('decided to cast cure');
                     if (getGem() == 'health') {
                         useGem();
@@ -3719,7 +3725,7 @@ function OnPageReload() {
 
                 //check for use health potion
                 if (ENABLE_HP_POTION) {
-                    if (isSOL || (getSelfSpirit() > vSpiritUseBuff) || (getSelfHealth() < HP_ITEM_P_CUTOFF && !isSOL)) {
+                    if (isHaveCloakOfTheFallen || isSOL || (getSelfSpirit() > vSpiritUseBuff) || (getSelfHealth() < HP_ITEM_P_CUTOFF && !isSOL)) {
                         if (getSelfHealth() < HP_ITEM_P_CUTOFF) {
                             var indexItem4 = nextItem('Health Potion');
                             if (indexItem4 !== -1) {
@@ -3766,7 +3772,7 @@ function OnPageReload() {
 
                 //check for use spirit potion
                 if (ENABLE_SP_POTION) {
-                    if (getSelfSpirit() < SP_ITEM_P_CUTOFF) {
+                    if (getSelfSpirit() < SP_ITEM_P_CUTOFF && !isHaveCloakOfTheFallen) {
                         console.log('decided to drink spirit pot');
                         if (getGem() == 'spirit') {
                             useGem();
@@ -3831,7 +3837,7 @@ function OnPageReload() {
                 }
 
 
-                if ((getSelfHealth() < lowerHPAlert || getSelfSpirit() < SP_ITEM_E_CUTOFF) && !isSOL) {
+                if ((getSelfHealth() < lowerHPAlert || getSelfSpirit() < SP_ITEM_E_CUTOFF) && (!isSOL || isHaveCloakOfTheFallen)) {
                     if (ENABALE_LE_POTION) {
                         var indexItemLE = nextItem('Last Elixir');
                         if (indexItemLE !== -1) {
