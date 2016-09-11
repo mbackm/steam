@@ -58,6 +58,7 @@ function main(){
 	}
 
     if (document.getElementById("togpane_log")){
+		if(!document.querySelector('#riddleform div img[src*="riddlemaster.php"]')){
             battle();
             localStorage.setItem("BattleStateExReset", false);
             localStorage.setItem("BattleStateEx", JSON.stringify(data));
