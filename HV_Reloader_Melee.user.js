@@ -3,7 +3,7 @@
 // @namespace   HVRLD3
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @include		/^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version		2.0.0.67
+// @version		2.0.0.68
 // @updateURL      https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @downloadURL    https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @run-at      document-end
@@ -3100,7 +3100,9 @@ function OnPageReload() {
 
                         if (GM_getValue("spiritMode")) {
                             if (getNumBossMonsterAlive() > 0 && settings.stopSpiritWhenFoundBoss) {
-                                changeSpiritMode('OFF');
+                                if(changeSpiritMode('OFF')){
+									return;
+								}
                                 useOverchargeMode = true;
                             } else {
                                 var spModeOn = 85;
@@ -3109,10 +3111,12 @@ function OnPageReload() {
                                 }
 
                                 if (getSelfOvercharge() > spModeOn && getSelfSpirit() >= (SP_ITEM_D_CUTOFF)) {
-                                    changeSpiritMode('ON');
+                                    if(changeSpiritMode('ON')){
+										return;
+									}
                                 } else {
                                     if (getSelfOvercharge() < 10 && getSelfSpirit() < (SP_ITEM_D_CUTOFF - 15)) {
-                                        changeSpiritMode('OFF');
+                                        //changeSpiritMode('OFF');
                                         useOverchargeMode = true;
                                     } else if (getSelfOvercharge() > spModeOn) {
                                         //changeSpiritMode('OFF');
@@ -3995,12 +3999,16 @@ function OnPageReload() {
                 if (key === 'ON') {
                     if (document.querySelector('img[src*="/y/battle/spirit_n.png"]')) {
                         toggleSpirit();
+						return true;
                     }
                 } else {
                     if (document.querySelector('img[src*="/y/battle/spirit_a.png"]')) {
                         toggleSpirit();
+						return true;
                     }
                 }
+
+				return false;
             }
 
             //focuses for a turn
