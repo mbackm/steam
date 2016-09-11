@@ -3,7 +3,7 @@
 // @namespace   HVRLD3
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @include		/^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version		2.0.0.66
+// @version		2.0.0.67
 // @updateURL      https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @downloadURL    https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @run-at      document-end
@@ -3772,7 +3772,7 @@ function OnPageReload() {
 
                 //check for use spirit potion
                 if (ENABLE_SP_POTION) {
-                    if (getSelfSpirit() < SP_ITEM_P_CUTOFF && !isHaveCloakOfTheFallen) {
+                    if (getSelfSpirit() < SP_ITEM_P_CUTOFF && (!isHaveCloakOfTheFallen || getSelfHealth() > 50 )) {
                         console.log('decided to drink spirit pot');
                         if (getGem() == 'spirit') {
                             useGem();
