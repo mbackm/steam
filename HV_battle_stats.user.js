@@ -10,7 +10,7 @@
 // @exclude  http://hentaiverse.org/?s=Forge*
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_battle_stats.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_battle_stats.user.js
-// @version  1.1.0.19
+// @version  1.1.0.20
 // ==/UserScript==
 
 if (window === window.parent){
@@ -52,11 +52,12 @@ function main(){
     var lastTime = data.lastTime;
     data.lastTime = now;
 
+	if(document.querySelector('#riddleform div img[src*="riddlemaster.php"]')){
+		data.Ponys = (data.Ponys*1)+1;
+		localStorage.setItem("BattleStateEx", JSON.stringify(data));
+	}
+
     if (document.getElementById("togpane_log")){
-		if(document.querySelector('#riddleform div img[src*="riddlemaster.php"]')){
-			data.Ponys = (data.Ponys*1)+1;
-			localStorage.setItem("BattleStateEx", JSON.stringify(data));
-		}else{
             battle();
             localStorage.setItem("BattleStateExReset", false);
             localStorage.setItem("BattleStateEx", JSON.stringify(data));
