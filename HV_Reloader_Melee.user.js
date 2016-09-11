@@ -2454,7 +2454,7 @@ function OnPageReload() {
                 if (GM_getValue('ROUND_GEM') === null) {
                     GM_setValue('ROUND_GEM', 0);
                 }
-                var ROUND_GEM = GM_getValue('ROUND_GEM');
+                var ROUND_GEM = GM_getValue('ROUND_GEM')*1;
 
                 //given that we want to (physical) attack something, pick what to attack
                 //current form: looks for groups of size five, then four, ... then chooses the middle one (ie 2h style)
