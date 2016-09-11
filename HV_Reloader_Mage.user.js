@@ -6,7 +6,7 @@
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
-// @version     1.3.3.68
+// @version     1.3.3.69
 // @grant       none
 // ==/UserScript==
 // Vanilla Reloader:
@@ -3268,8 +3268,10 @@ function OnPageReload() {
                 if ((location.href + "").indexOf('s=Battle&ss=gr') === -1 && settings.enableGFslowGEM) {
                     if (getGem() == 'health' && getSelfHealth() < 90 && ROUND_GEM > 20) {
                         useGem();
-                    } else if (getGem() == 'spirit' && ROUND_GEM > 15) {
+                        return;
+                    } else if (getGem() == 'spirit' && ROUND_GEM > 15 && isSOL) {
                         useGem();
+                        return;
                     } else {
                         GM_setValue('ROUND_GEM', (ROUND_GEM + 1));
                     }
