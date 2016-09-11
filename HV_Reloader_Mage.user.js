@@ -6,7 +6,7 @@
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
-// @version     1.3.3.70
+// @version     1.3.3.71
 // @grant       none
 // ==/UserScript==
 // Vanilla Reloader:
@@ -3217,7 +3217,7 @@ function OnPageReload() {
 
                 //check for use spirit potion
                 if (ENABLE_SP_POTION) {
-                    if (getSelfSpirit() < SP_ITEM_P_CUTOFF && !isHaveCloakOfTheFallen) {
+                    if (getSelfSpirit() < SP_ITEM_P_CUTOFF && (!isHaveCloakOfTheFallen || getSelfHealth() > 50 ) ) {
                         console.log('decided to drink spirit pot');
                         if (getGem() == 'spirit') {
                             useGem();
