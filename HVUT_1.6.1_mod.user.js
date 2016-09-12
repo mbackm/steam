@@ -3935,6 +3935,8 @@ GM_addStyle(
 	".hvut-btn {display:block !important; color:#fff; background-color:#600; cursor:pointer}"
 );
 
+var vChkRateRP = 101;
+
 _battle.load_equip = function(eq) {
 	eq.cSpan.textContent = "Loading";
 	eq.eSpan.innerHTML = "";
@@ -3947,6 +3949,16 @@ _battle.load_equip = function(eq) {
 				div = $element("div",null,["/"+html.substring(s,e)]);
 
 			_battle.parse_equip(eq,div);
+
+			
+
+			if(vChkRateRP < 80){
+				if(_battle.div.classList.length > 1){
+					_battle.div.classList.toggle("hvut-min");
+				}
+			}
+
+			console.log('vChkRateRP:'+vChkRateRP);
 		},
 		function(){
 			_battle.equip_fail(eq);
@@ -3973,6 +3985,10 @@ _battle.parse_equip = function(eq,div) {
 		cn = cdt<52?"hvut-repair1" : cdt<60?"hvut-repair2" : cdt<75?"hvut-repair3" : "hvut-repair4";
 
 	eq.cSpan.textContent = exec[1]+" / "+exec[2]+" ("+cdt.toFixed(1)+"%)";
+	console.log('cdt.toFixed(1):'+cdt.toFixed(1)+' < '+vChkRateRP);
+	if(cdt.toFixed(1) < vChkRateRP){
+		vChkRateRP = cdt.toFixed(1);
+	}
 	eq.cSpan.classList.add(cn);
 
 	_battle.update_repair(eq);
@@ -4216,7 +4232,7 @@ _battle.div = $element("div",$qs(".stuffbox"), vStyleOC);
 _battle.repair_div = $element("div",_battle.div,[" Loading...",".hvut-all"]);
 _battle.equip_ul = $element("ul",_battle.div,[".hvut-equip"]);
 _battle.enchant_ul = $element("ul",_battle.div,[".hvut-enchant"]);
-$element("div",_battle.div,[".hvut-btn"," OPEN / CLOSE"],function(){_battle.div.classList.toggle("hvut-min"); if(vOCcheck.chk === 'true'){setValue("openclose",{'chk':'false'});console.log('false');}else{setValue("openclose",{'chk':'true'});console.log('true');} vOCcheck = getValue("openclose",{});  });
+$element("div",_battle.div,[".hvut-btn"," OPEN / CLOSE"],function(){_battle.div.classList.toggle("hvut-min"); if(vOCcheck.chk === 'true'){setValue("openclose",{'chk':'false'});}else{setValue("openclose",{'chk':'true'});} vOCcheck = getValue("openclose",{});  });
 
 if(vOCcheck.chk === 'true') _battle.div.classList.toggle("hvut-min");
 
@@ -4234,6 +4250,8 @@ equip.value.current.forEach(function(eq,i){
 
 	_battle.load_equip(eq);
 });
+
+
 
 _battle.view_equip(equip.value.current[1]);
 
