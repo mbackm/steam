@@ -1,11 +1,13 @@
 // ==UserScript==
 // @name         Nekopost.net
 // @namespace    GG
-// @version      0.2
+// @version      0.3
 // @description  Enjoy :P
 // @author       BB-04
 // @match        http://www.nekopost.net/*
 // @run-at         document-end
+// @updateURL       https://github.com/suvidev/hv/raw/master/nekopost.user.js
+// @downloadURL     https://github.com/suvidev/hv/raw/master/nekopost.user.js
 // @grant        none
 // ==/UserScript==
 /* jshint -W097 */
