@@ -15,7 +15,7 @@
 // @icon 		http://g.e-hentai.org/favicon.ico
 // @updateURL       https://github.com/suvidev/hv/raw/master/HVUT_1.6.1_mod.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HVUT_1.6.1_mod.user.js
-// @version        1.6.1.0.4
+// @version        1.6.1.0.5
 // ==/UserScript==
 
 var settings = {
@@ -4198,12 +4198,27 @@ _battle.enchantment = {
 
 _battle.inventory = {};
 
+var vStyleOC = [".hvut-battle"];
+var vOCcheck = {'chk':'false'};
 
-_battle.div = $element("div",$qs(".stuffbox"),[".hvut-battle"]);
+if(getValue("openclose",{})){
+
+	vOCcheck = getValue("openclose",{});
+	//if(vOCcheck.chk === 'true') vStyleOC = [".hvut-battle",".hvut-min"];
+
+}else{
+	setValue("openclose",vOCcheck);
+}
+
+
+
+_battle.div = $element("div",$qs(".stuffbox"), vStyleOC);
 _battle.repair_div = $element("div",_battle.div,[" Loading...",".hvut-all"]);
 _battle.equip_ul = $element("ul",_battle.div,[".hvut-equip"]);
 _battle.enchant_ul = $element("ul",_battle.div,[".hvut-enchant"]);
-$element("div",_battle.div,[".hvut-btn"," OPEN / CLOSE"],function(){_battle.div.classList.toggle("hvut-min");});
+$element("div",_battle.div,[".hvut-btn"," OPEN / CLOSE"],function(){_battle.div.classList.toggle("hvut-min"); if(vOCcheck.chk === 'true'){setValue("openclose",{'chk':'false'});console.log('false');}else{setValue("openclose",{'chk':'true'});console.log('true');} vOCcheck = getValue("openclose",{});  });
+
+if(vOCcheck.chk === 'true') _battle.div.classList.toggle("hvut-min");
 
 equip.value.current.forEach(function(eq,i){
 	if(i === 0) {
