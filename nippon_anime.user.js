@@ -6,8 +6,8 @@
 // @author       GG
 // @match        http://www.nipponanime.net/forum/*
 // @grant        none
-// @updateURL       https://github.com/suvidev/hv/raw/master/nekopost.user.js
-// @downloadURL     https://github.com/suvidev/hv/raw/master/nekopost.user.js
+// @updateURL       https://github.com/suvidev/hv/raw/master/nippon_anime.user.js
+// @downloadURL     https://github.com/suvidev/hv/raw/master/nippon_anime.user.js
 // --@grant    GM_setValue
 // --@grant    GM_getValue
 // ==/UserScript==
