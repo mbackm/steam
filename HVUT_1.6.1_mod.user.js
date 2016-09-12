@@ -15,7 +15,7 @@
 // @icon 		http://g.e-hentai.org/favicon.ico
 // @updateURL       https://github.com/suvidev/hv/raw/master/HVUT_1.6.1_mod.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HVUT_1.6.1_mod.user.js
-// @version        1.6.1.0.5
+// @version        1.6.1.0.6
 // ==/UserScript==
 
 var settings = {
@@ -559,6 +559,10 @@ difficulty.td2.addEventListener("mouseenter",function(){
 		difficulty.change_select = $element("select",difficulty.div,{size:7,style:"float:right;width:70px"},{change:function(){
 			difficulty.change_select.disabled = true;
 			$element("iframe",difficulty.div,{src:"/?s=Character&ss=se&hvut=difficulty&difficulty="+difficulty.change_select.value,style:"position:absolute;width:0;height:0;border:0;visibility:hidden"});
+			
+			//setInterval(function(){ window.location.href = window.location.href; }, 2000);
+			setTimeout(function(){ window.location.href = window.location.href; }, 2000);
+
 		}});
 
 		["Normal","Hard","Nightmare","Hell","Nintendo","IWBTH","PFUDOR"].forEach(function(d,i){$element("option",[difficulty.change_select,0],{value:i,text:d,selected:d===player.difficulty});});
