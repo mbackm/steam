@@ -38,7 +38,7 @@ var settings = {
     enableHaveAutoCast: true, // if you already unlock auto-cast please enable and go to LIST_AUTO_CAST for config.
     showUsePotion: false, //#1/4# Show use potion stopWhenUseLE 
     spellControl: true, // Spell Control - use Scroll or normal buff
-    stopWhenUseLE: true, // stop auto when use Last Elixir
+    stopWhenUseLE: false, // stop auto when use Last Elixir
     showStopStartButton: true, // Show Stop Start button
     showStopStartButtonMainPage: true, // Show Stop Start button on Main Page
     showBarListBattleItems: false, //#2/4# Show list battle items
