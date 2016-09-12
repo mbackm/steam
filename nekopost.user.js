@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Nekopost.net
 // @namespace    GG
-// @version      0.3
+// @version      0.4
 // @description  Enjoy :P
 // @author       BB-04
 // @match        http://www.nekopost.net/*
@@ -37,15 +37,29 @@ if(document.querySelector('div.header.hidden-xs')){
 
 
 function addImg(vSrc){
-    var linkOimg = document.createElement("a");
-    linkOimg.id = 'linkOimgID';
-    linkOimg.href = vSrc;
-    linkOimg.appendChild(document.createTextNode("- Open IMG -"));
-    linkOimg.target = "_blank";
-    linkOimg.style.position = 'fixed';
-    linkOimg.style.bottom = '20px';
 
-    document.body.appendChild(linkOimg);
+	currentURL = vSrc;
+
+	if(!document.getElementById('linkOimgID')){
+
+		var linkOimg = document.createElement("a");
+		linkOimg.id = 'linkOimgID';
+		linkOimg.href = vSrc;
+		linkOimg.appendChild(document.createTextNode("- Open IMG -"));
+		linkOimg.target = "_blank";
+		linkOimg.style.position = 'fixed';
+		linkOimg.style.bottom = '20px';
+
+		lastGenURL = vSrc;
+
+		document.body.appendChild(linkOimg);
+
+	}else{
+		if(currentURL !== lastGenURL){
+			document.getElementById('linkOimgID').href = vSrc;
+			lastGenURL = vSrc;
+		}
+	}
 }
 
 
@@ -77,12 +91,13 @@ setTimeout(function(){
     vGenImgCopy();
 }, 3000);
 */
-
+var currentURL = '';
+var lastGenURL = '';
 function loopingFunction1() {
 
-    if(!document.getElementById('linkOimgID')){
+    //if(currentURL === lastGenURL){
         vGenImgCopy();
-    }
+    //}
 
     setTimeout(loopingFunction1, 1000);
 }
