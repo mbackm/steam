@@ -13,8 +13,8 @@
 // @grant          GM_xmlhttpRequest
 // @run-at         document-end
 // @icon 		http://g.e-hentai.org/favicon.ico
-// -@-updateURL       https://github
-// -@-downloadURL     https://github
+// -@-updateURL       https://github.com/suvidev/hv/raw/master/HVUT_1.6.1_mod.user.js
+// -@-downloadURL     https://github.com/suvidev/hv/raw/master/HVUT_1.6.1_mod.user.js
 // @version        1.6.1.0.4
 // ==/UserScript==
 
@@ -38,6 +38,7 @@ shrine : true,
 monsterLab : true,
 	monsterMorale : 7000,
 	monsterHunger : 11000,
+	disableMorale : false,
 moogleMail : true,
 upgrade : true,
 
@@ -2190,7 +2191,7 @@ _ml.update = function(m,html) {
 		m.winText.textContent = won + " / " + kill;
 		m.hungerText.textContent = m.hunger = hunger * 100;
 		m.hungerImg.style.width = hunger+"px";
-		//m.moraleText.textContent = m.morale = morale * 100;
+		if(!settings.disableMorale) m.moraleText.textContent = m.morale = morale * 100;
 		m.moraleImg.style.width = morale+"px";
 
 		/*
@@ -2259,8 +2260,10 @@ _ml.summary = function() {
 _ml.div = $element("div",$id("slot_pane").previousElementSibling,[".hvut-buttons"],function(e){e.stopPropagation();});
 $element("input",_ml.div,{type:"button",value:"Summary"},function(){_ml.result_ul.classList.toggle("hvut-hide");});
 $element("input",_ml.div,{type:"button",value:"Check All",style:"margin-left:100px"},function(){_ml.mobs.forEach(function(m){_ml.feed(m);});});
-$element("input",_ml.div,{type:"button",value:"Pill All",style:"margin-left:50px",disabled:true},function(){_ml.mobs.forEach(function(m){_ml.feed(m,"happyhappyjoyjoy");});});
-$element("input",_ml.div,{type:"button",value:"Under "+settings.monsterMorale,disabled:true},function(){_ml.mobs.forEach(function(m){_ml.feed(m,m.morale<settings.monsterMorale?"happyhappyjoyjoy":"");});});
+
+$element("input",_ml.div,{type:"button",value:"Pill All",style:"margin-left:50px",disabled:settings.disableMorale},function(){_ml.mobs.forEach(function(m){_ml.feed(m,"happyhappyjoyjoy");});});
+$element("input",_ml.div,{type:"button",value:"Under "+settings.monsterMorale,disabled:settings.disableMorale},function(){_ml.mobs.forEach(function(m){_ml.feed(m,m.morale<settings.monsterMorale?"happyhappyjoyjoy":"");});});
+
 $element("input",_ml.div,{type:"button",value:"Feed All",style:"margin-left:50px"},function(){_ml.mobs.forEach(function(m){_ml.feed(m,"feedmax");});});
 $element("input",_ml.div,{type:"button",value:"Under "+settings.monsterHunger},function(){_ml.mobs.forEach(function(m){_ml.feed(m,m.hunger<settings.monsterHunger?"feedmax":"");});});
 
@@ -2284,10 +2287,10 @@ $qsa("#slot_pane > div").forEach(function(div,i){
 		moraleImg = mob.moraleImg = moraleDiv.firstElementChild.firstElementChild;
 
 	mob.hunger = hungerImg.width * 100;
-	//mob.morale = moraleImg.width * 100;
+	if(!settings.disableMorale) mob.morale = moraleImg.width * 100;
 
 	mob.hungerText = $element("div",hungerDiv,[" "+mob.hunger,".hvut-feed"],function(e){_ml.feed(mob,"feedmax");e.stopPropagation();});
-	//mob.moraleText = $element("div",moraleDiv,[" "+mob.morale,".hvut-feed"],function(e){_ml.feed(mob,"happyhappyjoyjoy");e.stopPropagation();});
+	if(!settings.disableMorale) mob.moraleText = $element("div",moraleDiv,[" "+mob.morale,".hvut-feed"],function(e){_ml.feed(mob,"happyhappyjoyjoy");e.stopPropagation();});
 	mob.giftUl = $element("div",div,[".hvut-gift"]);
 });
 
