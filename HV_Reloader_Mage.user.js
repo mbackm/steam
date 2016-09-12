@@ -6,7 +6,7 @@
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
-// @version     1.3.3.71
+// @version     1.3.3.72
 // @grant       none
 // ==/UserScript==
 // Vanilla Reloader:
@@ -36,8 +36,9 @@
 var settings = {
     godAuto: true, // God Mode
     enableHaveAutoCast: true, // if you already unlock auto-cast please enable and go to LIST_AUTO_CAST for config.
-    showUsePotion: false, //#1/4# Show use potion
+    showUsePotion: false, //#1/4# Show use potion stopWhenUseLE 
     spellControl: true, // Spell Control - use Scroll or normal buff
+    stopWhenUseLE: true, // stop auto when use Last Elixir
     showStopStartButton: true, // Show Stop Start button
     showStopStartButtonMainPage: true, // Show Stop Start button on Main Page
     showBarListBattleItems: false, //#2/4# Show list battle items
@@ -3288,6 +3289,9 @@ function OnPageReload() {
                         var indexItemLE = nextItem('Last Elixir');
                         if (indexItemLE !== -1) {
                             useItem(indexItemLE);
+							if(settings.stopWhenUseLE){
+								GM_setValue("botSS", false);
+							}
                             return;
                         }
                     }
@@ -3903,7 +3907,13 @@ function OnPageReload() {
 
 
         })();
-    }
+    }else{
+		if(settings.stopWhenUseLE){
+			var bs = new Audio(currentSong);
+            bs.play();
+		}
+	}
+
     /* ============ GOD AUTO END =========== */
 
     /* =========== EXTERNAL SCRIPTS =========== */
