@@ -15,7 +15,7 @@
 // @icon 		http://g.e-hentai.org/favicon.ico
 // @updateURL       https://github.com/suvidev/hv/raw/master/HVUT_1.6.1_mod.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HVUT_1.6.1_mod.user.js
-// @version        1.6.1.0.10
+// @version        1.6.1.0.11
 // ==/UserScript==
 
 var settings = {
@@ -1628,6 +1628,7 @@ _es.get_shop_pane = function(eqdp,type,append) {
 
 		if(display) {
 			_es.shop_pane[data.eid] = data;
+			div.querySelector('div.fd2 div').textContent = div.querySelector('div.fd2 div').textContent + ' ['+data.price+']';
 			$element("span",[data.sub,0],"Buy "+data.price,function(){_es.shop_buy(data);});
 			div.parentNode.appendChild(data.sub);
 
@@ -1636,6 +1637,7 @@ _es.get_shop_pane = function(eqdp,type,append) {
 			}
 
 		} else {
+			div.querySelector('div.fd2 div').textContent = div.querySelector('div.fd2 div').textContent + ' ['+data.price+']';
 			div.parentNode.classList.add("hvut-hide");
 		}
 
