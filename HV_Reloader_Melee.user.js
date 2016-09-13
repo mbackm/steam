@@ -3,7 +3,7 @@
 // @namespace   HVRLD3
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @include		/^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version		2.0.0.68
+// @version		2.0.0.69
 // @updateURL      https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @downloadURL    https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @run-at      document-end
@@ -3730,14 +3730,14 @@ function OnPageReload() {
                 //check for use health potion
                 if (ENABLE_HP_POTION) {
                     if (isHaveCloakOfTheFallen || isSOL || (getSelfSpirit() > vSpiritUseBuff) || (getSelfHealth() < HP_ITEM_P_CUTOFF && !isSOL)) {
-                        if (getSelfHealth() < HP_ITEM_P_CUTOFF) {
+                        if ( (getSelfHealth() < HP_ITEM_P_CUTOFF) || (isHaveCloakOfTheFallen && (getSelfHealth() < 60)) ) {
                             var indexItem4 = nextItem('Health Potion');
                             if (indexItem4 !== -1) {
                                 useItem(indexItem4);
                                 return;
                             }
 
-                            if (getSelfHealth() < HP_ITEM_E_CUTOFF) {
+                            if ( (getSelfHealth() < HP_ITEM_E_CUTOFF) || (isHaveCloakOfTheFallen && (getSelfHealth() < 60)) ) {
                                 var indexItem5 = nextItem('Health Elixir');
                                 if (indexItem5 !== -1) {
                                     useItem(indexItem5);
