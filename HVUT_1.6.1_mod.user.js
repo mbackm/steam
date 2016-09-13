@@ -13,8 +13,8 @@
 // @grant          GM_xmlhttpRequest
 // @run-at         document-end
 // @icon 		http://g.e-hentai.org/favicon.ico
-// @updateURL       https://github.com/axezor/Steam-Next-Queue/raw/master/THV/HVUT_1.6.1_mod.user.js
-// @downloadURL     https://github.com/axezor/Steam-Next-Queue/raw/master/THV/HVUT_1.6.1_mod.user.js
+// @updateURL       https://github.com/suvidev/hv/raw/master/HVUT_1.6.1_mod.user.js
+// @downloadURL     https://github.com/suvidev/hv/raw/master/HVUT_1.6.1_mod.user.js
 // @version        1.6.1.0.8
 // ==/UserScript==
 
