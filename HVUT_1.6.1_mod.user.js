@@ -15,7 +15,7 @@
 // @icon 		http://g.e-hentai.org/favicon.ico
 // @updateURL       https://github.com/axezor/Steam-Next-Queue/raw/master/THV/HVUT_1.6.1_mod.user.js
 // @downloadURL     https://github.com/axezor/Steam-Next-Queue/raw/master/THV/HVUT_1.6.1_mod.user.js
-// @version        1.6.1.0.7
+// @version        1.6.1.0.8
 // ==/UserScript==
 
 var settings = {
@@ -1672,9 +1672,9 @@ $element("input",document.body,{type:"button",value:"View",className:"hvut-show"
 
 _es.div = $element("div",[$id("item_pane"),0],[".hvut-item"]);
 $element("input",_es.div,{type:"button",value:"Select for Selling"},function(){var eid,e;for(eid in _es.item_pane){e=_es.item_pane[eid];if(!e.div.parentNode.classList.contains('hvut-hide')) e.checkbox.checked=!e.locked&&!e.salvage;}});
-$element("input",_es.div,{type:"button",value:"Sell"},function(){var eid,e;for(eid in _es.item_pane){e=_es.item_pane[eid];if(e.checkbox.checked){_es.sell(eid);}}});
+$element("input",_es.div,{type:"button",value:"Sell"},function(){var eid,e;for(eid in _es.item_pane){e=_es.item_pane[eid];if(!e.div.parentNode.classList.contains('hvut-hide') && e.checkbox.checked){_es.sell(eid);}}});
 $element("input",_es.div,{type:"button",value:"Select for Salvaging"},function(){var eid,e;for(eid in _es.item_pane){e=_es.item_pane[eid];if(!e.div.parentNode.classList.contains('hvut-hide')) e.checkbox.checked=!e.locked&&e.salvage;}});
-$element("input",_es.div,{type:"button",value:"Salvage"},function(){var eid,e;for(eid in _es.item_pane){e=_es.item_pane[eid];if(e.checkbox.checked){_es.salvage(eid);}}});
+$element("input",_es.div,{type:"button",value:"Salvage"},function(){var eid,e;for(eid in _es.item_pane){e=_es.item_pane[eid];if(!e.div.parentNode.classList.contains('hvut-hide') && e.checkbox.checked){_es.salvage(eid);}}});
 $element("input",_es.div,{type:"button",value:"Clear"},function(){var eid,e;for(eid in _es.item_pane){e=_es.item_pane[eid];if(!e.div.parentNode.classList.contains('hvut-hide')) e.checkbox.checked=false;}});
 
 function doSearch(){
