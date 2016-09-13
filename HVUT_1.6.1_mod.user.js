@@ -15,7 +15,7 @@
 // @icon 		http://g.e-hentai.org/favicon.ico
 // @updateURL       https://github.com/suvidev/hv/raw/master/HVUT_1.6.1_mod.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HVUT_1.6.1_mod.user.js
-// @version        1.6.1.0.8
+// @version        1.6.1.0.9
 // ==/UserScript==
 
 var settings = {
@@ -36,8 +36,8 @@ itemShop : true,
 itemShopBot : true,
 shrine : true,
 monsterLab : true,
-	monsterMorale : 7000,
-	monsterHunger : 11000,
+	monsterMorale : 6001, //7000
+	monsterHunger : 6001, //11000
 	disableMorale : false,
 moogleMail : true,
 upgrade : true,
@@ -1445,7 +1445,7 @@ _es.salvage = function(eid) {
 	delete _es.item_pane[eid];
 	ajax("/?s=Forge&ss=sa&filter="+data.type,"select_item="+eid,function(response){
 	
-		
+		//data.div.parentNode.remove();
 
 		/*var responseXML = null;
 		// Inject responseXML into existing Object (only appropriate for XML content).
@@ -1453,21 +1453,26 @@ _es.salvage = function(eid) {
 		  responseXML = new DOMParser().parseFromString(response.responseText, "text/xml");
 		}*/
 
-		//console.log('Salvge e='+response.responseText);
+		var strDocument = response.responseText;
+		
+		//console.log('Salvge strDocument='+strDocument);
 
-		data.div.parentNode.remove();
-		var msgbox = document.querySelectorAll("#messagebox .cmb6:not(:first-child),.emsg");
+		var xg = strDocument.split('>Salvaged');
 		var message = '';
+		for(var i=1;i<xg.length;i++){
+			if(message!=='') message = message +' / ';
 
-		if (msgbox.length > 0) {
-			for (var i = 0; i < msgbox.length; i++) {
-			message = msgbox[i].textContent.replace(/Salvaged|Hit Space Bar.*|Received.?|\n/g, "") + "\n"+ message;
-			}
+			message = message + xg[i].substring(0, xg[i].indexOf('<')).trim();
+			
 		}
 
+	
 		message = message.trim();
 
-		data.div.textContent = message+'/'+data.div.textContent;
+		data.div.textContent = message+' | '+data.div.textContent;
+		
+		data.div.style.textDecoration = 'overline';
+		data.div.parentNode.childNodes[4].innerHTML = data.div.parentNode.childNodes[4].innerHTML;
 
 		
 	
