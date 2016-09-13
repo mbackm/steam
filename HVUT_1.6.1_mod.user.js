@@ -15,7 +15,7 @@
 // @icon 		http://g.e-hentai.org/favicon.ico
 // @updateURL       https://github.com/suvidev/hv/raw/master/HVUT_1.6.1_mod.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HVUT_1.6.1_mod.user.js
-// @version        1.6.1.0.9
+// @version        1.6.1.0.10
 // ==/UserScript==
 
 var settings = {
@@ -1715,14 +1715,35 @@ function doSearch(){
 		}
 
 		search = search.toLowerCase().split(";").filter(function(value){return value.trim();}).map(function(value){return value.trim().split(/\s+/);});
-
+		//console.log('search:'+search);
 		list.forEach(function(item){
 			var name = item.name.toLowerCase().replace(/ /g,"_");
+			//console.log(item);
+			var price = item.price;//(item.price+'').replace(/ /g,"_");
+			var p_salve = item.sal_value;
+
 			item.filtered = search.some(function(value){
 								return value.every(function(v){
-									return name.indexOf(v)!==-1;
+									var rt = false;
+									if(v.startsWith('$')){ 
+										v = v.substring(1); 
+										rt = ((price*1) < (v*1))?true:false;
+										//console.log('p:'+price+' < '+'v:'+v+' = '+rt);
+										return rt;
+									}else if(v.startsWith('#')){
+										v = v.substring(1); 
+										rt = ( ((p_salve*1) < (v*1)) && ((p_salve*1)>0) )?true:false;
+										//console.log('p_salve:'+p_salve+' < '+'v:'+v+' = '+rt+' name:'+name);
+										return rt;
+									}else{
+										rt = name.indexOf(v)!==-1;
+										//console.log('name:'+name+' = '+rt);
+										return rt;
+									}
 								});
 							});
+
+			//console.log('price:'+price+' fil:'+item.filtered);
 			if(item.dom) item.dom.classList[item.filtered?"remove":"add"]("hvut-hide");
 			
 		});
@@ -1731,6 +1752,8 @@ function doSearch(){
 	_es.equip = [];
 	_es.real_names = {};
 	_es.check_names = [];
+	
+	/*
 	$qsa("#item_pane > div").forEach(function(div){
 		if($qs(".eqdp",div)){
 				var eq = equip_parser.div($qs(".eqdp",div));
@@ -1746,26 +1769,31 @@ function doSearch(){
 				_es.equip.push(e);
 		}
 	});
+	
+	*/
 
 	_es.equip.key = "";
 	_es.equip_btn = $element("div",$id("leftpane"),[".hvut-btns"]);
 
-	_es.equip.input = $element("input",_es.equip_btn,{type:"text",placeholder:"keyword; keyword; keyword"},{keypress:function(e){e.stopPropagation();},keyup:function(e){if(e.keyCode===27){_es.filterx(_es.equip,"");}else{_es.filterx(_es.equip,_es.equip.input.value,true);}}});
+	_es.equip.input = $element("input",_es.equip_btn,{type:"text",placeholder:"$[sell]; #[Salvage]"},{keypress:function(e){e.stopPropagation();},keyup:function(e){if(e.keyCode===27){_es.filterx(_es.equip,"");}else{_es.filterx(_es.equip,_es.equip.input.value,true);}}});
 	$element("input",_es.equip_btn,{type:"button",value:"Reset"},function(){_es.filterx(_es.equip,"");});
 
-
+	
 	$qsa("#item_pane > div").forEach(function(div){
 		if(div.children.length > 0){
 			if(div.children[1]){
 				if(div.children[1].getAttribute("onmouseover")){
 					var d = equip_parser.div(div.children[1]);
+						d.type =_es.type;
+					//console.log(d.price);
 					var item = {
 						type : "equip",
 						name : d.name,
 						id : d.eid,
 						key : d.key,
 						count : 1,
-						price : 0,
+						price : d.price,
+						sal_value : _es.sal_value(d,d.price),
 						cod : 0,
 						filtered : true,
 						dom : div,
@@ -1776,7 +1804,8 @@ function doSearch(){
 			}
 		}
 	});
-
+	
+	
 	$qsa("#item_pane > div").forEach(function(div){
 		if($qs(".eqdp",div)){
 			var eq = equip_parser.div($qs(".eqdp",div));
@@ -1790,9 +1819,14 @@ function doSearch(){
 
 			var e = equip_parser.name(eq.real_name || eq.name);
 			e.div = div;
+			e.price = eq.price;
+			e.type = _es.type;
+			e.sal_value = _es.sal_value(eq,eq.price);
 			_es.equip.push(e);
 		}
 	});
+	
+	
 	//**************************//
 	//== END == new logic search equip
 	//**************************//
@@ -3861,6 +3895,7 @@ _iw.filterx = function(list,search,keep) {
 _iw.equip = [];
 _iw.real_names = {};
 _iw.check_names = [];
+/*
 $qsa("#item_pane > div").forEach(function(div){
 	if($qs(".eqdp",div)){
 			var eq = equip_parser.div($qs(".eqdp",div));
@@ -3876,6 +3911,7 @@ $qsa("#item_pane > div").forEach(function(div){
 			_iw.equip.push(e);
 	}
 });
+*/
 
 _iw.equip.key = "";
 _iw.equip_btn = $element("div",$id("leftpane"),[".hvut-btns"]);
