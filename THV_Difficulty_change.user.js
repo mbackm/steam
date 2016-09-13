@@ -1,6 +1,8 @@
 // ==UserScript==
 // @name         THV Difficulty change
 // @namespace    ??-??
+// @updateURL       https://github.com/suvidev/hv/raw/master/THV_Difficulty_change.user.js
+// @downloadURL     https://github.com/suvidev/hv/raw/master/THV_Difficulty_change.user.js
 // @version      0.1
 // @description  ??-??
 // @author       ??-??
