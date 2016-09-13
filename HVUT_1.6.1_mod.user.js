@@ -15,7 +15,7 @@
 // @icon 		http://g.e-hentai.org/favicon.ico
 // @updateURL       https://github.com/suvidev/hv/raw/master/HVUT_1.6.1_mod.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HVUT_1.6.1_mod.user.js
-// @version        1.6.1.0.12
+// @version        1.6.1.0.13
 // ==/UserScript==
 
 var settings = {
@@ -4083,7 +4083,7 @@ _battle.parse_equip = function(eq,div) {
 		cn = cdt<52?"hvut-repair1" : cdt<60?"hvut-repair2" : cdt<75?"hvut-repair3" : "hvut-repair4";
 
 	eq.cSpan.textContent = exec[1]+" / "+exec[2]+" ("+cdt.toFixed(1)+"%)";
-	console.log('cdt.toFixed(1):'+cdt.toFixed(1)+' < '+vChkRateRP);
+	//console.log('cdt.toFixed(1):'+cdt.toFixed(1)+' < '+vChkRateRP);
 	if(cdt.toFixed(1) < vChkRateRP){
 		vChkRateRP = cdt.toFixed(1);
 	}
