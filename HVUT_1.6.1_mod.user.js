@@ -9,16 +9,19 @@
 // @exclude        http://alt.hentaiverse.org/?hvbh
 // @exclude        http://hentaiverse.org/pages/showequip*
 // @exclude        http://alt.hentaiverse.org/pages/showequip*
+// @match        file:///*
 // @grant          GM_addStyle
 // @grant          GM_xmlhttpRequest
 // @run-at         document-end
 // @icon 		http://g.e-hentai.org/favicon.ico
 // @updateURL       https://github.com/suvidev/hv/raw/master/HVUT_1.6.1_mod.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HVUT_1.6.1_mod.user.js
-// @version        1.6.1.0.13
+// @version        1.6.1.0.14
 // ==/UserScript==
 
 var settings = {
+
+template : '$no $name',// $no = [Hea01] $name =  Legendary Onyx Power Helmet of Slaughter <<< [url]...[/url]
 
 minimize : false,
 scrollbar : true,
@@ -32,13 +35,14 @@ inventory : true,
 	equipColor : true,
 equipmentShop : true,
 	checkOldEID : 0,
+	showResultSalvage : false,	// #1 mod
 itemShop : true,
 itemShopBot : true,
 shrine : true,
 monsterLab : true,
 	monsterMorale : 6001, //7000
 	monsterHunger : 6001, //11000
-	disableMorale : false,
+	disableMorale : false,		// #2 mod
 moogleMail : true,
 upgrade : true,
 
@@ -1057,7 +1061,9 @@ GM_addStyle(
 	".hvut-item-Material .fd2 > div {color:#f00 !important}" +
 	".hvut-item-Collectable .fd2 > div {color:#0000FF !important}" +
 	
-	".hvut-btns {position:absolute; top:0px; left:30px; white-space:nowrap; text-align:left; z-index:8888}" +
+	".hvut-btns {position:absolute; top:0px; left:20%; white-space:nowrap; text-align:left; z-index:8888}" +
+	".hvut-btns-tp {position:absolute; top:0px; left:68%; white-space:nowrap; text-align:left; z-index:8888}" +
+	".hvut-bf {position:absolute;left:70%;z-index:7777;}" +
 
 	"div#inv_equip > div:after {content:''; display:block; clear:both}" +
 	"div.eqpp {padding-top:0}" +
@@ -1066,6 +1072,152 @@ GM_addStyle(
 	".hvut-type {margin:10px 5px 5px; padding:1px 5px; border:1px solid #333; border-radius:3px; font-size:10pt; color:#000}" +
 	".hvut-part {margin-top:3px; padding-top:5px !important; border-top:2px dotted #333}"
 );
+
+_in.inv_equip = {};
+
+function n(n){
+    return n > 9 ? "" + n: "0" + n;
+}
+
+function getBold(txt){
+	/*
+	var bold = ['Force Shield ','Phase ','Shade ','Power '];
+	if(bold.indexOf(txt) !== -1){
+		txt = '[b]'+txt+'[/b]';
+	}
+	*/
+
+	return txt;
+}
+
+_in.genTemplate = function (e,no){
+	
+	var output = settings.template;
+
+	//$name
+	//'[url=http://hentaiverse.org/pages/showequip.php?eid='+eid+'&key='+e.key+']'+quality+prefix+type+part+' of '+suffix+'[/url];
+	var sName='';
+
+	var quality='';
+	var prefix='';
+	var type='';
+	var part='';
+	var suffix='';
+
+	quality = e.quality;
+	prefix = e.prefix;
+	type = e.type;
+	part = e.part;
+	suffix = e.suffix;
+
+	if(typeof(quality) !== 'undefined'){ quality = quality+' '}else{quality='';};
+	if(typeof(prefix) !== 'undefined'){ prefix = prefix+' '}else{prefix='';};
+	if(typeof(type) !== 'undefined'){ type = type+' '}else{type='';};
+	if(typeof(part) !== 'undefined'){ part = part+' '}else{part='';};
+	if(typeof(suffix) !== 'undefined'){ suffix = suffix;}else{suffix='';};
+
+
+	var Peerless = '[color=#ff0000]P[/color][color=#ff7f00]e[/color][color=#c3c300]e[/color][color=#00ff00]r[/color][color=#00ffff]l[/color][color=#7171ff]e[/color][color=#8b00ff]s[/color][color=#ff0000]s[/color] ';
+	if( quality === 'Peerless ') quality=Peerless;
+
+
+	sName = '[url=http://hentaiverse.org/pages/showequip.php?eid='+e.eid+'&key='+e.key+']'+getBold(quality)+getBold(prefix)+getBold(type)+getBold(part)+'of '+getBold(suffix)+'[/url]';
+
+	//$no
+	//'['+category+no]'
+	var sNo = '';
+	switch (e.category) {
+		case "One-handed Weapon":
+			sNo = '[One'+no+']';
+			break;
+		case "Two-handed Weapon":
+			sNo = '[Two'+no+']';
+			break;
+		case "Staff":
+			sNo = '[Sta'+no+']';
+			break;
+		case "Shield":
+			sNo = '[Shd'+no+']';
+			break;
+		case "Cloth Armor":
+			sNo = '[Clo'+no+']';
+			break;
+		case "Light Armor":
+			sNo = '[Lig'+no+']';
+			break;
+		case "Heavy Armor":
+			sNo = '[Hea'+no+']';
+			break;
+	}
+	
+	return output.replace('$name',sName).replace('$no',sNo)+'<br/>';
+	
+}
+
+var iOne=1,iTwo=1,iSta=1,iShd=1,iClo=1,iLig=1,iHea=1;
+
+_in.template = function() {
+
+//	var e = _in.inv_equip[eid];
+	iOne=1;
+	iTwo=1;
+	iSta=1;
+	iShd=1;
+	iClo=1;
+	iLig=1;
+	iHea=1;
+
+	var rtOne = '',rtTwo = '',rtSta = '',rtShd = '',rtClo = '',rtLig = '',rtHea = '';
+
+	var eid, e;
+	var nDocument = window.open("", "List").document;
+	nDocument.body.innerHTML = "";
+    for (eid in _in.inv_equip) {
+        e = _in.inv_equip[eid];
+        if (!e.div.parentNode.classList.contains('hvut-hide') && e.checkbox.checked) {
+            //_es.sell(eid);
+			//console.log(e.checkbox.checked+' eid:'+eid+' key:'+e.key);
+			//[Lig02] [url=http://hentaiverse.org/pages/showequip.php?eid=106237764&key=cfe29d35cf]Legendary [b]Agile[/b] Shade Boots of the Arcanist[/url]
+			//console.log(e);
+
+			switch (e.category) {
+				case "One-handed Weapon":
+					rtOne += _in.genTemplate(e,n(iOne++));
+					break;
+				case "Two-handed Weapon":
+					rtTwo += _in.genTemplate(e,n(iTwo++));
+					break;
+				case "Staff":
+					rtSta += _in.genTemplate(e,n(iSta++));
+					break;
+				case "Shield":
+					rtShd += _in.genTemplate(e,n(iShd++));
+					break;
+				case "Cloth Armor":
+					rtClo += _in.genTemplate(e,n(iClo++));
+					break;
+				case "Light Armor":
+					rtLig += _in.genTemplate(e,n(iLig++));
+					break;
+				case "Heavy Armor":
+					rtHea += _in.genTemplate(e,n(iHea++));
+					break;
+			}
+
+			//nDocument.body.appendChild(document.createElement("div")).innerHTML = _in.genTemplate(e);
+
+        }
+    }
+	if(rtOne!=='') nDocument.body.appendChild(document.createElement("BR")); nDocument.body.appendChild(document.createElement("div")).innerHTML = rtOne;
+	if(rtTwo!=='') nDocument.body.appendChild(document.createElement("BR")); nDocument.body.appendChild(document.createElement("div")).innerHTML = rtTwo;
+	if(rtSta!=='') nDocument.body.appendChild(document.createElement("BR")); nDocument.body.appendChild(document.createElement("div")).innerHTML = rtSta;
+	if(rtShd!=='') nDocument.body.appendChild(document.createElement("BR")); nDocument.body.appendChild(document.createElement("div")).innerHTML = rtShd;
+	if(rtClo!=='') nDocument.body.appendChild(document.createElement("BR")); nDocument.body.appendChild(document.createElement("div")).innerHTML = rtClo;
+	if(rtLig!=='') nDocument.body.appendChild(document.createElement("BR")); nDocument.body.appendChild(document.createElement("div")).innerHTML = rtLig;
+	if(rtHea!=='') nDocument.body.appendChild(document.createElement("BR")); nDocument.body.appendChild(document.createElement("div")).innerHTML = rtHea;
+	
+
+};
 
 _in.equip = [];
 _in.real_names = {};
@@ -1083,8 +1235,16 @@ $qsa("#inv_equip > div").forEach(function(div){
 
 	var e = equip_parser.name(eq.real_name || eq.name);
 	e.div = div;
+	e.key = eq.key;
+	e.eid = eq.eid;
+	e.sub = $element("div",e.div,[".hvut-bf"]);
+	e.checkbox = $element("input",e.sub,{type:"checkbox"});
+
+	_in.inv_equip[eq.eid] = e;
+	
 	_in.equip.push(e);
 });
+
 
 if(_in.check_names.length) {
 	_in.check_button = $element("input",$id("rightpane"),{type:"button",value:"Checking...",style:"position:absolute;top:0;left:30px;z-index:10"});
@@ -1179,11 +1339,21 @@ _in.equip.forEach(function(e,i,a){
 		}
 	}
 
+
+	//e.sub = $element("div",e.parentNode,[".hvut-sub"]);
+	//e.div.insertBefore(e.checkbox,e.div);
+	//e.div.appendChild(e.checkbox);
+
 	_in.frag.appendChild(e.div);
 });
 $id("inv_equip").appendChild(_in.frag);
 
 }
+
+
+_in.equip_btn_tp = $element("div",$id("rightpane"),[".hvut-btns-tp"]);
+$element("input",_in.equip_btn_tp,{type:"button",value:"Template"},function(){_in.template();});
+$element("input",_in.equip_btn_tp,{type:"button",value:"Clear"},function(){var eid, e; for (eid in _in.inv_equip) { e = _in.inv_equip[eid]; e.checkbox.checked = false; }});
 
 //**************************//
 //== START == new logic search equip
@@ -1444,35 +1614,32 @@ _es.salvage = function(eid) {
 	data.sub.classList.add("hvut-disabled");
 	delete _es.item_pane[eid];
 	ajax("/?s=Forge&ss=sa&filter="+data.type,"select_item="+eid,function(response){
-	
-		//data.div.parentNode.remove();
-
-		/*var responseXML = null;
-		// Inject responseXML into existing Object (only appropriate for XML content).
-		if (!response.responseXML) {
-		  responseXML = new DOMParser().parseFromString(response.responseText, "text/xml");
-		}*/
-
-		var strDocument = response.responseText;
+		if(settings.showResultSalvage){
+			var strDocument = response.responseText;
 		
-		//console.log('Salvge strDocument='+strDocument);
+			//console.log('Salvge strDocument='+strDocument);
 
-		var xg = strDocument.split('>Salvaged');
-		var message = '';
-		for(var i=1;i<xg.length;i++){
-			if(message!=='') message = message +' / ';
+			var xg = strDocument.split('>Salvaged');
+			var message = '';
+			for(var i=1;i<xg.length;i++){
+				if(message!=='') message = message +' / ';
 
-			message = message + xg[i].substring(0, xg[i].indexOf('<')).trim();
+				message = message + xg[i].substring(0, xg[i].indexOf('<')).trim();
+				
+			}
+
+		
+			message = message.trim();
+
+			data.div.textContent = message+' | '+data.div.textContent;
 			
+			data.div.style.textDecoration = 'overline';
+			data.div.parentNode.childNodes[4].innerHTML = data.div.parentNode.childNodes[4].innerHTML;
+		}else{
+			data.div.parentNode.remove();
 		}
 
-	
-		message = message.trim();
-
-		data.div.textContent = message+' | '+data.div.textContent;
 		
-		data.div.style.textDecoration = 'overline';
-		data.div.parentNode.childNodes[4].innerHTML = data.div.parentNode.childNodes[4].innerHTML;
 
 		
 	
