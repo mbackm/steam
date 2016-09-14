@@ -5420,6 +5420,7 @@ if (document.getElementById('togpane_log')) {
 } else {
 
     GM_setValue("enableSkipSTMN", false);
+	GM_setValue('ROUND_GEM', 0);
 
     //show potion
     if (settings.showUsePotion) {
