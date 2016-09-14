@@ -3280,7 +3280,7 @@ function OnPageReload() {
                     } else if (getGem() == 'spirit' && ROUND_GEM > 15 && isSOL) {
                         useGem();
                         return;
-                    } else {
+                    } else if(getGem() !== 'none') {
                         GM_setValue('ROUND_GEM', (ROUND_GEM + 1));
                     }
                 }
