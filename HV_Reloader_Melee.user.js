@@ -3,7 +3,7 @@
 // @namespace   HVRLD3
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @include		/^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version		2.0.0.69
+// @version		2.0.0.70
 // @updateURL      https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @downloadURL    https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @run-at      document-end
@@ -3835,7 +3835,7 @@ function OnPageReload() {
                     } else if (getGem() == 'spirit' && ROUND_GEM > 15 && isSOL) {
                         useGem();
                         return;
-                    } else {
+                    } else if(getGem() !== 'none') {
                         GM_setValue('ROUND_GEM', (ROUND_GEM + 1));
                     }
                 }
@@ -6028,6 +6028,7 @@ if (document.getElementById('togpane_log')) {
 } else {
 
     GM_setValue("enableSkipSTMN", false);
+	GM_setValue('ROUND_GEM', 0);
 
     //show potion
     if (settings.showUsePotion) {
