@@ -43,6 +43,10 @@ function GM_getValue(vKeyv){
 var gbKeyPanel = 'inv_item';
 
 
+var gbStampData = {};
+
+if(GM_getValue("gbStampData")) gbStampData = JSON.parse(GM_getValue("gbStampData"));
+
 //document.getElementById('inv_item').querySelectorAll('tr')[0].outerText.replace('\n','||').trim()
 
 
@@ -58,11 +62,14 @@ function doStampItems(){
 
             if(strArray.length === 2){
                 strArray[1] = strArray[1].substring(0,strArray[1].indexOf('[')).trim();
-                GM_setValue(strArray[0],strArray[1]);
+                //GM_setValue(strArray[0],strArray[1]);
+				gbStampData[strArray[0]] = strArray[1];
             }
 
 
         }
+
+		GM_setValue("gbStampData",JSON.stringify(gbStampData));
 
         return itemListx.length;
     }
@@ -136,7 +143,7 @@ function showStampItem(){
                // GM_setValue(strArray[0],strArray[1]);
                 var nowVl = parseInt(itemListx[i].querySelectorAll('div.fd2')[1].children[0].textContent);
                // console.log('1 = '+itemListx[i].querySelectorAll('div.fd2')[0].children[0].textContent);
-                 var oldVl = GM_getValue(itemListx[i].querySelectorAll('div.fd2')[0].children[0].textContent);
+                 var oldVl = gbStampData[itemListx[i].querySelectorAll('div.fd2')[0].children[0].textContent];// GM_getValue(itemListx[i].querySelectorAll('div.fd2')[0].children[0].textContent);
                 var sumTotalVL = nowVl-oldVl;
                 if(sumTotalVL < 0){
                     itemListx[i].querySelectorAll('div.fd2')[1].children[0].style.color = '#DA0000';
