@@ -16,7 +16,7 @@
 // @icon 		http://g.e-hentai.org/favicon.ico
 // @updateURL       https://github.com/suvidev/hv/raw/master/HVUT_1.6.1_mod.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HVUT_1.6.1_mod.user.js
-// @version        1.6.1.0.16
+// @version        1.6.1.0.17
 // ==/UserScript==
 
 var settings = {
@@ -1105,6 +1105,7 @@ _in.genTemplate = function (e,no){
 	var type='';
 	var part='';
 	var suffix='';
+	var vOf = 'of ';
 
 	quality = e.quality;
 	prefix = e.prefix;
@@ -1116,14 +1117,14 @@ _in.genTemplate = function (e,no){
 	if(typeof(prefix) !== 'undefined'){ prefix = prefix+' '}else{prefix='';};
 	if(typeof(type) !== 'undefined'){ type = type+' '}else{type='';};
 	if(typeof(part) !== 'undefined'){ part = part+' '}else{part='';};
-	if(typeof(suffix) !== 'undefined'){ suffix = suffix;}else{suffix='';};
+	if(typeof(suffix) !== 'undefined'){ suffix = suffix;}else{suffix='';vOf='';};
 
 
 	var Peerless = '[color=#ff0000]P[/color][color=#ff7f00]e[/color][color=#c3c300]e[/color][color=#00ff00]r[/color][color=#00ffff]l[/color][color=#7171ff]e[/color][color=#8b00ff]s[/color][color=#ff0000]s[/color] ';
 	if( quality === 'Peerless ') quality=Peerless;
 
-
-	sName = '[url=http://hentaiverse.org/pages/showequip.php?eid='+e.eid+'&key='+e.key+']'+getBold(quality)+getBold(prefix)+getBold(type)+getBold(part)+'of '+getBold(suffix)+'[/url]';
+	
+	sName = '[url=http://hentaiverse.org/pages/showequip.php?eid='+e.eid+'&key='+e.key+']'+getBold(quality)+getBold(prefix)+getBold(type)+getBold(part)+vOf+getBold(suffix)+'[/url]';
 
 	//$no
 	//'['+category+no]'
@@ -1343,7 +1344,9 @@ _in.equip.forEach(function(e,i,a){
 		if(e.type==="Phase" && e.suffix !== p.suffix) {
 			$element("h5",_in.frag,[" "+e.suffix,".hvut-type"]);
 		} else if(e.type==="Cotton" && e.suffix !== p.suffix) {
-			$element("h5",_in.frag,[" "+e.suffix,".hvut-type"]);
+			vSuffix = e.suffix;
+			if(typeof(vSuffix) === 'undefined') vSuffix = 'No Suffix';
+			$element("h5",_in.frag,[" "+vSuffix,".hvut-type"]);
 		} else if(e.type !== p.type) {
 			$element("h5",_in.frag,[" "+e.type,".hvut-type"]);
 		} else if(e.category==="One-handed Weapon" || e.category==="Two-handed Weapon") {
