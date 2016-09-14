@@ -3730,14 +3730,14 @@ function OnPageReload() {
                 //check for use health potion
                 if (ENABLE_HP_POTION) {
                     if (isHaveCloakOfTheFallen || isSOL || (getSelfSpirit() > vSpiritUseBuff) || (getSelfHealth() < HP_ITEM_P_CUTOFF && !isSOL)) {
-                        if ( (getSelfHealth() < HP_ITEM_P_CUTOFF) || (isHaveCloakOfTheFallen && (getSelfHealth() < 60)) ) {
+                        if ( (getSelfHealth() < HP_ITEM_P_CUTOFF) || (isHaveCloakOfTheFallen && (getSelfHealth() < 50)) ) {
                             var indexItem4 = nextItem('Health Potion');
                             if (indexItem4 !== -1) {
                                 useItem(indexItem4);
                                 return;
                             }
 
-                            if ( (getSelfHealth() < HP_ITEM_E_CUTOFF) || (isHaveCloakOfTheFallen && (getSelfHealth() < 60)) ) {
+                            if ( (getSelfHealth() < HP_ITEM_E_CUTOFF) || (isHaveCloakOfTheFallen && (getSelfHealth() < 50)) ) {
                                 var indexItem5 = nextItem('Health Elixir');
                                 if (indexItem5 !== -1) {
                                     useItem(indexItem5);
@@ -3776,7 +3776,7 @@ function OnPageReload() {
 
                 //check for use spirit potion
                 if (ENABLE_SP_POTION) {
-                    if (getSelfSpirit() < SP_ITEM_P_CUTOFF && (!isHaveCloakOfTheFallen || getSelfHealth() > 50 )) {
+                    if (getSelfSpirit() < SP_ITEM_P_CUTOFF) {
                         console.log('decided to drink spirit pot');
                         if (getGem() == 'spirit') {
                             useGem();
