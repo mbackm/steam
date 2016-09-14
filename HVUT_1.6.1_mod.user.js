@@ -21,7 +21,7 @@
 
 var settings = {
 
-template : '$no $name ($lvl)',// $no = [Hea01] $name =  Legendary Onyx Power Helmet of Slaughter <<< [url]...[/url]
+template : '$no $name ($lvl)',// $no = [Hea01] $name =  Legendary Onyx Power Helmet of Slaughter <<< [url]...[/url] $lvl = show level required.
 
 minimize : false,
 scrollbar : true,
