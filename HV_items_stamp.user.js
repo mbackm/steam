@@ -6,6 +6,8 @@
 // @author       BB-04
 // @match        http://hentaiverse.org/?s=Character&ss=in
 // @match        http://hentaiverse.org/?s=Character&ss=it
+// @updateURL       https://github.com/suvidev/hv/raw/master/HV_items_stamp.user.js
+// @downloadURL     https://github.com/suvidev/hv/raw/master/HV_items_stamp.user.js
 // @version      0.3
 // @grant        none
 // ==/UserScript==
