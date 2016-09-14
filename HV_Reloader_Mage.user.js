@@ -3153,11 +3153,13 @@ function OnPageReload() {
                         return;
                     } else {
 
+						
                         if (getSelfHealth() < 40) {
                             if (castSpell('full cure', 0)) {
                                 return;
                             }
                         }
+						
 
                         if (castSpell('cure', 0)) {
                             return;
@@ -3218,7 +3220,7 @@ function OnPageReload() {
 
                 //check for use spirit potion
                 if (ENABLE_SP_POTION) {
-                    if (getSelfSpirit() < SP_ITEM_P_CUTOFF && (!isHaveCloakOfTheFallen || getSelfHealth() > 41 ) ) {
+                    if (getSelfSpirit() < SP_ITEM_P_CUTOFF) {
                         console.log('decided to drink spirit pot');
                         if (getGem() == 'spirit') {
                             useGem();
