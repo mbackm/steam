@@ -9,19 +9,18 @@
 // @exclude        http://alt.hentaiverse.org/?hvbh
 // @exclude        http://hentaiverse.org/pages/showequip*
 // @exclude        http://alt.hentaiverse.org/pages/showequip*
-// @match        file:///*
 // @grant          GM_addStyle
 // @grant          GM_xmlhttpRequest
 // @run-at         document-end
 // @icon 		http://g.e-hentai.org/favicon.ico
 // @updateURL       https://github.com/suvidev/hv/raw/master/HVUT_1.6.1_mod.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HVUT_1.6.1_mod.user.js
-// @version        1.6.1.0.18
+// @version        1.6.1.0.19
 // ==/UserScript==
 
 var settings = {
 
-template : '$no $name ($lvl)',// $no = [Hea01] $name =  Legendary Onyx Power Helmet of Slaughter <<< [url]...[/url] $lvl = show level required.
+template : '$no $name ($lvl)', // $no = [Hea01] $name =  Legendary Onyx Power Helmet of Slaughter <<< [url]...[/url] $lvl = show level required.
 
 minimize : false,
 scrollbar : true,
@@ -1155,7 +1154,7 @@ _in.genTemplate = function (e,no){
 	}
 
 	var vLvl = e.bound;
-	console.log(vLvl);
+	//console.log(vLvl);
 	if(e.unassigned === 'Unassigned'){
 		vLvl = 'Unassigned';
 	}else if(isNaN(vLvl)){
@@ -1179,14 +1178,19 @@ _in.template = function() {
 	iLig=1;
 	iHea=1;
 
+	var count = 0;
+
 	var rtOne = '',rtTwo = '',rtSta = '',rtShd = '',rtClo = '',rtLig = '',rtHea = '';
 
 	var eid, e;
 	var nDocument = window.open("", "List").document;
+	
 	nDocument.body.innerHTML = "";
     for (eid in _in.inv_equip) {
         e = _in.inv_equip[eid];
         if (!e.div.parentNode.classList.contains('hvut-hide') && e.checkbox.checked) {
+
+			count++;
             //_es.sell(eid);
 			//console.log(e.checkbox.checked+' eid:'+eid+' key:'+e.key);
 			//[Lig02] [url=http://hentaiverse.org/pages/showequip.php?eid=106237764&key=cfe29d35cf]Legendary [b]Agile[/b] Shade Boots of the Arcanist[/url]
@@ -1228,10 +1232,11 @@ _in.template = function() {
 	if(rtLig!=='') nDocument.body.appendChild(document.createElement("BR")); nDocument.body.appendChild(document.createElement("div")).innerHTML = rtLig;
 	if(rtHea!=='') nDocument.body.appendChild(document.createElement("BR")); nDocument.body.appendChild(document.createElement("div")).innerHTML = rtHea;
 	
-
+	nDocument.title = "Result [ "+count+" ]";
 };
 
 _in.equip = [];
+_in.equip_template = [];
 _in.real_names = {};
 _in.check_names = [];
 //var showx = true;
@@ -1272,7 +1277,8 @@ $qsa("#inv_equip > div").forEach(function(div){
 	e.sub = $element("div",e.div,[".hvut-bf"]);
 	e.checkbox = $element("input",e.sub,{type:"checkbox"});
 
-	_in.inv_equip[eq.eid] = e;
+	//_in.inv_equip[eq.eid] = e;
+	_in.equip_template.push(e);
 	
 	_in.equip.push(e);
 });
@@ -1341,6 +1347,46 @@ _in.equip.sort(function(a,b){
 
 	return r;
 });
+
+_in.equip_template.sort(function(a,b){
+	var sorter = settings.equipSorter;
+	if(a.category !== b.category) {
+		return sorter.category[a.category] - sorter.category[b.category];
+	} else if(a.category === "Obsolete") {
+		return a.name>b.name?1 : a.name<b.name?-1 : 0;
+	} else if(a.type !== b.type) {
+		return sorter.type[a.type] - sorter.type[b.type];
+	}
+
+	var by =
+		(a.category==="One-handed Weapon" || a.category==="Two-handed Weapon") ? ["suffix","quality","prefix"] :
+		a.category==="Staff" ? ["suffix","quality","prefix"] :
+		a.category==="Shield" ? ["quality","suffix","prefix"] :
+		a.type==="Phase" ? ["suffix","part","quality","prefix"] :
+		a.type==="Cotton" ? ["suffix","part","quality","prefix"] :
+							["part","quality","suffix","prefix"];
+
+	var r = 0;
+	by.some(function(e){
+		if(sorter.hasOwnProperty(e)) {
+			r = (sorter[e][a[e]]||99) - (sorter[e][b[e]]||99);
+		} else {
+			r = a[e]>b[e]?1 : a[e]<b[e]?-1 : 0
+		}
+
+		if(r) {
+			return true;
+		} else {
+			return false;
+		}
+	});
+
+	return r;
+});
+
+for(var j=0;j<_in.equip_template.length;j++){
+	_in.inv_equip[_in.equip_template[j].eid] = _in.equip_template[j];
+}
 
 
 _in.frag = $element();
@@ -4196,7 +4242,7 @@ _battle.load_equip = function(eq) {
 				}
 			}
 
-			console.log('vChkRateRP:'+vChkRateRP);
+			//console.log('vChkRateRP:'+vChkRateRP);
 		},
 		function(){
 			_battle.equip_fail(eq);
