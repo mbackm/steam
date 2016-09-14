@@ -1224,7 +1224,7 @@ _in.template = function() {
 _in.equip = [];
 _in.real_names = {};
 _in.check_names = [];
-
+//var showx = true;
 $qsa("#inv_equip > div").forEach(function(div){
 	var eq = equip_parser.div($qs(".eqdp",div));
 	if(eq.level === 10) {
@@ -1234,6 +1234,24 @@ $qsa("#inv_equip > div").forEach(function(div){
 			_in.check_names.push(eq);
 		}
 	}
+
+	/*
+	//http://hentaiverse.org/pages/showequip.php?eid=107705841&key=53f4e73a08
+	bound:397
+	category:"One-handed Weapon"
+	cdt:88.21362799263352
+	cdt1:479
+	cdt2:543
+	eid:"107705841"
+	key:"53f4e73a08"
+	level:0
+	name:"Legendary Fiery Axe of Slaughter"
+	price:null
+	pxp1:0
+	pxp2:357
+	soulbound:false
+	tradeable:true
+	*/
 
 	var e = equip_parser.name(eq.real_name || eq.name);
 	e.div = div;
