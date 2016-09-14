@@ -16,7 +16,7 @@
 // @icon 		http://g.e-hentai.org/favicon.ico
 // @updateURL       https://github.com/suvidev/hv/raw/master/HVUT_1.6.1_mod.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HVUT_1.6.1_mod.user.js
-// @version        1.6.1.0.17
+// @version        1.6.1.0.18
 // ==/UserScript==
 
 var settings = {
@@ -314,6 +314,7 @@ equip_parser.div = function(div) {
 		name : div.textContent.trim(),
 		category : exec[1],
 		bound : Number(exec[2]),
+		unassigned : typeof(exec[2])==='undefined'?'soulbound':exec[2],
 		tradeable : exec[3]==="Tradeable",
 		soulbound : exec[3]==="Soulbound",
 		cdt : exec[4]*100/exec[5],
@@ -1152,8 +1153,16 @@ _in.genTemplate = function (e,no){
 			sNo = '[Hea'+no+']';
 			break;
 	}
+
+	var vLvl = e.bound;
+	console.log(vLvl);
+	if(e.unassigned === 'Unassigned'){
+		vLvl = 'Unassigned';
+	}else if(isNaN(vLvl)){
+		vLvl = '[b][color=red]Soulbound[/color][/b]';
+	}
 	
-	return output.replace('$name',sName).replace('$no',sNo).replace('$lvl',e.bound)+'<br/>';
+	return output.replace('$name',sName).replace('$no',sNo).replace('$lvl',vLvl)+'<br/>';
 	
 }
 
@@ -1259,6 +1268,7 @@ $qsa("#inv_equip > div").forEach(function(div){
 	e.key = eq.key;
 	e.eid = eq.eid;
 	e.bound = eq.bound;
+	e.unassigned = eq.unassigned;
 	e.sub = $element("div",e.div,[".hvut-bf"]);
 	e.checkbox = $element("input",e.sub,{type:"checkbox"});
 
