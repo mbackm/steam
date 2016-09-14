@@ -16,12 +16,12 @@
 // @icon 		http://g.e-hentai.org/favicon.ico
 // @updateURL       https://github.com/suvidev/hv/raw/master/HVUT_1.6.1_mod.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HVUT_1.6.1_mod.user.js
-// @version        1.6.1.0.14
+// @version        1.6.1.0.15
 // ==/UserScript==
 
 var settings = {
 
-template : '$no $name',// $no = [Hea01] $name =  Legendary Onyx Power Helmet of Slaughter <<< [url]...[/url]
+template : '$no $name ($lvl)',// $no = [Hea01] $name =  Legendary Onyx Power Helmet of Slaughter <<< [url]...[/url]
 
 minimize : false,
 scrollbar : true,
@@ -1091,6 +1091,8 @@ function getBold(txt){
 }
 
 _in.genTemplate = function (e,no){
+
+	//console.log(e);
 	
 	var output = settings.template;
 
@@ -1150,7 +1152,7 @@ _in.genTemplate = function (e,no){
 			break;
 	}
 	
-	return output.replace('$name',sName).replace('$no',sNo)+'<br/>';
+	return output.replace('$name',sName).replace('$no',sNo).replace('$lvl',e.bound)+'<br/>';
 	
 }
 
@@ -1237,6 +1239,7 @@ $qsa("#inv_equip > div").forEach(function(div){
 	e.div = div;
 	e.key = eq.key;
 	e.eid = eq.eid;
+	e.bound = eq.bound;
 	e.sub = $element("div",e.div,[".hvut-bf"]);
 	e.checkbox = $element("input",e.sub,{type:"checkbox"});
 
