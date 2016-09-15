@@ -6,7 +6,7 @@
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
-// @version     1.3.3.74
+// @version     1.3.3.75
 // @grant       none
 // ==/UserScript==
 // Vanilla Reloader:
@@ -43,7 +43,9 @@ var settings = {
     showStopStartButtonMainPage: true, // Show Stop Start button on Main Page
     showBarListBattleItems: false, //#2/4# Show list battle items
     trackDrop: false, //#3/4# Track item drop
-    trackBattleStatEX: true, //#3.1/4# Track item drop
+    trackBattleStatEX: true, //#3.1/4# track battale stat ex
+		trackBattleStatEX_history: true, //#3.2/4# track battale stat ex history
+		trackBattleStatEX_count: 4, //#3.3/4# track battale stat ex count of reset keep history per end of rounds
     enableCheckPony: true, // enable check alert pony
     stopPlayAfterAutoAnswerPony: true, // stop bot after auto answer pony
     enableOfflineSong: true, // enable offline song
@@ -1574,6 +1576,7 @@ function OnPageReload() {
 			if (document.getElementById("togpane_log")){
 				if(localStorage.getItem("BattleStateExReset") === "true"){
 					localStorage.setItem("BattleStateEx", JSON.stringify(data));
+					localStorage.setItem("BattleStateExHistorySave", true);
 				}
 			}
 
@@ -1889,6 +1892,75 @@ function OnPageReload() {
 				//while (vCredits != (vCredits = vCredits.replace(/^(\d+)(\d{3})/, '$1,$2')));
 
 				button.innerHTML = "<b>[Summary]</b> "+data.Rounds+" Rounds / " +data.turn.formatMoney(0, '.', ',') + " turns / " + timeValue  + " (" + (tPers).toFixed(2) + " t/s) / EXP: "+vEXP.formatMoney(0, '.', ',')+" / Credits: "+vCredits.formatMoney(0, '.', ',')+" / Pony: "+data.Ponys;
+				
+				if(settings.trackBattleStatEX_history){
+					var listKeep = ['1000','150','125','110','100','90','80','75','70','65','60','55','1'];
+					var listKindex = listKeep.indexOf(data.Rounds.split(' / ')[0]);
+					var listBTJson = {};
+					if(localStorage.getItem("listBTJson")) listBTJson = JSON.parse(localStorage.getItem("listBTJson"));
+
+					if(listKindex !== -1 && localStorage.getItem("BattleStateExHistorySave") === "true"){
+
+						if(typeof(listBTJson[listKeep[listKindex]+"_index"]) === 'undefined') listBTJson[listKeep[listKindex]+"_index"]= -1;
+
+						var lIndex = listBTJson[listKeep[listKindex]+"_index"];
+						if(lIndex === settings.trackBattleStatEX_count){
+							lIndex = 0;
+						}else{
+							lIndex++;
+						}
+
+						var keepTxt = "<b>"+getNowFormat()+"</b><br/>"+ dmg.innerHTML+"<br/>"+atk.innerHTML+"<br/>"+item.innerHTML+"<br/>"+skill.innerHTML+"<br/>"+button.innerHTML;
+
+
+
+						listBTJson[listKeep[listKindex]+'_'+lIndex] = keepTxt;
+
+						localStorage.setItem("listBTJson", JSON.stringify(listBTJson));
+						localStorage.setItem("BattleStateExHistorySave", false);
+					}
+
+					if(localStorage.getItem("listBTJson")){
+
+						if(localStorage.getItem("listBTJson")) listBTJson = JSON.parse(localStorage.getItem("listBTJson"));
+
+						//display:block !important; color:#fff; background-color:#600; cursor:pointer
+						var vDiv = document.createElement("div");
+						vDiv.style.display = "block !importan";
+						vDiv.style.color = "#fff";
+						vDiv.style.width = "5%";
+						vDiv.style.textAlign = "center";
+						vDiv.style.backgroundColor = "#600";
+						vDiv.style.cursor = "pointer";
+						vDiv.appendChild(document.createTextNode("History"));
+						vDiv.addEventListener('click', function() {
+
+							var nDocument = window.open("", "List").document;
+							nDocument.body.innerHTML = "";
+							nDocument.title = "Battle stats History";
+
+							for(var i=0;i<listKeep.length;i++){
+								var genHR = false;
+								for(var j=0;j<settings.trackBattleStatEX_count;j++){
+									if(typeof(listBTJson[listKeep[i]+'_'+j]) !== 'undefined'){
+										nDocument.body.appendChild(document.createElement("BR"));
+										nDocument.body.appendChild(document.createElement("div")).innerHTML = listBTJson[listKeep[i]+'_'+j];
+										genHR = true;
+									}else{
+										break;
+									}
+								}
+								
+								if(genHR) nDocument.body.appendChild(document.createElement("HR"));
+
+							}
+
+						});
+
+						button.appendChild(vDiv);
+
+					}
+				}
 
 			}
 
@@ -5787,10 +5859,28 @@ function showStopStartMainPage() {
 
 
 /*============ SHOW Battle stat EX ======*/
+function getNowFormat(){
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var hh = today.getHours();
+    var mmin = today.getMinutes();
+
+    var yyyy = today.getFullYear();
+
+    if(dd<10) dd='0'+dd;
+    if(mm<10) mm='0'+mm;
+	if(hh<10) hh='0'+hh;
+	if(mmin<10) mmin='0'+mmin;
+
+    var today = dd+'/'+mm+'/'+yyyy+'  '+hh+':'+mmin;
+
+    return today;
+}
 
 // display
 function show(){
-	console.log('x');
+	var data = {last:0, count:0, total:0, countATK:0, totalATK:0, turn:0, beginTime: Date.now(), lastTime: 0, EXP: 0,Credits: 0,Rounds: '0/0',Ponys: 0};
 	var load = localStorage.getItem("BattleStateEx");
     if (load) data = JSON.parse(load);
 
