@@ -8,8 +8,8 @@
 // @version      0.0.1.20150706005638
 // @namespace    https://greasyfork.org/users/2233
 // @icon 		http://g.e-hentai.org/favicon.ico
-// @updateURL       https://github.com/suvidev
-// @downloadURL     https://github.com/su
+// @updateURL       https://github.com/suvidev/hv/raw/master/HV_open_moogleMail.user.js
+// @downloadURL     https://github.com/suvidev/hv/raw/master/HV_open_moogleMail.user.js
 // @description Open MM in a new tab. Automatically recall MM. Automatically take attachments.
 // ==/UserScript==
 
