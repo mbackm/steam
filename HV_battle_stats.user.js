@@ -156,7 +156,7 @@ function main(){
 
             //								["You crit Memorabilia Of Darksage for 9274 void damage", "You", "crit", "Memorabilia Of Darksage", "9274", "void damage"]
             // attack					   //.match(/you for (\d+) (\w+) damage/);
-            d = tr[i].children[2].textContent.match(/([\w\W ]*) (crit|hit|hits|crits) ([\w\W ]*) for (\d*) ([\w\W ]*)/);
+            d = tr[i].children[2].textContent.match(/([\w\W ]*) (crit|hit|blast|hits|crits|blasts) ([\w\W ]*) for (\d*) ([\w\W ]*)/);
             if (d){
                 var tagLL = "@";
 
