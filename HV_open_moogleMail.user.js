@@ -5,7 +5,7 @@
 // @include     http://hentaiverse.org/?s=Bazaar&ss=mm&filter=inbox*
 // @include     http://hentaiverse.org/?s=Bazaar&ss=mm&filter=read*
 // @include     http://hentaiverse.org/?s=Bazaar&ss=mm&filter=sent*
-// @version      0.0.1.20150706005638
+// @version      0.0.1.20150706005639
 // @namespace    https://greasyfork.org/users/2233
 // @icon 		http://g.e-hentai.org/favicon.ico
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_open_moogleMail.user.js
@@ -17,7 +17,7 @@
 
 var auto_take_attachment = true;
 var auto_recall = false; // only used in the sentbox
-var auto_close_mail_without_attachment = false;
+var auto_close_mail_without_attachment = true;
 
 /*** End of Settings ***/
 
@@ -39,9 +39,10 @@ for(var i=0, len=letters.length; i<len; i++) {
         else if(/&filter=sent/.test(href)) { url = 'http://hentaiverse.org/?s=Bazaar&ss=mm&filter=sent&mid='; }
         url += letters[i].onclick.toString().match(/&?\bmid=(\d+)/)[1];
         letters[i].onclick = function() {
-            /*if(typeof GM_openInTab != 'undefined') { GM_openInTab(url, true);  }
-            else { window.open(url, '_blank'); }*/
+            if(typeof GM_openInTab != 'undefined') { GM_openInTab(url, true);  }
+            else { window.open(url, '_blank'); }
 
+			/*
 			if(typeof GM_openInTab != 'undefined'){
 				vDocOpen = GM_openInTab(url, true);
 				if(autoClose) setTimeout(function() { vDocOpen.close(); }, (3*1000));
@@ -49,6 +50,9 @@ for(var i=0, len=letters.length; i<len; i++) {
 				vDocOpen = window.open(url, '_blank');
 				if(autoClose) setTimeout(function() { vDocOpen.close(); }, (3*1000));
 			}
+			*/
+
+
         };
     })();
 }
@@ -76,8 +80,15 @@ if(auto_take_attachment) {
 if(auto_close_mail_without_attachment) {
     if(/&?\bmid=/.test(href)) {
         if(!$('img[src="/y/mooglemail/recallmail.png"]') && !$('img[src="/y/mooglemail/takeattacheditem.png"]') && $('img[src="/y/mooglemail/closemail.png"]')) {
-            if(typeof unsafeWindow != 'undefined') { unsafeWindow.close(); }
+            
+
+			if(typeof unsafeWindow != 'undefined') { unsafeWindow.close(); }
             else { window.close(); }
+			
+
+			window.location.href = window.location.href;
+			
+
         }
     }
 }
