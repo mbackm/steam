@@ -6,7 +6,7 @@
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
-// @version     1.3.3.78
+// @version     1.3.3.79
 // @grant       none
 // ==/UserScript==
 // Vanilla Reloader:
@@ -5987,11 +5987,9 @@ function show(){
 			if(typeof(listBTJson[listKeep[listKindex]+"_index"]) === 'undefined') listBTJson[listKeep[listKindex]+"_index"]= -1;
 
 			var lIndex = listBTJson[listKeep[listKindex]+"_index"];
-			if(lIndex === settings.trackBattleStatEX_count){
-				lIndex = 0;
-			}else{
-				lIndex++;
-			}
+			if(lIndex >= settings.trackBattleStatEX_count) lIndex = -1;
+			
+			lIndex++;
 
 			listBTJson[listKeep[listKindex]+"_index"]= lIndex;
 
@@ -6029,7 +6027,7 @@ function show(){
 
 				for(var i=0;i<listKeep.length;i++){
 					var genHR = false;
-					for(var j=0;j<settings.trackBattleStatEX_count;j++){
+					for(var j=0;j<=settings.trackBattleStatEX_count;j++){
 						if(typeof(listBTJson[listKeep[i]+'_'+j]) !== 'undefined'){
 							nDocument.body.appendChild(document.createElement("BR"));
 							nDocument.body.appendChild(document.createElement("div")).innerHTML = listBTJson[listKeep[i]+'_'+j];
