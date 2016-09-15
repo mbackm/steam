@@ -1815,6 +1815,20 @@ function OnPageReload() {
 							case "hit":
 								tagLL = "@Hit";
 								break;
+							case "blasts":
+								if(d[1].startsWith('Your')){
+									tagLL = "@" + (d[1].substring(5));
+								}else{
+									tagLL = "@" + (d[1]);
+								}
+								break;
+							case "blast":
+								if(d[1].startsWith('Your')){
+									tagLL = "@" + (d[1].substring(5));
+								}else{
+									tagLL = "@" + (d[1]);
+								}
+								break;
 						}
 
 						var tag = tagLL;//"@" + (d[1]+'_'+d[2]);
