@@ -6,7 +6,7 @@
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
-// @version     1.3.3.76
+// @version     1.3.3.77
 // @grant       none
 // ==/UserScript==
 // Vanilla Reloader:
@@ -1691,7 +1691,7 @@ function OnPageReload() {
 
 					//								["You crit Memorabilia Of Darksage for 9274 void damage", "You", "crit", "Memorabilia Of Darksage", "9274", "void damage"]
 					// attack					   //.match(/you for (\d+) (\w+) damage/);
-					d = tr[i].children[2].textContent.match(/([\w\W ]*) (crit|hit|hits|crits) ([\w\W ]*) for (\d*) ([\w\W ]*)/);
+					d = tr[i].children[2].textContent.match(/([\w\W ]*) (crit|hit|blast|hits|crits|blasts) ([\w\W ]*) for (\d*) ([\w\W ]*)/);
 					if (d){
 						var tagLL = "@";
 
@@ -6009,6 +6009,9 @@ function show(){
 				var nDocument = window.open("", "List").document;
 				nDocument.body.innerHTML = "";
 				nDocument.title = "Battle stats History";
+				nDocument.body.style.fontSize = '10pt';
+				nDocument.body.style.fontFamily = 'arial,helvetica,sans-serif';
+				nDocument.body.style.color = '#5C0D11';
 
 				for(var i=0;i<listKeep.length;i++){
 					var genHR = false;
