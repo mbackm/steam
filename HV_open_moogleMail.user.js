@@ -5,7 +5,7 @@
 // @include     http://hentaiverse.org/?s=Bazaar&ss=mm&filter=inbox*
 // @include     http://hentaiverse.org/?s=Bazaar&ss=mm&filter=read*
 // @include     http://hentaiverse.org/?s=Bazaar&ss=mm&filter=sent*
-// @version      0.0.1.20150706005639
+// @version      0.0.1.20150706005640
 // @namespace    https://greasyfork.org/users/2233
 // @icon 		http://g.e-hentai.org/favicon.ico
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_open_moogleMail.user.js
@@ -85,8 +85,8 @@ if(auto_close_mail_without_attachment) {
 			if(typeof unsafeWindow != 'undefined') { unsafeWindow.close(); }
             else { window.close(); }
 			
-
-			window.location.href = window.location.href;
+			setTimeout(function() { window.location.href = window.location.href; }, (3*1000));
+			
 			
 
         }
