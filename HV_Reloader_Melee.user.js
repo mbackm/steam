@@ -3,7 +3,7 @@
 // @namespace   HVRLD3
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @include		/^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version		2.0.0.73
+// @version		2.0.0.74
 // @updateURL      https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @downloadURL    https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @run-at      document-end
@@ -1790,7 +1790,7 @@ function OnPageReload() {
 
 					//								["You crit Memorabilia Of Darksage for 9274 void damage", "You", "crit", "Memorabilia Of Darksage", "9274", "void damage"]
 					// attack					   //.match(/you for (\d+) (\w+) damage/);
-					d = tr[i].children[2].textContent.match(/([\w\W ]*) (crit|hit|hits|crits) ([\w\W ]*) for (\d*) ([\w\W ]*)/);
+					d = tr[i].children[2].textContent.match(/([\w\W ]*) (crit|hit|blast|hits|crits|blasts) ([\w\W ]*) for (\d*) ([\w\W ]*)/);
 					if (d){
 						var tagLL = "@";
 
@@ -6615,6 +6615,9 @@ function show(){
 				var nDocument = window.open("", "List").document;
 				nDocument.body.innerHTML = "";
 				nDocument.title = "Battle stats History";
+				nDocument.body.style.fontSize = '10pt';
+				nDocument.body.style.fontFamily = 'arial,helvetica,sans-serif';
+				nDocument.body.style.color = '#5C0D11';
 
 				for(var i=0;i<listKeep.length;i++){
 					var genHR = false;
