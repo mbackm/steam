@@ -3,7 +3,7 @@
 // @namespace    ??-??
 // @updateURL       https://github.com/suvidev/hv/raw/master/THV_Difficulty_change.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/THV_Difficulty_change.user.js
-// @version      0.1
+// @version      0.2
 // @description  ??-??
 // @author       ??-??
 // @match        http://hentaiverse.org/*
@@ -11,6 +11,8 @@
 // ==/UserScript==
 
 (function() {
+
+	var showCalculatorStat = true;
 
 
     var GBGM_KEY = "THDC_";
@@ -52,6 +54,31 @@
             if (pair[0] == variable) {
                 return pair[1];
             }
+        }
+    }
+
+	function showTotalStat(){
+        //document.getElementById('pattrform').querySelectorAll('table tbody tr')[0].querySelectorAll('div.fd4 div')
+
+        if(document.getElementById('pattrform')){
+            var tttList = document.getElementById('pattrform').querySelectorAll('table tbody tr');
+
+            for(tti = 0;tti<(tttList.length-1);tti++){
+                var tqqall = tttList[tti].querySelectorAll('div.fd4 div');
+                var sum = 0;
+
+                var stat1 = tqqall[1].textContent.replace('+','');
+                var stat2 = tqqall[2].textContent.replace('+','');
+                var stat3 = tqqall[3].textContent.replace('+','');
+
+                sum = parseInt(stat1) + parseInt(stat2) + parseInt(stat3);
+
+
+                tqqall[0].textContent = '[ '+sum+' ] .. '+tqqall[0].textContent;
+
+                //console.log('sum = '+sum);
+            }
+
         }
     }
 
@@ -188,6 +215,14 @@
 
             document.body.appendChild(divPSX);
 
+        }
+
+		if(document.getElementById('pattrform')){
+            if(document.getElementById('pattrform').querySelector('div.fd4 div')){
+                if(document.getElementById('pattrform').querySelector('div.fd4 div').textContent === 'Strength'){
+                    showTotalStat();
+                }
+            }
         }
     }
 
