@@ -6,7 +6,7 @@
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
-// @version     1.3.3.77
+// @version     1.3.3.78
 // @grant       none
 // ==/UserScript==
 // Vanilla Reloader:
@@ -1715,6 +1715,20 @@ function OnPageReload() {
 								break;
 							case "hit":
 								tagLL = "@Hit";
+								break;
+							case "blasts":
+								if(d[1].startsWith('Your')){
+									tagLL = "@" + (d[1].substring(5));
+								}else{
+									tagLL = "@" + (d[1]);
+								}
+								break;
+							case "blast":
+								if(d[1].startsWith('Your')){
+									tagLL = "@" + (d[1].substring(5));
+								}else{
+									tagLL = "@" + (d[1]);
+								}
 								break;
 						}
 
