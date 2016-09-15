@@ -8,7 +8,7 @@
 // @match        http://hentaiverse.org/?s=Character&ss=it
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_items_stamp.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_items_stamp.user.js
-// @version      0.3
+// @version      0.4
 // @grant        none
 // ==/UserScript==
 
@@ -143,7 +143,10 @@ function showStampItem(){
                // GM_setValue(strArray[0],strArray[1]);
                 var nowVl = parseInt(itemListx[i].querySelectorAll('div.fd2')[1].children[0].textContent);
                // console.log('1 = '+itemListx[i].querySelectorAll('div.fd2')[0].children[0].textContent);
-                 var oldVl = gbStampData[itemListx[i].querySelectorAll('div.fd2')[0].children[0].textContent];// GM_getValue(itemListx[i].querySelectorAll('div.fd2')[0].children[0].textContent);
+                var oldVl = gbStampData[itemListx[i].querySelectorAll('div.fd2')[0].children[0].textContent];// GM_getValue(itemListx[i].querySelectorAll('div.fd2')[0].children[0].textContent);
+				 
+				if(isNaN(oldVl)){ gbStampData[itemListx[i].querySelectorAll('div.fd2')[0].children[0].textContent] = nowVl; oldVl=0; GM_setValue("gbStampData",JSON.stringify(gbStampData));}
+
                 var sumTotalVL = nowVl-oldVl;
                 if(sumTotalVL < 0){
                     itemListx[i].querySelectorAll('div.fd2')[1].children[0].style.color = '#DA0000';
