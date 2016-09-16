@@ -6,7 +6,7 @@
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
-// @version     1.3.3.82
+// @version     1.3.3.83
 // @grant       none
 // ==/UserScript==
 // Vanilla Reloader:
@@ -536,15 +536,22 @@ function initialPageLoad() {
     if (settings.roundCounter) {
         (function() {
             var logs = document.querySelector('#togpane_log tr:nth-last-child(2)').textContent;
-            if (/Round/.test(logs)) {
-                var round = logs.match(/Round ([\d\s\/]+)/)[1];
-                localStorage.setItem('rounds', round);
-            } else if (/random encounter/.test(logs)) {
-                var round = '1 / 1';
-                localStorage.setItem('rounds', round);
-            } else {
-                var round = localStorage.getItem('rounds') || undefined;
-            }
+            var round = '';
+			try {
+
+				if (/\(Round/.test(logs)) {
+					round = logs.match(/Round ([\d\s\/]+)/)[1];
+					localStorage.setItem('rounds', round);
+				} else if (/random encounter/.test(logs)) {
+					round = '1 / 1';
+					localStorage.setItem('rounds', round);
+				} else {
+					round = localStorage.getItem('rounds') || undefined;
+				}
+			}
+			catch(err) {
+				round = localStorage.getItem('rounds') || undefined;
+			}
 
             // Change page title to "HV"
             document.title = '' + localStorage.getItem('rounds') + ' [THV]';
@@ -1638,12 +1645,18 @@ function OnPageReload() {
 				data.turn++;
 
 				var logs = document.querySelector('#togpane_log tr:nth-last-child(2)').textContent;
-				if (/Round/.test(logs)) {
-					var round = logs.match(/Round ([\d\s\/]+)/)[1];
-					data.Rounds = round;
-				} else if (/random encounter/.test(logs)) {
-					var round = '1 / 1';
-					data.Rounds = round;
+				var round = '';
+				try {
+					if (/\(Round/.test(logs)) {
+						round = logs.match(/Round ([\d\s\/]+)/)[1];
+						data.Rounds = round;
+					} else if (/random encounter/.test(logs)) {
+						round = '1 / 1';
+						data.Rounds = round;
+					}
+				}
+				catch(err) {
+					round = localStorage.getItem('rounds') || undefined;
 				}
 
 				for (var i=0; i<tr.length && tr[i].children[0].textContent==last; i++){
