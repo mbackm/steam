@@ -3243,7 +3243,7 @@ function OnPageReload() {
                             monForMage = chooseTargetForMAGE();
                         }
 
-                        var spell_list = ['ragnarok', 'disintegrate', 'corruption']; // selectSpellWithMonEff(monForMage);
+                        var spell_list = ['disintegrate', 'ragnarok', 'corruption']; //['ragnarok', 'disintegrate', 'corruption']; // selectSpellWithMonEff(monForMage);
 
                         //Fight normal
 
