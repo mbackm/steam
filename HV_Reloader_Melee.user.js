@@ -1949,7 +1949,7 @@ function OnPageReload() {
 						var tgLog = document.getElementById("leftpane");
 						div.style.position = "relative";
 						div.style.width = "669px";
-						div.style.height = "124px";
+						div.style.height = "134px";
 						div.style.clear = "both";
 						div.style.textAlign = "justify";
 						div.style.overflow = "auto";
@@ -1972,15 +1972,15 @@ function OnPageReload() {
 				var vAvg = Math.floor(data.total / data.count);
 				//while (vAvg != (vAvg = vAvg.replace(/^(\d+)(\d{3})/, '$1,$2')));
 
-				var avg = "Average: " + vAvg.formatMoney(0, '.', ',') + " / ";
-				var str1 = "<b>[Damage]</b> " + avg + extData(data, "#", true, 1);
+				var avg = "Avg: " + vAvg.formatMoney(0, '.', ',') + " / ";
+				var str1 = "<b>[Dmg]</b> " + avg + extData(data, "#", true, 1);
 				dmg.innerHTML = str1;
 
 				var vAvgAtk = Math.floor(data.totalATK / data.countATK);
 				//while (vAvgAtk != (vAvgAtk = vAvgAtk.replace(/^(\d+)(\d{3})/, '$1,$2')));
 
-				var avgAtk = "Average: " + vAvgAtk.formatMoney(0, '.', ',') + " / ";
-				var strAtk = "<b>[Attack]</b> " + avgAtk + extData(data, "@", true, 0);
+				var avgAtk = "Avg: " + vAvgAtk.formatMoney(0, '.', ',') + " / ";
+				var strAtk = "<b>[Atk]</b> " + avgAtk + extData(data, "@", true, 0);
 				atk.innerHTML = strAtk;
 
 				var str2 = "<b>[Used Item]</b> " + extData(data, "$");
@@ -6536,7 +6536,7 @@ function show(){
 			var tgLog = document.getElementById("leftpane");
 			div.style.position = "relative";
 			div.style.width = "669px";
-			div.style.height = "124px";
+			div.style.height = "134px";
 			div.style.clear = "both";
 			div.style.textAlign = "justify";
 			div.style.overflow = "auto";
@@ -6559,15 +6559,15 @@ function show(){
 	var vAvg = Math.floor(data.total / data.count);
 	//while (vAvg != (vAvg = vAvg.replace(/^(\d+)(\d{3})/, '$1,$2')));
 
-	var avg = "Average: " + vAvg.formatMoney(0, '.', ',') + " / ";
-	var str1 = "<b>[Damage]</b> " + avg + extData(data, "#", true, 1);
+	var avg = "Avg: " + vAvg.formatMoney(0, '.', ',') + " / ";
+	var str1 = "<b>[Dmg]</b> " + avg + extData(data, "#", true, 1);
 	dmg.innerHTML = str1;
 
 	var vAvgAtk = Math.floor(data.totalATK / data.countATK);
 	//while (vAvgAtk != (vAvgAtk = vAvgAtk.replace(/^(\d+)(\d{3})/, '$1,$2')));
 
-	var avgAtk = "Average: " + vAvgAtk.formatMoney(0, '.', ',') + " / ";
-	var strAtk = "<b>[Attack]</b> " + avgAtk + extData(data, "@", true, 0);
+	var avgAtk = "Avg: " + vAvgAtk.formatMoney(0, '.', ',') + " / ";
+	var strAtk = "<b>[Atk]</b> " + avgAtk + extData(data, "@", true, 0);
 	atk.innerHTML = strAtk;
 
 	var str2 = "<b>[Used Item]</b> " + extData(data, "$");
