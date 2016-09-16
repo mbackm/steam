@@ -6,7 +6,7 @@
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
-// @version     1.3.3.79
+// @version     1.3.3.80
 // @grant       none
 // ==/UserScript==
 // Vanilla Reloader:
@@ -1879,7 +1879,7 @@ function OnPageReload() {
 				//while (vAvgAtk != (vAvgAtk = vAvgAtk.replace(/^(\d+)(\d{3})/, '$1,$2')));
 
 				var avgAtk = "Average: " + vAvgAtk.formatMoney(0, '.', ',') + " / ";
-				var strAtk = "<b>[Attack]</b> " + avgAtk + extData("@", true, 0);
+				var strAtk = "<b>[Attack]</b> " + avgAtk + extData(data, "@", true, 0);
 				atk.innerHTML = strAtk;
 
 				var str2 = "<b>[Used Item]</b> " + extData(data, "$");
