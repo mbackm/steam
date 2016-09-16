@@ -3,7 +3,7 @@
 // @namespace   HVRLD3
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @include		/^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version		2.0.0.74
+// @version		2.0.0.75
 // @updateURL      https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @downloadURL    https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @run-at      document-end
@@ -1978,7 +1978,7 @@ function OnPageReload() {
 				//while (vAvgAtk != (vAvgAtk = vAvgAtk.replace(/^(\d+)(\d{3})/, '$1,$2')));
 
 				var avgAtk = "Average: " + vAvgAtk.formatMoney(0, '.', ',') + " / ";
-				var strAtk = "<b>[Attack]</b> " + avgAtk + extData("@", true, 0);
+				var strAtk = "<b>[Attack]</b> " + avgAtk + extData(data, "@", true, 0);
 				atk.innerHTML = strAtk;
 
 				var str2 = "<b>[Used Item]</b> " + extData(data, "$");
