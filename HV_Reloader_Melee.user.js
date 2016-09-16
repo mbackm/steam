@@ -3,7 +3,7 @@
 // @namespace   HVRLD3
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @include		/^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version		2.0.0.76
+// @version		2.0.0.77
 // @updateURL      https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @downloadURL    https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @run-at      document-end
@@ -217,9 +217,11 @@ function extData(data, sign, per, type){
 			d[0] = key, d[1] = data[key], d[2] = "";
 			if (per) {
 				if(type === 1){
-					d[1] = Math.floor(d[1] / data.total * 100) * 1;
+					//d[1] = Math.floor(d[1] / data.total * 100) * 1;
+					d[1] = (d[1] / data.total * 100).toFixed(2) *1;
 				}else{
-					d[1] = Math.floor(d[1] / data.totalATK * 100) * 1;
+					//d[1] = Math.floor(d[1] / data.totalATK * 100) * 1;
+					d[1] = (d[1] / data.totalATK * 100).toFixed(2) *1;
 				}
 				d[2] = "%";
 			}
@@ -1729,7 +1731,7 @@ function OnPageReload() {
 			function battle(){
 				var tr = document.body.querySelectorAll("#togpane_log tr");
 				var last = tr[0].children[0].textContent;
-				if (last == data.last) return;
+				if ((last+'') === (data.last+'') || (last+'') === '0') return;
 				data.last = last;
 
 				data.turn++;
