@@ -3,7 +3,7 @@
 // @namespace   HVRLD3
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @include		/^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version		2.0.0.75
+// @version		2.0.0.76
 // @updateURL      https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @downloadURL    https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @run-at      document-end
@@ -5779,6 +5779,17 @@ if (settings.enableCheckPony) {
         if (GM_getValue('detailLogs')) {
             addDataToJson('** Found Pony **', 1, 'blue');
         }
+
+		if(settings.trackBattleStatEX){
+
+			var data = {last:0, count:0, total:0, countATK:0, totalATK:0, turn:0, beginTime: Date.now(), lastTime: 0, EXP: 0,Credits: 0,Rounds: 0,Ponys: 0};
+			var load = localStorage.getItem("BattleStateEx");
+			if (load) data = JSON.parse(load);
+
+			data.Ponys = (data.Ponys*1)+1;
+			localStorage.setItem("BattleStateEx", JSON.stringify(data));
+
+		}
 
         if (document.getElementById('monsterpane') !== null) {
             if (document.getElementById('monsterpane').innerHTML.indexOf('Choose the right answer based on the image below.') !== -1) {
