@@ -6,7 +6,7 @@
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
-// @version     1.3.3.85
+// @version     1.3.3.86
 // @grant       none
 // ==/UserScript==
 // Vanilla Reloader:
@@ -3749,7 +3749,7 @@ function OnPageReload() {
                 }
 
 
-                if ((getSelfHealth() < lowerHPAlert || getSelfSpirit() < SP_ITEM_E_CUTOFF) && (!isSOL || isHaveCloakOfTheFallen)) {
+                if ((getSelfHealth() < lowerHPAlert || (getSelfSpirit() < SP_ITEM_E_CUTOFF || (isHaveCloakOfTheFallen && getSelfSpirit() < SP_ITEM_P_CUTOFF ) )) && (!isSOL || isHaveCloakOfTheFallen)) {
                     if (ENABALE_LE_POTION) {
                         var indexItemLE = nextItem('Last Elixir');
                         if (indexItemLE !== -1) {
