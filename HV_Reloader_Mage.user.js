@@ -6,7 +6,7 @@
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
-// @version     1.3.3.80
+// @version     1.3.3.81
 // @grant       none
 // ==/UserScript==
 // Vanilla Reloader:
@@ -5173,6 +5173,17 @@ if (settings.enableCheckPony) {
         if (GM_getValue('detailLogs')) {
             addDataToJson('** Found Pony **', 1, 'blue');
         }
+
+		if(settings.trackBattleStatEX){
+
+			var data = {last:0, count:0, total:0, countATK:0, totalATK:0, turn:0, beginTime: Date.now(), lastTime: 0, EXP: 0,Credits: 0,Rounds: 0,Ponys: 0};
+			var load = localStorage.getItem("BattleStateEx");
+			if (load) data = JSON.parse(load);
+
+			data.Ponys = (data.Ponys*1)+1;
+			localStorage.setItem("BattleStateEx", JSON.stringify(data));
+
+		}
 
         if (settings.enablePopupAlert) {
             //window.open('http://danbooru.donmai.us/data/__kagamine_rin_aku_no_musume_vocaloid_evillious_nendaiki_and_vocaloid_drawn_by_chino_machiko__2638ce4e7c84eaa85040bcc3173bf42f.png', '_blank');
