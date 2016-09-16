@@ -8,7 +8,7 @@
 // @match        http://hentaiverse.org/?s=Character&ss=it
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_items_stamp.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_items_stamp.user.js
-// @version      0.4
+// @version      0.5
 // @grant        none
 // ==/UserScript==
 
@@ -85,12 +85,12 @@ function getDDtoday(){
     var mmin = today.getMinutes();
 
     var yyyy = today.getFullYear();
-    if(dd<10){
-        dd='0'+dd;
-    }
-    if(mm<10){
-        mm='0'+mm;
-    }
+
+    if(dd<10) dd='0'+dd;
+    if(mm<10) mm='0'+mm;
+	if(hh<10) hh='0'+hh;
+	if(mmin<10) mmin='0'+mmin;
+
     var today = dd+'/'+mm+'/'+yyyy+'  '+hh+':'+mmin;
 
     return today;
