@@ -6256,7 +6256,7 @@ function show(){
 
 				var kTable = buildHtmlTable(mainJson.sort(axeccp));
 				TrackDropHtml = '<div><table style="display:none;font-size: 10pt;font-family: arial, helvetica, sans-serif;border: solid 1px;" id="'+listKeep[listKindex]+'_'+lIndex+'"> '+kTable.innerHTML+' </table></div>';
-				var SHH = '<div style=\' background: #ffdf65;    width: 58px;    font-size: 10pt;    font-family: arial, helvetica, sans-serif;    cursor: pointer;    color: rgb(92, 13, 17);\' onclick="if(document.getElementById(\''+listKeep[listKindex]+'_'+lIndex+'\').style.display ===\'none\'){document.getElementById(\''+listKeep[listKindex]+'_'+lIndex+'\').style.display = \'block\';}else{document.getElementById(\''+listKeep[listKindex]+'_'+lIndex+'\').style.display = \'none\';}">DISPLAY</div>';
+				var SHH = '<div style=\' background: #ffdf65;    width: 68px;    font-size: 10pt;    font-family: arial, helvetica, sans-serif;    cursor: pointer;    color: rgb(92, 13, 17);\' onclick="if(document.getElementById(\''+listKeep[listKindex]+'_'+lIndex+'\').style.display ===\'none\'){document.getElementById(\''+listKeep[listKindex]+'_'+lIndex+'\').style.display = \'block\';}else{document.getElementById(\''+listKeep[listKindex]+'_'+lIndex+'\').style.display = \'none\';}">Drop Items</div>';
 
 				TrackDropHtml = SHH + TrackDropHtml;
 				keepTxt = keepTxt + "<br/>"+TrackDropHtml;
