@@ -6,7 +6,7 @@
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
-// @version     1.3.3.86
+// @version     1.3.3.87
 // @grant       none
 // ==/UserScript==
 // Vanilla Reloader:
@@ -47,7 +47,8 @@ var settings = {
     trackDrop: false, //#3/4# Track item drop
     trackBattleStatEX: true, //#3.1/4# track battale stat ex
 		trackBattleStatEX_history: true, //#3.2/4# track battale stat ex history
-		trackBattleStatEX_count: 4, //#3.3/4# track battale stat ex count of reset keep history per end of rounds
+		trackBattleStatEX_count: 4, //#3.3/4# track battle stat ex count of reset keep history per end of rounds
+		trackBattleStatEX_TrackDrop: true, //#3.4/4# track battle ex track drop
     enableCheckPony: true, // enable check alert pony
     stopPlayAfterAutoAnswerPony: true, // stop bot after auto answer pony
     enableOfflineSong: true, // enable offline song
@@ -313,7 +314,7 @@ function addDataToJson(vKey, vValue, vColor) {
     var chkEquip = true;
 
     if (vColor === 'rgb(255, 0, 0)') {
-        if (!vKey.startsWith('Legendary') && !vKey.startsWith('Magnificent')) {
+        if (!vKey.startsWith('Peerless') && !vKey.startsWith('Legendary') && !vKey.startsWith('Magnificent')) {
             chkEquip = false;
         }
     }
@@ -1811,10 +1812,102 @@ function OnPageReload() {
 							data.Credits += d[1]*1;
 						}
 
-						continue;
+						//continue;
 					}
 
+
+					//------------------//
+					//--- Track Drop ---//
+					//------------------//
+					if(settings.trackBattleStatEX_TrackDrop){
+
+						var vSpan = tr[i].children[2].querySelector('span');
+						if(vSpan){
+							var dataTracking = vSpan.textContent;
+							//console.log('dataTracking: '+dataTracking);
+							var repx = /^\[(\d){1,2}x[A-Za-z0-9_ ]*\]$/;
+							var cColor = vSpan.style.color;
+
+							if (repx.test(dataTracking)) {
+
+								var nowC = dataTracking.match(/(\d){1,2}/g);
+
+								if (nowC !== null) {
+									var countItem = nowC[0];
+									var cNameText = dataTracking.match(/\ [A-Za-z0-9_ ]*/g)[0].trim();
+
+									addTrakDropEX(cNameText, countItem, cColor);
+
+								}
+
+							} else {
+								var countItem2 = 1;
+								var cNameText2 = dataTracking.replace('[', '').replace(']', '');
+
+								if (/^\d{1,}\ Credits$/.test(cNameText2)) {
+									countItem2 = cNameText2.match(/\d{1,}/g)[0];
+									cNameText2 = 'Credits';
+								}
+
+								addTrakDropEX(cNameText2, countItem2, cColor);
+							}
+						}
+
+					}
+					//--- Track Drop END ---//
+
 				}
+
+				return;
+			}
+
+			//add track drop ex
+			function addTrakDropEX(vKey, vValue, vColor){
+				//console.log('vKey:'+vKey+' vValue:'+vValue+' vColor:'+vColor);
+				var logs = null;
+				var vData = {};
+				if (localStorage.getItem("BattleStateExTrackDropLogs"))
+					logs = JSON.parse(localStorage.getItem("BattleStateExTrackDropLogs"));
+				else
+					logs = {};
+
+				var keyAlready = false;
+
+				if(typeof(logs[vKey]) !== 'undefined'){
+					//var pValue =  (vValue*1) + (logs[vKey].value*1);
+					vData = {"value":  (vValue*1) + (logs[vKey].value*1),
+							"color": vColor};
+					logs[vKey] = vData;
+					keyAlready = true;
+				}
+
+				var chkEquip = true;
+				if (vColor === 'rgb(255, 0, 0)') {
+					if (!vKey.startsWith('Peerless') && !vKey.startsWith('Legendary') && !vKey.startsWith('Magnificent')) {
+						chkEquip = false;
+					}
+				}
+
+				if (!keyAlready) {
+					//console.log('chkEquip:'+chkEquip+' vKey = '+vKey);
+					if (chkEquip) {
+						vData = {"value": vValue,
+							"color": vColor};
+						logs[vKey] = vData;
+					} else {
+						var vOtherEquip = localStorage.getItem("BattleStateExTrackDropOtherEQ");
+
+						if (!vOtherEquip) {
+							vOtherEquip = 0;
+						}
+
+						vOtherEquip = ( (vOtherEquip*1) + 1 );
+						localStorage.setItem("BattleStateExTrackDropOtherEQ", vOtherEquip);
+					}
+				}
+
+				localStorage.setItem("BattleStateExTrackDropLogs", JSON.stringify(logs));
+
 			}
 
 
@@ -3749,7 +3842,7 @@ function OnPageReload() {
                 }
 
 
-                if ((getSelfHealth() < lowerHPAlert || (getSelfSpirit() < SP_ITEM_E_CUTOFF || (isHaveCloakOfTheFallen && getSelfSpirit() < SP_ITEM_P_CUTOFF ) )) && (!isSOL || isHaveCloakOfTheFallen)) {
+                if ((getSelfHealth() < lowerHPAlert || (getSelfSpirit() < SP_ITEM_E_CUTOFF || (isHaveCloakOfTheFallen && getSelfSpirit() < (SP_ITEM_E_CUTOFF) ) )) && (!isSOL || isHaveCloakOfTheFallen)) {
                     if (ENABALE_LE_POTION) {
                         var indexItemLE = nextItem('Last Elixir');
                         if (indexItemLE !== -1) {
@@ -5299,6 +5392,7 @@ function buildHtmlTable(arr) {
             if (j === 0 || j === 1) {
                 if (columns.length === 3) {
                     td.style.color = arr[i][columns[2]];
+					td.style.textAlign = 'center';
                 }
             }
 
@@ -6130,6 +6224,50 @@ function show(){
 
 			var keepTxt = "<b>"+getNowFormat()+"</b><br/>"+ dmg.innerHTML+"<br/>"+atk.innerHTML+"<br/>"+item.innerHTML+"<br/>"+skill.innerHTML+"<br/>"+button.innerHTML;
 
+			//===============//
+			//Keep Track Drop//
+			if(settings.trackBattleStatEX_TrackDrop){
+				var TrackDropHtml = "";
+
+				var mainJson = [];
+
+				var vx = JSON.parse(localStorage.getItem("BattleStateExTrackDropLogs"));
+				for (key in vx){
+
+				 mainJson.push({
+						"id": key,
+						"value": "" + vx[key].value,
+						"color": vx[key].color
+					});
+
+				}
+
+				mainJson.push({
+					"id": "Credits+Items",
+					"value": "" + getSumPrice(JSON.stringify(mainJson)),
+					"color": 'rgb(144, 124, 2)'
+				});
+
+				mainJson.push({
+					"id": "Other Equip",
+					"value": "" + localStorage.getItem("BattleStateExTrackDropOtherEQ"),
+					"color": 'rgb(255, 0, 0)'
+				});
+
+				var kTable = buildHtmlTable(mainJson.sort(axeccp));
+				TrackDropHtml = '<div><table style="display:none;font-size: 10pt;font-family: arial, helvetica, sans-serif;border: solid 1px;" id="'+listKeep[listKindex]+'_'+lIndex+'"> '+kTable.innerHTML+' </table></div>';
+				var SHH = '<div style=\' background: #ffdf65;    width: 58px;    font-size: 10pt;    font-family: arial, helvetica, sans-serif;    cursor: pointer;    color: rgb(92, 13, 17);\' onclick="if(document.getElementById(\''+listKeep[listKindex]+'_'+lIndex+'\').style.display ===\'none\'){document.getElementById(\''+listKeep[listKindex]+'_'+lIndex+'\').style.display = \'block\';}else{document.getElementById(\''+listKeep[listKindex]+'_'+lIndex+'\').style.display = \'none\';}">DISPLAY</div>';
+
+				TrackDropHtml = SHH + TrackDropHtml;
+				keepTxt = keepTxt + "<br/>"+TrackDropHtml;
+
+				localStorage.removeItem("BattleStateExTrackDropLogs")
+				localStorage.setItem("BattleStateExTrackDropOtherEQ", 0);
+
+				//console.log(TrackDropHtml);
+			}
+			//Keep Track Drop END//
+			//===================//
 
 
 			listBTJson[listKeep[listKindex]+'_'+lIndex] = keepTxt;
