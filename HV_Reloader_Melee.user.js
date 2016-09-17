@@ -6752,7 +6752,41 @@ function show(){
 				});
 
 				var kTable = buildHtmlTable(mainJson.sort(axeccp));
-				TrackDropHtml = '<div><table style="display:none;font-size: 10pt;font-family: arial, helvetica, sans-serif;border: solid 1px;" id="'+listKeep[listKindex]+'_'+lIndex+'"> '+kTable.innerHTML+' </table></div>';
+
+				var trSplit = kTable.innerHTML.split('</tr>');
+				var finalKtable = "<table><tr><td valign='top'><table  style=' font-size: 10pt; font-family: arial, helvetica, sans-serif;' >";
+
+				var vNewTable = false;
+				var vAdd = 1;
+				var vMod = 16;
+				var vFirst = true;
+
+				for(var t=0;t<trSplit.length;t++){
+					//console.log(trSplit[t]);
+					if(t !== 0 && vAdd%vMod === 0 ){
+
+						vNewTable = true;
+					}
+
+					if(vNewTable){
+						vNewTable = false;
+						vAdd = 1;
+						if(vFirst){
+							vFirst = false;
+							vMod = vMod-2;
+						}
+						
+						finalKtable = finalKtable + "</tbody></table></td><td valign='top'><table style=' font-size: 10pt; font-family: arial, helvetica, sans-serif;'>"+trSplit[(trSplit.length-1)]+"</td><td>"+trSplit[0];
+						finalKtable = finalKtable+trSplit[t]+"</tr>";
+					}else{
+						finalKtable = finalKtable+trSplit[t]+"</tr>";
+						vAdd++;
+					}
+				}
+
+				finalKtable = finalKtable+"</tr>"+trSplit[(trSplit.length-1)]+"</td></tr></table>";
+
+				TrackDropHtml = '<div style="display:none;font-size: 10pt;font-family: arial, helvetica, sans-serif;border: solid 1px;" id="'+listKeep[listKindex]+'_'+lIndex+'"> '+finalKtable+' </div>';
 				var SHH = '<div style=\' background: #ffdf65;    width: 68px;    font-size: 10pt;    font-family: arial, helvetica, sans-serif;    cursor: pointer;    color: rgb(92, 13, 17);\' onclick="if(document.getElementById(\''+listKeep[listKindex]+'_'+lIndex+'\').style.display ===\'none\'){document.getElementById(\''+listKeep[listKindex]+'_'+lIndex+'\').style.display = \'block\';}else{document.getElementById(\''+listKeep[listKindex]+'_'+lIndex+'\').style.display = \'none\';}">Drop Items</div>';
 
 				TrackDropHtml = SHH + TrackDropHtml;
