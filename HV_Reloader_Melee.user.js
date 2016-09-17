@@ -1679,7 +1679,7 @@ function OnPageReload() {
     if (settings.trackBattleStatEX) {
         (function() {
 
-			var data = {last:0, count:0, total:0, countATK:0, totalATK:0, turn:0, beginTime: Date.now(), lastTime: 0, EXP: 0,Credits: 0,Rounds: 0,Ponys: 0};
+			var data = {last:0, count:0, total:0, countATK:0, totalATK:0, turn:0, beginTime: Date.now(), lastTime: 0, EXP: 0,Credits: 0,Rounds: '0/0',Ponys: 0};
 			var nglist = /^(Shield Bash|Vital Strike|Merciful Blow|Great Cleave|Rending Blow|Shatter Strike|Iris Strike|Backstab|Frenzied Blows|Skyward Sword|Concussive Strike|FUS RO DAH|Orbital Friendship Cannon)$/;
 
 			if (document.getElementById("togpane_log")){
@@ -5890,7 +5890,7 @@ if (settings.enableCheckPony) {
 
 		if(settings.trackBattleStatEX){
 
-			var data = {last:0, count:0, total:0, countATK:0, totalATK:0, turn:0, beginTime: Date.now(), lastTime: 0, EXP: 0,Credits: 0,Rounds: 0,Ponys: 0};
+			var data = {last:0, count:0, total:0, countATK:0, totalATK:0, turn:0, beginTime: Date.now(), lastTime: 0, EXP: 0,Credits: 0,Rounds: '0/0',Ponys: 0};
 			var load = localStorage.getItem("BattleStateEx");
 			if (load) data = JSON.parse(load);
 
