@@ -3,7 +3,7 @@
 // @namespace   HVRLD3
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @include		/^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version		2.0.0.80
+// @version		2.0.0.81
 // @updateURL      https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @downloadURL    https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @run-at      document-end
@@ -1679,7 +1679,7 @@ function OnPageReload() {
     if (settings.trackBattleStatEX) {
         (function() {
 
-			var data = {last:0, count:0, total:0, countATK:0, totalATK:0, turn:0, beginTime: Date.now(), lastTime: 0, EXP: 0,Credits: 0,Rounds: '0/0',Ponys: 0};
+			var data = {last:0, count:0, total:0, countATK:0, totalATK:0, turn:0, beginTime: Date.now(), lastTime: 0, EXP: 0,Credits: 0,Rounds: '0 / 0',Ponys: 0};
 			var nglist = /^(Shield Bash|Vital Strike|Merciful Blow|Great Cleave|Rending Blow|Shatter Strike|Iris Strike|Backstab|Frenzied Blows|Skyward Sword|Concussive Strike|FUS RO DAH|Orbital Friendship Cannon)$/;
 
 			if (document.getElementById("togpane_log")){
@@ -5890,7 +5890,7 @@ if (settings.enableCheckPony) {
 
 		if(settings.trackBattleStatEX){
 
-			var data = {last:0, count:0, total:0, countATK:0, totalATK:0, turn:0, beginTime: Date.now(), lastTime: 0, EXP: 0,Credits: 0,Rounds: '0/0',Ponys: 0};
+			var data = {last:0, count:0, total:0, countATK:0, totalATK:0, turn:0, beginTime: Date.now(), lastTime: 0, EXP: 0,Credits: 0,Rounds: '0 / 0',Ponys: 0};
 			var load = localStorage.getItem("BattleStateEx");
 			if (load) data = JSON.parse(load);
 
@@ -6551,7 +6551,7 @@ function getNowFormat(){
 
 // display
 function show(){
-	var data = {last:0, count:0, total:0, countATK:0, totalATK:0, turn:0, beginTime: Date.now(), lastTime: 0, EXP: 0,Credits: 0,Rounds: '0/0',Ponys: 0};
+	var data = {last:0, count:0, total:0, countATK:0, totalATK:0, turn:0, beginTime: Date.now(), lastTime: 0, EXP: 0,Credits: 0,Rounds: '0 / 0',Ponys: 0};
 	var load = localStorage.getItem("BattleStateEx");
     if (load) data = JSON.parse(load);
 
