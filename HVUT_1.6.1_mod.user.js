@@ -15,12 +15,12 @@
 // @icon 		http://g.e-hentai.org/favicon.ico
 // @updateURL       https://github.com/suvidev/hv/raw/master/HVUT_1.6.1_mod.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HVUT_1.6.1_mod.user.js
-// @version        1.6.1.0.20
+// @version        1.6.1.0.21
 // ==/UserScript==
 
 var settings = {
 
-template : '$no $name ($lvl)', // $no = [Hea01] $name =  Legendary Onyx Power Helmet of Slaughter <<< [url]...[/url] $lvl = show level required.
+template : '$no $name Level $lvl', // $no = [Hea01] $name =  Legendary Onyx Power Helmet of Slaughter <<< [url]...[/url] $lvl = show level required.
 
 minimize : false,
 scrollbar : true,
@@ -95,7 +95,7 @@ autoLock : false,
 
 checkBazaars : ["Peerless","Legendary","Magnificent && !Cotton && !Leather && !Plate"],
 //checkBazaars : ["Peerless","Legendary && Rapier of Slaughter","Legendary Ethereal && (Katana || Estoc || Mace) && Slaughter","Legendary Fiery Redwood && (Destruction||Surtr||Elementalist)","Legendary Arctic Redwood && (Destruction||Niflheim||Elementalist)","Legendary Shocking && (Redwood||Willow) && (Destruction||Mjolnir||Elementalist)","Legendary Tempestuous && (Redwood||Willow) && (Destruction||Freyr||Elementalist)","Legendary Hallowed && (Katalox||Oak) && (Destruction||Heimdall||Heaven-sent)","Legendary Demonic && (Katalox||Willow) && (Destruction||Fenrir||Demon-fiend)","Legendary && Force Shield","Legendary && (Frugal || Mystic || Charged || Radiant) && Phase","Legendary && (Frugal || Charged) && (Elementalist || Heaven-sent || Demon-fiend)","Legendary && (Agile || Savage) && Shadowdancer","Legendary && Power && Slaughter"],
-
+//["suffix","quality","prefix"]
 
 hideItem : ["Infusion of","Scroll of","Flower Vase","Bubble-Gum","ManBearPig Tail","Holy Hand Grenade of Antioch","Mithra's Flower","Dalek Voicebox","Lock of Blue Hair","Bunny-Girl Costume","Hinamatsuri Doll","Broken Glasses","Black T-Shirt","Sapling","Unicorn Horn","Noodly Appendage","Crystal of","Monster Chow","Monster Edibles","Monster Cuisine","Happy Pills","Crystallized Phazon","Shade Fragment","Repurposed Actuator","Defense Matrix Modulator","Binding of","Figurine","Draught","Potion","Elixir","Last Elixir","Energy Drink","Precursor Artifact","Soul Fragment"],
 
@@ -1073,7 +1073,7 @@ GM_addStyle(
 	".hvut-part {margin-top:3px; padding-top:5px !important; border-top:2px dotted #333}"
 );
 
-_in.inv_equip = {};
+//_in.inv_equip = {};
 
 function n(n){
     return n > 9 ? "" + n: "0" + n;
@@ -1186,9 +1186,11 @@ _in.template = function() {
 	var nDocument = window.open("", "List").document;
 	
 	nDocument.body.innerHTML = "";
-    for (eid in _in.inv_equip) {
-        e = _in.inv_equip[eid];
-        if (!e.div.parentNode.classList.contains('hvut-hide') && e.checkbox.checked) {
+    //for (eid in _in.inv_equip) {
+	for (eid in _in.equip_template) {
+        //e = _in.inv_equip[eid];
+		e = _in.equip_template[eid];
+        if (!e.div.classList.contains('hvut-hide') && e.checkbox.checked) {
 
 			count++;
             //_es.sell(eid);
@@ -1384,9 +1386,11 @@ _in.equip_template.sort(function(a,b){
 	return r;
 });
 
+/*
 for(var j=0;j<_in.equip_template.length;j++){
 	_in.inv_equip[_in.equip_template[j].eid] = _in.equip_template[j];
 }
+*/
 
 
 _in.frag = $element();
@@ -1432,8 +1436,11 @@ $id("inv_equip").appendChild(_in.frag);
 
 
 _in.equip_btn_tp = $element("div",$id("rightpane"),[".hvut-btns-tp"]);
+$element("input",_in.equip_btn_tp,{type:"checkbox"},function(){var eid, e; for (eid in _in.equip_template) { e =_in.equip_template[eid]; if(!e.div.classList.contains('hvut-hide')){ e.checkbox.checked = this.checked;} }});
 $element("input",_in.equip_btn_tp,{type:"button",value:"Template"},function(){_in.template();});
-$element("input",_in.equip_btn_tp,{type:"button",value:"Clear"},function(){var eid, e; for (eid in _in.inv_equip) { e = _in.inv_equip[eid]; e.checkbox.checked = false; }});
+//$element("input",_in.equip_btn_tp,{type:"button",value:"Clear"},function(){var eid, e; for (eid in _in.inv_equip) { e = _in.inv_equip[eid]; e.checkbox.checked = false; }});
+$element("input",_in.equip_btn_tp,{type:"button",value:"Clear"},function(){var eid, e; for (eid in _in.equip_template) { e =_in.equip_template[eid]; e.checkbox.checked = false; }});
+
 
 //**************************//
 //== START == new logic search equip
