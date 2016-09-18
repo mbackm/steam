@@ -2664,6 +2664,8 @@ GM_addStyle(
 
 if($qs("textarea.stdinput")) {
 	$element("div",[$qs("textarea.stdinput").parentNode,$qs("textarea.stdinput")],{textContent:"Templates: {$name} {$count} {$cod} {$price} {$link} {$level}",style:"margin:5px 15px;font-size:10pt;font-weight:bold;text-align:left"});
+	//[url={$link}]{$name}[/url] ({$level})
+	$element("div",[$qs("textarea.stdinput").parentNode,$qs("textarea.stdinput")],{textContent:"[url={$link}]{$name}[/url] ({$level})",style:"margin:5px 15px;font-size:10pt;font-weight:bold;text-align:left"});
 }
 
 
