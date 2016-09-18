@@ -15,7 +15,7 @@
 // @icon 		http://g.e-hentai.org/favicon.ico
 // @updateURL       https://github.com/suvidev/hv/raw/master/HVUT_1.6.1_mod.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HVUT_1.6.1_mod.user.js
-// @version        1.6.1.0.19
+// @version        1.6.1.0.20
 // ==/UserScript==
 
 var settings = {
@@ -2663,7 +2663,7 @@ GM_addStyle(
 );
 
 if($qs("textarea.stdinput")) {
-	$element("div",[$qs("textarea.stdinput").parentNode,$qs("textarea.stdinput")],{textContent:"Templates: {$name} {$count} {$cod} {$price} {$link}",style:"margin:5px 15px;font-size:10pt;font-weight:bold;text-align:left"});
+	$element("div",[$qs("textarea.stdinput").parentNode,$qs("textarea.stdinput")],{textContent:"Templates: {$name} {$count} {$cod} {$price} {$link} {$level}",style:"margin:5px 15px;font-size:10pt;font-weight:bold;text-align:left"});
 }
 
 
@@ -2855,9 +2855,9 @@ _mm.send = function() {
 	var current = _mm.current,
 		to = current.to,
 		subject = (_mm.subject || (current.type==="equip"?"{$name}" : (current.type==="credits"||current.type==="hath")? "{$count} {$name}" : "{$count}x {$name}"))
-			.replace(/\{\$(name|count|price|cod|link)\}/g,function(s,t){return ({name:current.name,count:current.count.toLocaleString(),price:current.price.toLocaleString(),cod:current.cod.toLocaleString(),link:current.key?"http://hentaiverse.org/pages/showequip.php?eid="+current.id+"&key="+current.key:""})[t];}),
+			.replace(/\{\$(name|count|price|cod|link|level)\}/g,function(s,t){return ({name:current.name,count:current.count.toLocaleString(),price:current.price.toLocaleString(),cod:current.cod.toLocaleString(),link:current.key?"http://hentaiverse.org/pages/showequip.php?eid="+current.id+"&key="+current.key:"",level:current.bound})[t];}),
 		body = (_mm.body || (current.type==="equip"?"{$link}" : current.cod?"CoD: {$count}x {$price}c = {$cod} Credits" : ""))
-			.replace(/\{\$(name|count|price|cod|link)\}/g,function(s,t){return ({name:current.name,count:current.count.toLocaleString(),price:current.price.toLocaleString(),cod:current.cod.toLocaleString(),link:current.key?"http://hentaiverse.org/pages/showequip.php?eid="+current.id+"&key="+current.key:""})[t];});
+			.replace(/\{\$(name|count|price|cod|link|level)\}/g,function(s,t){return ({name:current.name,count:current.count.toLocaleString(),price:current.price.toLocaleString(),cod:current.cod.toLocaleString(),link:current.key?"http://hentaiverse.org/pages/showequip.php?eid="+current.id+"&key="+current.key:"",level:current.bound})[t];});
 
 	var post =
 		"action=send"+
@@ -3121,6 +3121,7 @@ $qsa("#equip > div").forEach(function(div){
 		name : d.name,
 		id : d.eid,
 		key : d.key,
+		bound : d.bound,
 		count : 1,
 		price : 0,
 		cod : 0,
