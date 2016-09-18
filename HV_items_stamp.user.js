@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         Items Stamp Storage
+// @name         HV Items Stamp Storage
 // @namespace    GG
 // @icon         http://g.e-hentai.org/favicon.ico
 // @description  Enjoy. :P
@@ -8,7 +8,7 @@
 // @match        http://hentaiverse.org/?s=Character&ss=it
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_items_stamp.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_items_stamp.user.js
-// @version      0.5
+// @version      0.6
 // @grant        none
 // ==/UserScript==
 
@@ -145,7 +145,7 @@ function showStampItem(){
                // console.log('1 = '+itemListx[i].querySelectorAll('div.fd2')[0].children[0].textContent);
                 var oldVl = gbStampData[itemListx[i].querySelectorAll('div.fd2')[0].children[0].textContent];// GM_getValue(itemListx[i].querySelectorAll('div.fd2')[0].children[0].textContent);
 				 
-				if(isNaN(oldVl)){ gbStampData[itemListx[i].querySelectorAll('div.fd2')[0].children[0].textContent] = nowVl; oldVl=0; GM_setValue("gbStampData",JSON.stringify(gbStampData));}
+				if(isNaN(oldVl)){ gbStampData[itemListx[i].querySelectorAll('div.fd2')[0].children[0].textContent] = (nowVl-1); oldVl=0; GM_setValue("gbStampData",JSON.stringify(gbStampData));}
 
                 var sumTotalVL = nowVl-oldVl;
                 if(sumTotalVL < 0){
