@@ -2131,6 +2131,8 @@ function OnPageReload() {
 						//nothing..
 					}else{
 						//save...
+						localStorage.setItem("BattleStateExReset", true);
+
 						if(settings.trackBattleStatEX_history){
 							var listKeep = ['1000','150','125','110','100','90','80','75','70','65','60','55','1'];
 							var listKindex = listKeep.indexOf(data.Rounds.split(' / ')[0]);
