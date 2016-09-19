@@ -37,7 +37,7 @@ var settings = {
     godAuto: true, // God Mode
     enableHaveAutoCast: true, // if you already unlock auto-cast please enable and go to LIST_AUTO_CAST for config.
     enableWeaponSkill: false, // use Weapon Skills
-    monsterForUseOFCFRD: 6,1], // count monster alive, count boss alive [ for special skill OFC , FRD ]
+    monsterForUseOFCFRD: [6,1], // count monster alive, count boss alive [ for special skill OFC , FRD ]
     enableBuffMon: true, // use debuff to monster
     showUsePotion: false, //#1/4# Show use poton
     spellControl: true, // Spell Control - use Scroll or normal buff
