@@ -6184,7 +6184,7 @@ function show(){
 	var load = localStorage.getItem("BattleStateEx");
     if (load) data = JSON.parse(load);
 
-    var now = Date.now();
+    var now = data.lastTime;//Date.now();
     var lastTime = data.lastTime;
     data.lastTime = now;
 
