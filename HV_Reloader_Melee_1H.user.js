@@ -3,7 +3,7 @@
 // @namespace   HVRLD3
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @include		/^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version		2.0.0.83
+// @version		2.0.0.84
 // @updateURL      https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee_1H.user.js
 // @downloadURL    https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee_1H.user.js
 // @run-at      document-end
@@ -2261,7 +2261,7 @@ function OnPageReload() {
 
 									finalKtable = finalKtable+"</tr>"+trSplit[(trSplit.length-1)]+"</td></tr></table>";
 
-									TrackDropHtml = '<div style="display:none;font-size: 10pt;font-family: arial, helvetica, sans-serif;border: solid 1px;" id="'+listKeep[listKindex]+'_'+lIndex+'"> '+finalKtable+' </div>';
+									TrackDropHtml = '<div class="track" style="display:none;font-size: 10pt;font-family: arial, helvetica, sans-serif;border: solid 1px;" id="'+listKeep[listKindex]+'_'+lIndex+'"> '+finalKtable+' </div>';
 									var SHH = '<div style=\' background: #ffdf65;    width: 68px;    font-size: 10pt;    font-family: arial, helvetica, sans-serif;    cursor: pointer;    color: rgb(92, 13, 17);\' onclick="if(document.getElementById(\''+listKeep[listKindex]+'_'+lIndex+'\').style.display ===\'none\'){document.getElementById(\''+listKeep[listKindex]+'_'+lIndex+'\').style.display = \'block\';}else{document.getElementById(\''+listKeep[listKindex]+'_'+lIndex+'\').style.display = \'none\';}">Drop Items</div>';
 
 									TrackDropHtml = SHH + TrackDropHtml;
@@ -7076,6 +7076,8 @@ function show(){
 				nDocument.body.style.fontSize = '10pt';
 				nDocument.body.style.fontFamily = 'arial,helvetica,sans-serif';
 				nDocument.body.style.color = '#5C0D11';
+
+				nDocument.body.appendChild(document.createElement("div")).innerHTML = '<table style=\'position: fixed;    background-color: #f3ffd6;    right: 5px;    font-size: 10pt;    font-family: arial, helvetica, sans-serif;\'><tr><td><input id=\'cbShowAll\' type=\'checkbox\' onchange="var divItems = document.querySelectorAll(\'div.track\');  for(var i=0;i<divItems.length;i++){ if(this.checked){ divItems[i].style.display = \'block\';	}else{ divItems[i].style.display = \'none\';} }"></td><td>Show/Hide Drop Items</td></tr></table>';
 
 
 				for(var i=0;i<listKeep.length;i++){
