@@ -37,7 +37,8 @@ var settings = {
     godAuto: true, // God Mode
     enableHaveAutoCast: true, // if you already unlock auto-cast please enable and go to LIST_AUTO_CAST for config.
     enableWeaponSkill: false, // use Weapon Skills
-    monsterForUseOFCFRD: [6,1], // count monster alive, count boss alive [ for special skill OFC , FRD ]
+		monsterForUseOFCFRD: [6,1], // count monster alive, count boss alive [ for special skill OFC , FRD ]
+		chooseNumOfMonsterForOFCFRD: true, // show choose num of monster for OFC FRD
     enableBuffMon: true, // use debuff to monster
     showUsePotion: false, //#1/4# Show use poton
     spellControl: true, // Spell Control - use Scroll or normal buff
@@ -850,6 +851,11 @@ function initialPageLoad() {
                     GM_setValue("currentSpecialSkill", "orbital friendship cannon");
                 }
 
+                var currentMonOFCFRD = GM_getValue('currentMonOFCFRD');
+                if (currentMonOFCFRD === null) {
+                    GM_setValue("currentMonOFCFRD", '6,1');
+                }
+
                 function genShowSellControl() {
                     if (!document.getElementById('aDIscpcID')) {
                         var aDIscpc = document.createElement('DIV');
@@ -864,7 +870,11 @@ function initialPageLoad() {
 
 						var heiPx = 170;
 						if (document.getElementById('1111') || document.getElementById('1101')) { 
-							heiPx = 190;
+							if(settings.chooseNumOfMonsterForOFCFRD){
+								heiPx = 220;
+							}else{
+								heiPx = 190;
+							}
 						}
 
                         if (document.getElementById('2501')) {
@@ -1030,6 +1040,8 @@ function initialPageLoad() {
                             selex.appendChild(option5);
                             selex.appendChild(option6);
 
+							var tttr5;
+							var tttr6;
                             //special skill
                             if (document.getElementById('1111') || document.getElementById('1101')) { // ofc , frd
                                 var cbOFCFRD = document.createElement("INPUT");
@@ -1047,6 +1059,7 @@ function initialPageLoad() {
                                 selspsk.id = 'speSkillID';
                                 selspsk.style.width = '60px';
                                 selspsk.style.webkitAppearance = 'none';
+								selspsk.style.textAlignLast = "center";
                                 selspsk.style.background = 'rgb(87, 218, 212)';
                                 selspsk.setAttribute("title", "Special Skill");
                                 selspsk.addEventListener('change', function() {
@@ -1076,13 +1089,57 @@ function initialPageLoad() {
                                     selspsk.appendChild(optionx2);
                                 }
 
-                                var tttr5 = document.createElement("TR");
+                                 tttr5 = document.createElement("TR");
                                 var tttd51 = document.createElement("TD");
                                 var tttd52 = document.createElement("TD");
                                 tttd51.appendChild(cbOFCFRD);
                                 tttd52.appendChild(selspsk);
                                 tttr5.appendChild(tttd51);
                                 tttr5.appendChild(tttd52);
+
+
+								// set mon for use OFC/FRD
+								if(settings.chooseNumOfMonsterForOFCFRD){
+									var selsmonfr = document.createElement("select");
+									selsmonfr.id = 'selsMonFrID';
+									selsmonfr.style.width = '60px';
+									selsmonfr.style.webkitAppearance = 'none';
+									selsmonfr.style.textAlignLast = "center";
+									selsmonfr.style.background = 'rgb(255, 194, 57)';
+									selsmonfr.setAttribute("title", "Number of mon");
+
+									selsmonfr.addEventListener('change', function() {
+										GM_setValue("currentMonOFCFRD", selsmonfr.value);
+									});
+
+									var optiono1 = document.createElement("option");
+									optiono1.id = 'op61';
+									optiono1.value = '6,1';
+									if (currentMonOFCFRD === '6,1') {
+										optiono1.setAttribute("selected", "true");
+									}
+									optiono1.appendChild(document.createTextNode(' 6,1 '));
+
+									var optiono2 = document.createElement("option");
+									optiono2.id = 'op81';
+									optiono2.value = '8,1';
+									if (currentMonOFCFRD === '8,1') {
+										optiono2.setAttribute("selected", "true");
+									}
+									optiono2.appendChild(document.createTextNode(' 8,1 '));
+
+									selsmonfr.appendChild(optiono1);
+									selsmonfr.appendChild(optiono2);
+
+
+									 tttr6 = document.createElement("TR");
+									var tttd61 = document.createElement("TD");
+									var tttd62 = document.createElement("TD");
+
+									tttd62.appendChild(selsmonfr);
+									tttr6.appendChild(tttd61);
+									tttr6.appendChild(tttd62);
+								}
                             }
 
 
@@ -1177,6 +1234,10 @@ function initialPageLoad() {
 
                             if (document.getElementById('1111') || document.getElementById('1101')){
                                 ttble.appendChild(tttr5);
+
+								if(settings.chooseNumOfMonsterForOFCFRD){
+									ttble.appendChild(tttr6);
+								}
 							}
 
 							aDIscpc.appendChild(ttble);
@@ -2525,7 +2586,7 @@ function OnPageReload() {
 			}
 
 			if(settings.showImperilOnOff){
-				heiPx = heiPx+30;
+				heiPx = heiPx+60;
 			}
 
             if (document.getElementById('2501')) {
@@ -3854,8 +3915,14 @@ function OnPageReload() {
                             }
                         }
 
+						
+
                         if (useOverchargeMode || enableOFC || enableFRD) {
                             if (enableOFC || enableFRD) {
+								if(settings.chooseNumOfMonsterForOFCFRD){
+									settings.monsterForUseOFCFRD = GM_getValue('currentMonOFCFRD').split(',');
+								}
+
                                 if (enableOFC) {
                                     if (getNumMonstersAlive() >= settings.monsterForUseOFCFRD[0] || getNumBossMonsterAlive() >= settings.monsterForUseOFCFRD[1]) {
                                         if (getSelfOvercharge() >= mainOvercharge) {
