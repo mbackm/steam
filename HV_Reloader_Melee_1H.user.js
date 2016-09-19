@@ -4,8 +4,8 @@
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @include		/^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
 // @version		2.0.0.82
-// @updateURL      https://github.com/
-// @downloadURL    https://github.com/
+// @updateURL      https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee_1H.user.js
+// @downloadURL    https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee_1H.user.js
 // @run-at      document-end
 // @grant       none
 // ==/UserScript==
