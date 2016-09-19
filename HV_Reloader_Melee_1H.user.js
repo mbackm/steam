@@ -3,7 +3,7 @@
 // @namespace   HVRLD3
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @include		/^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version		2.0.0.82
+// @version		2.0.0.83
 // @updateURL      https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee_1H.user.js
 // @downloadURL    https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee_1H.user.js
 // @run-at      document-end
@@ -44,6 +44,8 @@ var settings = {
     stopSpiritWhenFoundBoss: false, //Stop spirit when found boss
     showStopStartButton: true, // Show Stop Start button
     showStopStartButtonMainPage: true, // Show Stop Start button on Main Page
+		showImperilOnOff: true, // Show on of imperil
+		showImperilOnOffMainPage: true, // Show on of imperil on Main Page
     showBarListBattleItems: false, //#2/4# Show list battle items
     trackDrop: false, //#3/4# Track item drop
     trackBattleStatEX: true, //#3.1/4# track battale stat ex
@@ -1230,6 +1232,47 @@ function initialPageLoad() {
 
                         aDIscpc.appendChild(ccter);
                     }
+					
+					
+					if(settings.showImperilOnOff){
+						//display:block !important; color:#fff; background-color:#600; cursor:pointer
+						var vDiv = document.createElement("div");
+						vDiv.style.display = "block !importan";
+						vDiv.style.color = "#fff";
+						vDiv.style.width = "74px";
+						vDiv.style.height = "16px";
+						vDiv.style.fontSize = "10pt";
+						vDiv.style.textAlign = "center";
+						//vDiv.style.backgroundColor = "#600";
+						vDiv.style.cursor = "pointer";
+						
+
+						if (GM_getValue("useImperil")) {
+                            vDiv.appendChild(document.createTextNode("Imperil[ON]"));
+                            vDiv.style.background = 'rgb(126, 202, 141)';
+                        } else {
+                            vDiv.appendChild(document.createTextNode("Imperil[OFF]"));
+                            vDiv.style.background = 'rgb(41, 0, 4)';
+
+                        }
+
+						vDiv.addEventListener('click', function() {
+							if (GM_getValue("useImperil")) {
+                                GM_setValue("useImperil", false);
+                                vDiv.textContent = "Imperil[OFF]";
+                                vDiv.style.background = 'rgb(41, 0, 4)';
+                            } else {
+                                GM_setValue("useImperil", true);
+                                vDiv.textContent = "Imperil[ON]";
+                                vDiv.style.background = 'rgb(126, 202, 141)';
+                            }
+						});
+
+						var ccterD = document.createElement("CENTER");
+                        ccterD.appendChild(vDiv);
+
+                        aDIscpc.appendChild(ccterD);
+					}
 
 
                     //document.body.appendChild(aDIscpc);
@@ -2481,6 +2524,10 @@ function OnPageReload() {
 				heiPx = 200;
 			}
 
+			if(settings.showImperilOnOff){
+				heiPx = heiPx+30;
+			}
+
             if (document.getElementById('2501')) {
                 if (isFirefoxChk) {
                     newDivShowItems.style.top = heiPx+'px';
@@ -2777,7 +2824,7 @@ function OnPageReload() {
         (function() {
 
             var difficulty = 'PFUDOR';
-            var enableUseImperil = true;
+            var enableUseImperil = GM_getValue("useImperil");
 
             if (document.querySelectorAll('table.cit').length > 0) {
                 if (document.querySelectorAll('table.cit')[1].querySelectorAll('div.fd4').length > 0) {
@@ -3631,7 +3678,7 @@ function OnPageReload() {
                         iRandom = getRandomInt(1, 99);
                     }
 
-                    if (settings.enableBuffMon) {
+                    if (settings.enableBuffMon && !GM_getValue("useImperil")) {
 
                         if (((iRandom % 7) === 0 && getNumBossMonsterAlive() > 1)) {
                             var indexMon = chooseTargetBoss();
@@ -3727,7 +3774,14 @@ function OnPageReload() {
                             }
                         }
 
-                    }
+                    }else if(GM_getValue("useImperil")){
+						for (var sb in MAIN_SPELL_MONSTER) {
+							var tb = MAIN_SPELL_MONSTER[sb];
+							if (useSpellEffToMonster(tb)) {
+								return;
+							}
+						}
+					}
 
 
                     if (STYLE == 'twohand' || STYLE == 'dual') {
@@ -6660,6 +6714,66 @@ function showStopStartMainPage() {
 /*============ SHOW STOP/START BUTTON END ======*/
 
 
+
+/*============ SHOW ON/OFF Imperil BUTTON ==========*/
+
+function showOnOffImperil() {
+    if (!document.getElementById('onOffImperilID')) {
+
+        var vDiv = document.createElement("div");
+		vDiv.style.display = "block !importan";
+		vDiv.style.color = "#fff";
+		vDiv.style.width = "74px";
+		vDiv.style.height = "16px";
+		vDiv.style.fontSize = "10pt";
+		vDiv.style.textAlign = "center";
+		vDiv.id = "onOffImperilID";
+		//vDiv.style.backgroundColor = "#600";
+		vDiv.style.cursor = "pointer";
+		
+
+		if (GM_getValue("useImperil")) {
+			vDiv.appendChild(document.createTextNode("Imperil[ON]"));
+			vDiv.style.background = 'rgb(126, 202, 141)';
+		} else {
+			vDiv.appendChild(document.createTextNode("Imperil[OFF]"));
+			vDiv.style.background = 'rgb(41, 0, 4)';
+
+		}
+
+		vDiv.addEventListener('click', function() {
+			if (GM_getValue("useImperil")) {
+				GM_setValue("useImperil", false);
+				vDiv.textContent = "Imperil[OFF]";
+				vDiv.style.background = 'rgb(41, 0, 4)';
+			} else {
+				GM_setValue("useImperil", true);
+				vDiv.textContent = "Imperil[ON]";
+				vDiv.style.background = 'rgb(126, 202, 141)';
+			}
+		});
+
+        var tsble = document.createElement("TABLE");
+        tsble.classList.add("cit");
+		tsble.style.paddingTop = '1px';
+		tsble.style.paddingLeft = '70px';
+		tsble.style.zIndex = '777';
+
+        var tstr1 = document.createElement("TR");
+        var tstd11 = document.createElement("TD");
+
+        tstd11.appendChild(vDiv);
+        tstr1.appendChild(tstd11);
+
+        tsble.appendChild(tstr1);
+
+        document.querySelector(".clb").appendChild(tsble);
+    }
+}
+
+/*============ SHOW ON/OFF Imperil BUTTON END ======*/
+
+
 /*============ SHOW Battle stat EX ======*/
 function getNowFormat(){
     var today = new Date();
@@ -7141,6 +7255,13 @@ if (document.getElementById('togpane_log')) {
         if (!checkHaveOverchanrge() && !checkHaveNoCurrentBattle() && checkHaveManaPotionBar()) {
 			localStorage.setItem("BattleStateExReset", true);
             show();
+        }
+    }
+
+	//show on off imperil
+	if (settings.showImperilOnOffMainPage) {
+        if (!checkHaveOverchanrge() && !checkHaveNoCurrentBattle() && checkHaveManaPotionBar()) {
+            showOnOffImperil();
         }
     }
 }
