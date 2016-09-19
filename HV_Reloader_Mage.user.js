@@ -6,7 +6,7 @@
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
-// @version     1.3.3.89
+// @version     1.3.3.90
 // @grant       none
 // ==/UserScript==
 // Vanilla Reloader:
@@ -2074,6 +2074,7 @@ function OnPageReload() {
 						//nothing..
 					}else{
 						//save...
+						localStorage.setItem("BattleStateExReset", true);
 						if(settings.trackBattleStatEX_history){
 							var listKeep = ['1000','150','125','110','100','90','80','75','70','65','60','55','1'];
 							var listKindex = listKeep.indexOf(data.Rounds.split(' / ')[0]);
