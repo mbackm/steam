@@ -3642,7 +3642,7 @@ function OnPageReload() {
                                     iRandom = getRandomInt(1, 99);
                                 }
 
-                                if ((iRandom % 9) === 0) {
+                                /*if ((iRandom % 9) === 0) {
                                     //MAIN_SPELL_MONSTER.push('imperil');
                                     MAIN_SPELL_MONSTER.push('magnet');
 
@@ -3652,7 +3652,7 @@ function OnPageReload() {
                                         MAIN_SPELL_MONSTER.push('silence');
                                     }
                                     //MAIN_SPELL_MONSTER.push('blind');
-                                }
+                                }*/
                                 /*
                                     else if((iRandom%14) === 0){
                                         MAIN_SPELL_MONSTER.push('confuse');
@@ -3681,13 +3681,14 @@ function OnPageReload() {
                             if ((iRandom % 12) === 0) {
                                 if (getNumBossMonsterAlive() > 1 || getNumMonstersAlive() > 5) {
                                     //MAIN_SPELL_MONSTER.push('imperil');
-                                    MAIN_SPELL_MONSTER.push('magnet');
+                                   /* MAIN_SPELL_MONSTER.push('magnet');
 
                                     if ((iRandom % 24) === 0) {
                                         MAIN_SPELL_MONSTER.push('weaken');
                                         MAIN_SPELL_MONSTER.push('slow');
                                         MAIN_SPELL_MONSTER.push('silence');
                                     }
+									*/
                                     //MAIN_SPELL_MONSTER.push('blind');
                                 }
                             }
@@ -3704,11 +3705,12 @@ function OnPageReload() {
 
                             if ((iRandom % 10) === 0) {
                                 if (getNumBossMonsterAlive() > 1) {
-                                    MAIN_SPELL_MONSTER.push('magnet');
+                                    /*MAIN_SPELL_MONSTER.push('magnet');
 
                                     if ((iRandom % 30) === 0) {
                                         MAIN_SPELL_MONSTER.push('weaken');
                                     }
+									*/
                                     //MAIN_SPELL_MONSTER.push('imperil');
                                     //MAIN_SPELL_MONSTER.push('slow');
                                     //MAIN_SPELL_MONSTER.push('silence');
