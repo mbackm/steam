@@ -3,7 +3,7 @@
 // @namespace   HVRLD3
 // @author      nihilvoid, Dan31, FabulousCupcake, ??
 // @include		/^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
-// @version		2.0.0.81
+// @version		2.0.0.82
 // @updateURL      https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @downloadURL    https://github.com/suvidev/hv/raw/master/HV_Reloader_Melee.user.js
 // @run-at      document-end
@@ -275,6 +275,17 @@ function GM_getValue(vKeyv) {
 function checkHaveOverchanrge() {
     try {
         if ('Overcharge' === document.body.children[4].children[0].children[7].textContent) {
+            return true;
+        }
+    } catch (e) {
+        return false;
+    }
+
+}
+
+function checkHaveManaPotionBar() {
+    try {
+        if ('Magic points' === document.body.children[4].children[0].children[3].textContent) {
             return true;
         }
     } catch (e) {
@@ -784,7 +795,7 @@ function initialPageLoad() {
 
 
 
-            if (!document.getElementById('quickbar') && !document.querySelector('#riddleform div img[src*="riddlemaster.php"]') && !checkHaveOverchanrge()) {
+            if (!document.getElementById('quickbar') && !document.querySelector('#riddleform div img[src*="riddlemaster.php"]') && !checkHaveOverchanrge() && checkHaveManaPotionBar()) {
                 //nothing..
             } else {
                 genShowStaminaControl();
@@ -1226,7 +1237,7 @@ function initialPageLoad() {
 
             }
 
-            if (!document.getElementById('quickbar') && !document.querySelector('#riddleform div img[src*="riddlemaster.php"]') && !checkHaveOverchanrge()) {
+            if (!document.getElementById('quickbar') && !document.querySelector('#riddleform div img[src*="riddlemaster.php"]') && !checkHaveOverchanrge() && checkHaveManaPotionBar()) {
                 //nothing..
             } else {
                 genShowSellControl();
@@ -1440,7 +1451,7 @@ function OnPageReload() {
             if (document.getElementById('riddleform') || document.getElementById('equipment') || document.querySelector('img[src $= "derpy.gif"]')) {
                 trackUsePotion();
                 genSHowUsePotion();
-            } else if (!document.getElementById('quickbar') && !document.querySelector('#riddleform div img[src*="riddlemaster.php"]') && !checkHaveOverchanrge()) {
+            } else if (!document.getElementById('quickbar') && !document.querySelector('#riddleform div img[src*="riddlemaster.php"]') && !checkHaveOverchanrge() && checkHaveManaPotionBar()) {
 
                 var divPS = document.createElement("DIV");
 
@@ -1466,7 +1477,7 @@ function OnPageReload() {
                 divPS.appendChild(lbPS2);
 
                 document.body.appendChild(divPS);
-                if (!checkHaveOverchanrge()) {
+                if (!checkHaveOverchanrge() && checkHaveManaPotionBar()) {
                     clearCurrentLastTrack();
                 }
 
@@ -1695,7 +1706,7 @@ function OnPageReload() {
 			var now = Date.now();
 			var lastTime = data.lastTime;
 			data.lastTime = now;
-
+			var notFF = false;
 			if(document.querySelector('#riddleform div img[src*="riddlemaster.php"]')){
 				data.Ponys = (data.Ponys*1)+1;
 				localStorage.setItem("BattleStateEx", JSON.stringify(data));
@@ -1703,7 +1714,7 @@ function OnPageReload() {
 
 			if (document.getElementById("togpane_log")){
 				if(!document.querySelector('#riddleform div img[src*="riddlemaster.php"]')){
-					battle();
+					if(battle()) notFF=true;
 					localStorage.setItem("BattleStateExReset", false);
 					localStorage.setItem("BattleStateEx", JSON.stringify(data));
 					show();
@@ -2113,6 +2124,121 @@ function OnPageReload() {
 				//while (vCredits != (vCredits = vCredits.replace(/^(\d+)(\d{3})/, '$1,$2')));
 
 				button.innerHTML = "<b>[Summary]</b> "+data.Rounds+" Rounds / " +data.turn.formatMoney(0, '.', ',') + " turns / " + timeValue  + " (" + (tPers).toFixed(2) + " t/s) / EXP: "+vEXP.formatMoney(0, '.', ',')+" / Credits: "+vCredits.formatMoney(0, '.', ',')+" / Pony: "+data.Ponys;
+
+				var vPop = document.getElementsByClassName('btcp')[0];
+				if(vPop){
+					if(vPop.getElementsByTagName('img')[0]){
+						//nothing..
+					}else{
+						//save...
+						if(settings.trackBattleStatEX_history){
+							var listKeep = ['1000','150','125','110','100','90','80','75','70','65','60','55','1'];
+							var listKindex = listKeep.indexOf(data.Rounds.split(' / ')[0]);
+							var listBTJson = {};
+							if(localStorage.getItem("listBTJson")) listBTJson = JSON.parse(localStorage.getItem("listBTJson"));
+
+							if(listKindex !== -1 && localStorage.getItem("BattleStateExHistorySave") === "true"){
+
+								if(typeof(listBTJson[listKeep[listKindex]+"_index"]) === 'undefined') listBTJson[listKeep[listKindex]+"_index"]= -1;
+
+								var lIndex = listBTJson[listKeep[listKindex]+"_index"];
+								if(lIndex >= settings.trackBattleStatEX_count) lIndex = -1;
+								
+								lIndex++;
+
+								listBTJson[listKeep[listKindex]+"_index"]= lIndex;
+
+								var keepTxt = "<b>"+getNowFormat()+"</b><br/>"+ dmg.innerHTML+"<br/>"+atk.innerHTML+"<br/>"+item.innerHTML+"<br/>"+skill.innerHTML+"<br/>"+button.innerHTML;
+
+								//===============//
+								//Keep Track Drop//
+								if(settings.trackBattleStatEX_TrackDrop){
+									var TrackDropHtml = "";
+
+									var mainJson = [];
+
+									var vx = JSON.parse(localStorage.getItem("BattleStateExTrackDropLogs"));
+									for (key in vx){
+
+									 mainJson.push({
+											"id": key,
+											"value": "" + vx[key].value,
+											"color": vx[key].color
+										});
+
+									}
+
+									mainJson.push({
+										"id": "Credits+Items",
+										"value": "" + getSumPrice(JSON.stringify(mainJson)),
+										"color": 'rgb(144, 124, 2)'
+									});
+
+									mainJson.push({
+										"id": "Other Equip",
+										"value": "" + localStorage.getItem("BattleStateExTrackDropOtherEQ"),
+										"color": 'rgb(255, 0, 0)'
+									});
+
+									var kTable = buildHtmlTable(mainJson.sort(axeccp));
+
+									var trSplit = kTable.innerHTML.split('</tr>');
+									var finalKtable = "<table><tr><td valign='top'><table  style=' font-size: 10pt; font-family: arial, helvetica, sans-serif;' >";
+
+									var vNewTable = false;
+									var vAdd = 1;
+									var vMod = 16;
+									var vFirst = true;
+
+									for(var t=0;t<trSplit.length;t++){
+										//console.log(trSplit[t]);
+										if(t !== 0 && vAdd%vMod === 0 ){
+
+											vNewTable = true;
+										}
+
+										if(vNewTable){
+											vNewTable = false;
+											vAdd = 1;
+											if(vFirst){
+												vFirst = false;
+												vMod = vMod-2;
+											}
+											
+											finalKtable = finalKtable + "</tbody></table></td><td valign='top'><table style=' font-size: 10pt; font-family: arial, helvetica, sans-serif;'>"+trSplit[(trSplit.length-1)]+"</td><td>"+trSplit[0];
+											finalKtable = finalKtable+trSplit[t]+"</tr>";
+										}else{
+											finalKtable = finalKtable+trSplit[t]+"</tr>";
+											vAdd++;
+										}
+									}
+
+									finalKtable = finalKtable+"</tr>"+trSplit[(trSplit.length-1)]+"</td></tr></table>";
+
+									TrackDropHtml = '<div style="display:none;font-size: 10pt;font-family: arial, helvetica, sans-serif;border: solid 1px;" id="'+listKeep[listKindex]+'_'+lIndex+'"> '+finalKtable+' </div>';
+									var SHH = '<div style=\' background: #ffdf65;    width: 68px;    font-size: 10pt;    font-family: arial, helvetica, sans-serif;    cursor: pointer;    color: rgb(92, 13, 17);\' onclick="if(document.getElementById(\''+listKeep[listKindex]+'_'+lIndex+'\').style.display ===\'none\'){document.getElementById(\''+listKeep[listKindex]+'_'+lIndex+'\').style.display = \'block\';}else{document.getElementById(\''+listKeep[listKindex]+'_'+lIndex+'\').style.display = \'none\';}">Drop Items</div>';
+
+									TrackDropHtml = SHH + TrackDropHtml;
+									keepTxt = keepTxt + "<br/>"+TrackDropHtml;
+
+									localStorage.removeItem("BattleStateExTrackDropLogs")
+									localStorage.setItem("BattleStateExTrackDropOtherEQ", 0);
+
+									//console.log(TrackDropHtml);
+								}
+								//Keep Track Drop END//
+								//===================//
+
+
+								listBTJson[listKeep[listKindex]+'_'+lIndex] = keepTxt;
+
+								localStorage.setItem("listBTJson", JSON.stringify(listBTJson));
+								localStorage.setItem("BattleStateExHistorySave", false);
+							}
+						}// end track battle stats history
+					}
+				}
+
 
 			}
 
@@ -6701,13 +6827,14 @@ function show(){
 	//while (vCredits != (vCredits = vCredits.replace(/^(\d+)(\d{3})/, '$1,$2')));
 
 	button.innerHTML = "<b>[Summary]</b> "+data.Rounds+" Rounds / " +data.turn.formatMoney(0, '.', ',') + " turns / " + timeValue  + " (" + (tPers).toFixed(2) + " t/s) / EXP: "+vEXP.formatMoney(0, '.', ',')+" / Credits: "+vCredits.formatMoney(0, '.', ',')+" / Pony: "+data.Ponys;
-	
+
 	if(settings.trackBattleStatEX_history){
 		var listKeep = ['1000','150','125','110','100','90','80','75','70','65','60','55','1'];
+
 		var listKindex = listKeep.indexOf(data.Rounds.split(' / ')[0]);
 		var listBTJson = {};
 		if(localStorage.getItem("listBTJson")) listBTJson = JSON.parse(localStorage.getItem("listBTJson"));
-
+		/*
 		if(listKindex !== -1 && localStorage.getItem("BattleStateExHistorySave") === "true"){
 
 			if(typeof(listBTJson[listKeep[listKindex]+"_index"]) === 'undefined') listBTJson[listKeep[listKindex]+"_index"]= -1;
@@ -6807,6 +6934,8 @@ function show(){
 			localStorage.setItem("BattleStateExHistorySave", false);
 		}
 
+		*/
+
 		if(localStorage.getItem("listBTJson")){
 
 			if(localStorage.getItem("listBTJson")) listBTJson = JSON.parse(localStorage.getItem("listBTJson"));
@@ -6829,6 +6958,7 @@ function show(){
 				nDocument.body.style.fontFamily = 'arial,helvetica,sans-serif';
 				nDocument.body.style.color = '#5C0D11';
 
+
 				for(var i=0;i<listKeep.length;i++){
 					var genHR = false;
 					for(var j=0;j<=settings.trackBattleStatEX_count;j++){
@@ -6850,7 +6980,10 @@ function show(){
 			button.appendChild(vDiv);
 
 		}
-	}
+	}// end battle ex history
+
+	
+	
 }
 
 /*============ SHOW Battle stat EX END ======*/
@@ -6881,7 +7014,7 @@ if (document.getElementById('togpane_log')) {
 
         if (document.getElementById('riddleform') || document.getElementById('equipment') || document.querySelector('img[src $= "derpy.gif"]')) return;
 
-        if (!document.getElementById('quickbar') && !document.querySelector('#riddleform div img[src*="riddlemaster.php"]') && !checkHaveOverchanrge()) {
+        if (!document.getElementById('quickbar') && !document.querySelector('#riddleform div img[src*="riddlemaster.php"]') && !checkHaveOverchanrge() && checkHaveManaPotionBar()) {
 
             var divPS = document.createElement("DIV");
 
@@ -6913,7 +7046,7 @@ if (document.getElementById('togpane_log')) {
 
             document.body.appendChild(divPS);
 
-            if (!checkHaveOverchanrge()) {
+            if (!checkHaveOverchanrge() && checkHaveManaPotionBar()) {
                 GM_setValue('HealthDraught', 0);
                 GM_setValue('ManaDraught', 0);
                 GM_setValue('SpiritDraught', 0);
@@ -6949,7 +7082,7 @@ if (document.getElementById('togpane_log')) {
     if (settings.trackDrop) {
         if (document.getElementById('riddleform') || document.getElementById('equipment') || document.querySelector('img[src $= "derpy.gif"]')) return;
 
-        if (GM_getValue('detailLogs') && !checkHaveOverchanrge() && !checkHaveNoCurrentBattle()) {
+        if (GM_getValue('detailLogs') && !checkHaveOverchanrge() && !checkHaveNoCurrentBattle() && checkHaveManaPotionBar()) {
 
             //function gen +
             if (!GM_getValue('enableKeep')) {
@@ -6979,28 +7112,28 @@ if (document.getElementById('togpane_log')) {
     //hv counter
     if (settings.counterPlus) {
         if (document.getElementById('riddleform') || document.getElementById('equipment') || document.querySelector('img[src $= "derpy.gif"]')) return;
-        if (!checkHaveOverchanrge() && !checkHaveNoCurrentBattle()) {
+        if (!checkHaveOverchanrge() && !checkHaveNoCurrentBattle() && checkHaveManaPotionBar()) {
             genAfterTurn();
         }
     }
 
     //show stamina control
     if (settings.staminaControl && settings.staminaShowMainPage) {
-        if (!checkHaveOverchanrge() && !checkHaveNoCurrentBattle()) {
+        if (!checkHaveOverchanrge() && !checkHaveNoCurrentBattle() && checkHaveManaPotionBar()) {
             showSTMNControl();
         }
     }
 
     //show stop-start
     if (settings.showStopStartButtonMainPage) {
-        if (!checkHaveOverchanrge() && !checkHaveNoCurrentBattle()) {
+        if (!checkHaveOverchanrge() && !checkHaveNoCurrentBattle() && checkHaveManaPotionBar()) {
             showStopStartMainPage();
         }
     }
 	
 	//show battle stat ex
 	if (settings.trackBattleStatEX) {
-        if (!checkHaveOverchanrge() && !checkHaveNoCurrentBattle()) {
+        if (!checkHaveOverchanrge() && !checkHaveNoCurrentBattle() && checkHaveManaPotionBar()) {
 			localStorage.setItem("BattleStateExReset", true);
             show();
         }
