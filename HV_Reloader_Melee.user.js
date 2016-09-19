@@ -1043,6 +1043,7 @@ function initialPageLoad() {
                                 var selspsk = document.createElement("select");
                                 selspsk.id = 'speSkillID';
                                 selspsk.style.width = '60px';
+								selspsk.style.textAlignLast = "center";
                                 selspsk.style.webkitAppearance = 'none';
                                 selspsk.style.background = 'rgb(87, 218, 212)';
                                 selspsk.setAttribute("title", "Special Skill");
