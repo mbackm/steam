@@ -1128,8 +1128,26 @@ function initialPageLoad() {
 									}
 									optiono2.appendChild(document.createTextNode(' 8,1 '));
 
+									var optiono3 = document.createElement("option");
+									optiono3.id = 'op43';
+									optiono3.value = '4,3';
+									if (currentMonOFCFRD === '4,3') {
+										optiono3.setAttribute("selected", "true");
+									}
+									optiono3.appendChild(document.createTextNode(' 4,3 '));
+
+									var optiono4 = document.createElement("option");
+									optiono4.id = 'op11';
+									optiono4.value = '1,1';
+									if (currentMonOFCFRD === '1,1') {
+										optiono4.setAttribute("selected", "true");
+									}
+									optiono4.appendChild(document.createTextNode(' 1,1 '));
+
 									selsmonfr.appendChild(optiono1);
 									selsmonfr.appendChild(optiono2);
+									selsmonfr.appendChild(optiono3);
+									selsmonfr.appendChild(optiono4);
 
 
 									 tttr6 = document.createElement("TR");
