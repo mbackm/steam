@@ -15,14 +15,14 @@
 
 //====== Setting Zone ======//
 
-var MAX_PRIMARY = 3; // max=25
-var MAX_ELEMENTAL = 4; // max=50
-var MAX_CHAOS = 1; // max=20
+var MAX_PRIMARY = 10; // max=25
+var MAX_ELEMENTAL = 23; // max=50
+var MAX_CHAOS = 0; // max=20
 
 // if have value on this,  it use this first, if not go to default;
-var vPri = ["pa_int", "pa_wis"];//["pa_str", "pa_dex", "pa_agi", "pa_end", "pa_int", "pa_wis"];
-var vElem = ["er_holy", "er_dark"];//["er_fire", "er_cold", "er_elec", "er_wind", "er_holy", "er_dark"];
-var vChaos = ["evade", "resist"];//["affect", "damage", "atkspd", "accur", "cevbl", "cpare", "health", "parry", "resist", "evade", "phymit", "magmit"];
+var vPri = ["pa_str", "pa_dex", "pa_agi", "pa_end", "pa_int", "pa_wis"];//["pa_str", "pa_dex", "pa_agi", "pa_end", "pa_int", "pa_wis"];
+var vElem = ["er_fire", "er_cold", "er_elec", "er_wind", "er_holy", "er_dark"];//["er_fire", "er_cold", "er_elec", "er_wind", "er_holy", "er_dark"];
+var vChaos = ["affect"];//["affect", "damage", "atkspd", "accur", "cevbl", "cpare", "health", "parry", "resist", "evade", "phymit", "magmit"];
 
 //====== Setting Zone END ======//
 
