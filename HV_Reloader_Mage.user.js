@@ -6,7 +6,7 @@
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
-// @version     1.3.3.91
+// @version     1.3.3.92
 // @grant       none
 // ==/UserScript==
 // Vanilla Reloader:
@@ -38,7 +38,7 @@ var settings = {
     enableHaveAutoCast: true, // if you already unlock auto-cast please enable and go to LIST_AUTO_CAST for config.
     showUsePotion: false, //#1/4# Show use potion stopWhenUseLE 
     spellControl: true, // Spell Control - use Scroll or normal buff
-    stopWhenUseLE: false, // stop auto when use Last Elixir
+    stopWhenUseLE: true, // stop auto when use Last Elixir
     showStopStartButton: true, // Show Stop Start button
     showStopStartButtonMainPage: true, // Show Stop Start button on Main Page
     showImperilOnOff: true, // Show on of imperil
@@ -841,15 +841,15 @@ function initialPageLoad() {
 
                         if (document.getElementById('2501')) {
                             if (isFirefoxChk) {
-                                aDIscpc.style.height = '170px';
+                                aDIscpc.style.height = '190px';
                             } else {
-                                aDIscpc.style.height = '150px';
+                                aDIscpc.style.height = '170px';
                             }
                         } else {
                             if (isFirefoxChk) {
-                                aDIscpc.style.height = '150px';
+                                aDIscpc.style.height = '170px';
                             } else {
-                                aDIscpc.style.height = '130px';
+                                aDIscpc.style.height = '150px';
                             }
                         }
 
@@ -870,6 +870,24 @@ function initialPageLoad() {
 			*/
 
                         if (settings.spellControl) {
+
+							// scroll 0
+                            var iRadio0 = document.createElement("INPUT");
+                            iRadio0.setAttribute("type", "radio");
+                            iRadio0.setAttribute("name", "spellCT");
+                            iRadio0.setAttribute("value", "0");
+                            if (spellSelect === 0) {
+                                iRadio0.setAttribute("checked", "true");
+                            }
+                            iRadio0.addEventListener('change', function() {
+                                GM_setValue("spellSelect", 0);
+                            });
+
+                            var lbRad0 = document.createElement("LABEL");
+                            lbRad0.style.color = '#5C0D11';
+                            lbRad0.style.fontFamily = "'Verdana','sans-serif'";
+                            lbRad0.setAttribute("title", "swiftness/shadow/protection/");
+                            lbRad0.appendChild(document.createTextNode('SC #0'));
 
                             // scroll 1
                             var iRadio1 = document.createElement("INPUT");
@@ -1027,7 +1045,15 @@ function initialPageLoad() {
                             // table zone
                             var ttble = document.createElement("TABLE");
 
-                            var tttr1 = document.createElement("TR");
+                            var tttr0 = document.createElement("TR");
+                            var tttd01 = document.createElement("TD");
+                            var tttd02 = document.createElement("TD");
+                            tttd01.appendChild(iRadio0);
+                            tttd02.appendChild(lbRad0);
+                            tttr0.appendChild(tttd01);
+                            tttr0.appendChild(tttd02);
+
+							var tttr1 = document.createElement("TR");
                             var tttd11 = document.createElement("TD");
                             var tttd12 = document.createElement("TD");
                             tttd11.appendChild(iRadio1);
@@ -1069,6 +1095,7 @@ function initialPageLoad() {
                             tttr4.appendChild(tttd41);
                             tttr4.appendChild(tttd42);
 
+							ttble.appendChild(tttr0);
                             ttble.appendChild(tttr1);
                             ttble.appendChild(tttr2);
                             ttble.appendChild(tttr3);
@@ -2418,7 +2445,7 @@ function OnPageReload() {
             newDivShowItems.id = "divShowItems";
             newDivShowItems.style.position = "absolute";
 
-			var heiPx = 160;
+			var heiPx = 180;
 
 			if(settings.showImperilOnOff){
 				heiPx = heiPx+30;
@@ -3585,7 +3612,41 @@ function OnPageReload() {
                     // user scroll
 
 
-                    if (GM_getValue('spellSelect') === 1) {
+                    if (GM_getValue('spellSelect') === 0) {
+                        //-swiftness/shadow/protection
+                        var listUseEff = ['hastened', 'shadow veil', 'protection'];
+
+                        for (var sc = 0; sc < listUseEff.length; sc++) {
+                            var chkIndexScroll = -1;
+                            var vEffn = listUseEff[sc];
+                            if (!checkForScrollBuff(vEffn)) {
+
+                                var nEffn = effScrollList.indexOf(vEffn);
+                                chkIndexScroll = nextScroll(effScrollList[nEffn + 1]);
+
+                                if (chkIndexScroll === -1) {
+                                    chkIndexScroll = nextItem(effScrollList[nEffn + 1]);
+
+                                    if (chkIndexScroll !== -1) {
+                                        useItem(chkIndexScroll);
+                                        return;
+                                    }
+                                }
+
+                                if (chkIndexScroll !== -1) {
+                                    useItemClick('ikey_s' + chkIndexScroll);
+                                    return;
+                                } else {
+                                    if (!checkForBuff(vEffn)) {
+                                        if (castSpell(vEffn, 0)) {
+                                            return;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                    }else if (GM_getValue('spellSelect') === 1) {
                         //-swiftness/shadow/protection/absorption/life
                         var listUseEff = ['hastened', 'shadow veil', 'protection', 'absorbing ward', 'spark of life'];
 
