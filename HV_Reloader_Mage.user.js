@@ -6,7 +6,7 @@
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
-// @version     1.3.3.93
+// @version     1.3.3.94
 // @grant       none
 // ==/UserScript==
 // Vanilla Reloader:
@@ -2042,7 +2042,7 @@ function OnPageReload() {
 						var tgLog = document.getElementById("leftpane");
 						div.style.position = "relative";
 						div.style.width = "669px";
-						div.style.height = "134px";
+						div.style.height = "144px";
 						div.style.clear = "both";
 						div.style.textAlign = "justify";
 						div.style.overflow = "auto";
@@ -6340,7 +6340,7 @@ function show(){
 			var tgLog = document.getElementById("leftpane");
 			div.style.position = "relative";
 			div.style.width = "669px";
-			div.style.height = "134px";
+			div.style.height = "144px";
 			div.style.clear = "both";
 			div.style.textAlign = "justify";
 			div.style.overflow = "auto";
@@ -6531,12 +6531,30 @@ function show(){
 
 				nDocument.body.appendChild(document.createElement("div")).innerHTML = '<table style=\'position: fixed;    background-color: #f3ffd6;    right: 5px;    font-size: 10pt;    font-family: arial, helvetica, sans-serif;\'><tr><td><input id=\'cbShowAll\' type=\'checkbox\' onchange="var divItems = document.querySelectorAll(\'div.track\');  for(var i=0;i<divItems.length;i++){ if(this.checked){ divItems[i].style.display = \'block\';	}else{ divItems[i].style.display = \'none\';} }"></td><td>Show/Hide Drop Items</td></tr></table>';
 
+				var styleBG = ['#c3fcff','#d2ffdc','#e2ffc3','#fffdc3','#ffd1c3','#ffe6fd','#e1e6ff'];
+				var styleNow = 0;
+
 				for(var i=0;i<listKeep.length;i++){
 					var genHR = false;
+
+					var vRoundDiv = document.createElement("div");
+					vRoundDiv.style.backgroundColor = styleBG[styleNow];
+					styleNow++;
+
+					if(styleNow === styleBG.length ){
+						styleNow = 0;
+					}
+
+					nDocument.body.appendChild(vRoundDiv);
+
 					for(var j=0;j<=settings.trackBattleStatEX_count;j++){
 						if(typeof(listBTJson[listKeep[i]+'_'+j]) !== 'undefined'){
-							nDocument.body.appendChild(document.createElement("BR"));
-							nDocument.body.appendChild(document.createElement("div")).innerHTML = listBTJson[listKeep[i]+'_'+j];
+							
+							vRoundDiv.appendChild(document.createElement("BR"));
+							vRoundDiv.appendChild(document.createElement("div")).innerHTML = listBTJson[listKeep[i]+'_'+j];
+							
+							//nDocument.body.appendChild(document.createElement("BR"));
+							//nDocument.body.appendChild(document.createElement("div")).innerHTML = listBTJson[listKeep[i]+'_'+j];
 							genHR = true;
 						}else{
 							break;
