@@ -1691,7 +1691,7 @@ function OnPageReload() {
     if (settings.trackBattleStatEX) {
         (function() {
 
-			var data = {last:0, count:0, total:0, countATK:0, totalATK:0, turn:0, beginTime: Date.now(), lastTime: 0, EXP: 0,Credits: 0,Rounds: '0 / 0',Ponys: 0};
+			var data = {last:0, count:0, total:0, countATK:0, totalATK:0, turn:0, beginTime: Date.now(), lastTime: 0, EXP: 0,Credits: 0,Rounds: '0 / 0',Ponys: 0,Spark:0};
 			var nglist = /^(Shield Bash|Vital Strike|Merciful Blow|Great Cleave|Rending Blow|Shatter Strike|Iris Strike|Backstab|Frenzied Blows|Skyward Sword|Concussive Strike|FUS RO DAH|Orbital Friendship Cannon)$/;
 
 			if (document.getElementById("togpane_log")){
@@ -1865,6 +1865,13 @@ function OnPageReload() {
 
 						data.totalATK += d[4]*1;
 						data.countATK++;
+						continue;
+					}
+
+					//Spark of life
+					d = tr[i].children[2].textContent.match('You gain the effect Cloak of the Fallen.');
+					if(d){
+						data.Spark++;
 						continue;
 					}
 
@@ -2124,7 +2131,7 @@ function OnPageReload() {
 				var vCredits = data.Credits;
 				//while (vCredits != (vCredits = vCredits.replace(/^(\d+)(\d{3})/, '$1,$2')));
 
-				button.innerHTML = "<b>[Summary]</b> "+data.Rounds+" Rounds / " +data.turn.formatMoney(0, '.', ',') + " turns / " + timeValue  + " (" + (tPers).toFixed(2) + " t/s) / EXP: "+vEXP.formatMoney(0, '.', ',')+" / Credits: "+vCredits.formatMoney(0, '.', ',')+" / Pony: "+data.Ponys;
+				button.innerHTML = "<b>[Summary]</b> "+data.Rounds+" Rounds / " +data.turn.formatMoney(0, '.', ',') + " turns / " + timeValue  + " (" + (tPers).toFixed(2) + " t/s) / EXP: "+vEXP.formatMoney(0, '.', ',')+" / Credits: "+vCredits.formatMoney(0, '.', ',')+" / Pony: "+data.Ponys+" / Spark: "+data.Spark;
 
 				var vPop = document.getElementsByClassName('btcp')[0];
 				if(vPop){
@@ -6019,7 +6026,7 @@ if (settings.enableCheckPony) {
 
 		if(settings.trackBattleStatEX){
 
-			var data = {last:0, count:0, total:0, countATK:0, totalATK:0, turn:0, beginTime: Date.now(), lastTime: 0, EXP: 0,Credits: 0,Rounds: '0 / 0',Ponys: 0};
+			var data = {last:0, count:0, total:0, countATK:0, totalATK:0, turn:0, beginTime: Date.now(), lastTime: 0, EXP: 0,Credits: 0,Rounds: '0 / 0',Ponys: 0,Spark:0};
 			var load = localStorage.getItem("BattleStateEx");
 			if (load) data = JSON.parse(load);
 
@@ -6680,7 +6687,7 @@ function getNowFormat(){
 
 // display
 function show(){
-	var data = {last:0, count:0, total:0, countATK:0, totalATK:0, turn:0, beginTime: Date.now(), lastTime: 0, EXP: 0,Credits: 0,Rounds: '0 / 0',Ponys: 0};
+	var data = {last:0, count:0, total:0, countATK:0, totalATK:0, turn:0, beginTime: Date.now(), lastTime: 0, EXP: 0,Credits: 0,Rounds: '0 / 0',Ponys: 0,Spark:0};
 	var load = localStorage.getItem("BattleStateEx");
     if (load) data = JSON.parse(load);
 
@@ -6829,7 +6836,7 @@ function show(){
 	var vCredits = data.Credits;
 	//while (vCredits != (vCredits = vCredits.replace(/^(\d+)(\d{3})/, '$1,$2')));
 
-	button.innerHTML = "<b>[Summary]</b> "+data.Rounds+" Rounds / " +data.turn.formatMoney(0, '.', ',') + " turns / " + timeValue  + " (" + (tPers).toFixed(2) + " t/s) / EXP: "+vEXP.formatMoney(0, '.', ',')+" / Credits: "+vCredits.formatMoney(0, '.', ',')+" / Pony: "+data.Ponys;
+	button.innerHTML = "<b>[Summary]</b> "+data.Rounds+" Rounds / " +data.turn.formatMoney(0, '.', ',') + " turns / " + timeValue  + " (" + (tPers).toFixed(2) + " t/s) / EXP: "+vEXP.formatMoney(0, '.', ',')+" / Credits: "+vCredits.formatMoney(0, '.', ',')+" / Pony: "+data.Ponys+" / Spark: "+data.Spark;
 
 	if(settings.trackBattleStatEX_history){
 		var listKeep = ['1000','150','125','110','100','90','80','75','70','65','60','55','1'];
