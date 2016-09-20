@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         HV Monster up stat
 // @namespace    ??-??
-// @version      0.3
+// @version      0.4
 // @description  Enjoy :P
 // @author       BB-04
 // @match        http://hentaiverse.org/?s=Bazaar&ss=ml*
@@ -317,8 +317,8 @@ function upStatPri(vMainData, vMaxSetting, vSlot){
 				_div.id = 'showMLPri_'+vValue;
 				//document.getElementById('mainpane').insertBefore(_div, spTable);
 				//spTable.appendChild(_div);
-				_div.classList["add"]("doing");
-				vTD.appendChild(_div);
+				//_div.classList["add"]("doing");
+				//vTD.appendChild(_div);
 			}
 			
 			
@@ -330,7 +330,7 @@ function upStatPri(vMainData, vMaxSetting, vSlot){
                 param: "", 
                 callback: checkState,
                 repeat: 1, 
-                elm: _div, 
+                elm: null, 
                 text: vValue+" (#)"
             };
 
@@ -341,6 +341,7 @@ function upStatPri(vMainData, vMaxSetting, vSlot){
 
                 if(nowStat < vMaxSetting){
                     var loop = vMaxSetting - nowStat;
+					//console.log('vValue:'+vValue+' loop:'+loop);
                     var haveTag = false;
                     for(var i=0;i<loop;i++){
                         vTag.push(vSlot);
@@ -348,6 +349,12 @@ function upStatPri(vMainData, vMaxSetting, vSlot){
                     }
 
                     if(haveTag){
+						if(_div){
+							_div.classList["add"]("doing");
+							vTD.appendChild(_div);
+							req.elm = _div;
+						}
+
                         req.tag = vTag;
                         post(req, 0, vMaxSetting, "PRI");
 
@@ -414,8 +421,8 @@ function upStatElem(vMainData, vMaxSetting, vSlot){
 				_div.id = 'showMLElem_'+vValue;
 				//document.getElementById('mainpane').insertBefore(_div, spTable);
 				//spTable.appendChild(_div);
-				_div.classList["add"]("doing");
-				vTD.appendChild(_div);
+				//_div.classList["add"]("doing");
+				//vTD.appendChild(_div);
 			}
 
 			var req = {
@@ -425,7 +432,7 @@ function upStatElem(vMainData, vMaxSetting, vSlot){
                 param: "", 
                 callback: checkState,
                 repeat: 1,
-                elm: _div, 
+                elm: null, 
                 text: vValue+" (#)"
             };
 
@@ -443,6 +450,12 @@ function upStatElem(vMainData, vMaxSetting, vSlot){
                     }
 
                     if(haveTag){
+						if(_div){
+							_div.classList["add"]("doing");
+							vTD.appendChild(_div);
+							req.elm = _div;
+						}
+
                         req.tag = vTag;
                         post(req, 0, vMaxSetting, "ELEM");
 
@@ -497,10 +510,10 @@ function upStatChaos(vMainData, vMaxSetting, vSlot){
 			if(!_div){
 				_div = document.createElement("DIV");
 				_div.id = 'showMLChaos_'+vValue;
-				_div.classList["add"]("doing");
+				//_div.classList["add"]("doing");
 				//document.getElementById('mainpane').insertBefore(_div, spTable);
 				//spTable.appendChild(_div);
-				vTD.appendChild(_div);
+				//vTD.appendChild(_div);
 			}
 
             var req = {
@@ -510,7 +523,7 @@ function upStatChaos(vMainData, vMaxSetting, vSlot){
                 param: "", 
                 callback: checkState,
                 repeat: 1, 
-                elm: _div, 
+                elm: null, 
                 text: vValue+" (#)"
             };
 
@@ -531,6 +544,11 @@ function upStatChaos(vMainData, vMaxSetting, vSlot){
                     }
 
                     if(haveTag){
+						if(_div){
+							_div.classList["add"]("doing");
+							vTD.appendChild(_div);
+							req.elm = _div;
+						}
                         req.tag = vTag;
                         post(req, 0, vMaxSetting, "CHAOS");
 
@@ -589,6 +607,8 @@ if(letGo === "false"){
 
     if(nowMon !== '1'){
 
+		localStorage.setItem("monsterLetGo", false);
+
         //pri--zone
         if(vPri.length > 0){
             pri.value = vPri;
@@ -633,6 +653,7 @@ if(letGo === "false"){
 				var TotalDoing = document.querySelectorAll('div.doing').length;
 
 				if(TotalDoing === 0){
+					localStorage.setItem("monsterLetGo", true);
 					location.href = location.href;
 				}
 
@@ -640,6 +661,7 @@ if(letGo === "false"){
 			
 
 		}else{
+			localStorage.setItem("monsterLetGo", true);
 			document.querySelector('img[src="/y/monster/next.png"]').click();
 		}
 
