@@ -3742,7 +3742,7 @@ function OnPageReload() {
                             } else {
                                 var spModeOn = 85;
                                 if (MODE_FIGHTING !== "1H") {
-                                    spModeOn = 40;
+                                    spModeOn = 80;
                                 }
 
                                 if (getSelfOvercharge() > spModeOn && getSelfSpirit() >= (SP_ITEM_D_CUTOFF)) {
