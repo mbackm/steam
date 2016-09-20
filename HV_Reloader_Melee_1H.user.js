@@ -3100,9 +3100,9 @@ function OnPageReload() {
                 var MP_ITEM_E_CUTOFF = 15;
 
                 var ENABLE_SP_POTION = true;
-                var SP_ITEM_D_CUTOFF = 60;
-                var SP_ITEM_P_CUTOFF = 32;
-                var SP_ITEM_E_CUTOFF = 5;
+                var SP_ITEM_D_CUTOFF = 75;
+                var SP_ITEM_P_CUTOFF = 30;
+                var SP_ITEM_E_CUTOFF = 30;
 
                 var ENABALE_LE_POTION = true;
 
