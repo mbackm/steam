@@ -3744,13 +3744,14 @@ function OnPageReload() {
                         if (((iRandom % 7) === 0 && getNumBossMonsterAlive() > 1)) {
                             var indexMon = chooseTargetBoss();
                             if (indexMon !== -1) {
-                                if ((location.href + "").indexOf('s=Battle&ss=rb') === -1) {
+
+                                /*if ((location.href + "").indexOf('s=Battle&ss=rb') === -1) {
                                     iRandom = getRandomInt(1, 45);
                                 } else {
                                     iRandom = getRandomInt(1, 99);
                                 }
 
-                                /*if ((iRandom % 9) === 0) {
+                                if ((iRandom % 9) === 0) {
                                     //MAIN_SPELL_MONSTER.push('imperil');
                                     MAIN_SPELL_MONSTER.push('magnet');
 
@@ -3785,21 +3786,22 @@ function OnPageReload() {
                             //if(useSkilllToMonster('slow')){
                             //    return;
                             //}
-
+							/* 
                             if ((iRandom % 12) === 0) {
                                 if (getNumBossMonsterAlive() > 1 || getNumMonstersAlive() > 5) {
                                     //MAIN_SPELL_MONSTER.push('imperil');
-                                   /* MAIN_SPELL_MONSTER.push('magnet');
+                                   MAIN_SPELL_MONSTER.push('magnet');
 
                                     if ((iRandom % 24) === 0) {
                                         MAIN_SPELL_MONSTER.push('weaken');
                                         MAIN_SPELL_MONSTER.push('slow');
                                         MAIN_SPELL_MONSTER.push('silence');
                                     }
-									*/
+									
                                     //MAIN_SPELL_MONSTER.push('blind');
                                 }
                             }
+							*/
 
                             for (var sb in MAIN_SPELL_MONSTER) {
                                 var tb = MAIN_SPELL_MONSTER[sb];
@@ -3810,15 +3812,15 @@ function OnPageReload() {
                             }
 
                         } else if ((getNumBossMonsterAlive() > 1 || (difficulty === 'PFUDOR' && getNumBossMonsterAlive() > 0))) {
-
+							/*
                             if ((iRandom % 10) === 0) {
                                 if (getNumBossMonsterAlive() > 1) {
-                                    /*MAIN_SPELL_MONSTER.push('magnet');
+                                    MAIN_SPELL_MONSTER.push('magnet');
 
                                     if ((iRandom % 30) === 0) {
                                         MAIN_SPELL_MONSTER.push('weaken');
                                     }
-									*/
+									
                                     //MAIN_SPELL_MONSTER.push('imperil');
                                     //MAIN_SPELL_MONSTER.push('slow');
                                     //MAIN_SPELL_MONSTER.push('silence');
@@ -3826,6 +3828,7 @@ function OnPageReload() {
                                     //MAIN_SPELL_MONSTER.push('blind');
                                 }
                             }
+							*/
 
                             for (var sb2 in MAIN_SPELL_MONSTER) {
                                 var tb2 = MAIN_SPELL_MONSTER[sb2];
@@ -3924,7 +3927,7 @@ function OnPageReload() {
 								}
 
                                 if (enableOFC) {
-                                    if (getNumMonstersAlive() >= settings.monsterForUseOFCFRD[0] || getNumBossMonsterAlive() >= settings.monsterForUseOFCFRD[1]) {
+                                    if (getNumMonstersAlive() >= (settings.monsterForUseOFCFRD[0]*1) || getNumBossMonsterAlive() >= (settings.monsterForUseOFCFRD[1]*1)) {
                                         if (getSelfOvercharge() >= mainOvercharge) {
                                             if (castSpell('orbital friendship cannon', chooseTarget(false))) {
                                                 return;
@@ -3932,7 +3935,7 @@ function OnPageReload() {
                                         }
                                     }
                                 } else if (enableFRD) {
-                                    if (getNumMonstersAlive() >= settings.monsterForUseOFCFRD[0] || getNumBossMonsterAlive() >= settings.monsterForUseOFCFRD[1]) {
+                                    if (getNumMonstersAlive() >= (settings.monsterForUseOFCFRD[0]*1) || getNumBossMonsterAlive() >= (settings.monsterForUseOFCFRD[1]*1)) {
                                         if (getSelfOvercharge() >= mainOvercharge) {
                                             if (castSpell('fus ro dah', chooseTarget(false))) {
                                                 return;
