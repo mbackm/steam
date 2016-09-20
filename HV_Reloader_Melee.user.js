@@ -2321,7 +2321,7 @@ function OnPageReload() {
                         break;
                     case "Spirit Draught":
                         xDivChildNodes0.innerHTML = "D- SP";
-                        xDivChildNodes0.style.color = "#B3820A";
+                        xDivChildNodes0.style.color = "#7D5A03";
                         xDivChildNodes0.style.fontWeight = "bolder";
                         itPosition = true;
                         break;
