@@ -3135,6 +3135,20 @@ function OnPageReload() {
                     }
                 }
 
+				function getMonsterMaxHP_digits(){
+					var hpList = localStorage.getItem("hpList").split(';');
+					var hpMax = -1;
+					var nowMon = -1;
+					for(var n=0;n<=(hpList.length-1);n++){
+						if((hpList[n]*1) > hpMax){
+							hpMax = (hpList[n]*1);
+							nowMon = (n+1);
+						}
+					}
+
+					return nowMon;
+				}
+
                 //select boss max Mana  or  Have heal skill first.
                 function chooseTargetBoss() {
                     var monArray = document.getElementById('monsterpane').querySelectorAll('div[id^="mkey_"][onclick*="battle"] div.btm2[style^="background"]');
