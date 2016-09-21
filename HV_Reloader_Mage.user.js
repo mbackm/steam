@@ -4052,6 +4052,14 @@ function OnPageReload() {
 
                     actionBeep(false, false);
                     GM_setValue("botSS", false);
+
+					var btnSSx = document.getElementById('btnSSid');
+					if(btnSSx){
+								btnSSx.appendChild(document.createTextNode("-YES-"));
+								document.title = '(-WTF-)';
+								btnSSx.style.background = 'rgb(86, 195, 51)';
+					}
+
                     return;
                 }
 
