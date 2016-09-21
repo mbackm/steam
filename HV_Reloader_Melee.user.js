@@ -2983,6 +2983,7 @@ function OnPageReload() {
                 // DEFINITIONS POINT - should be filled in to tell the ai how to act //
                 ///////////////////////////////////////////////////////////////////////
                 var CURE_HP_CUTOFF = 55;
+				var SP_POTIONS_HAS_CD = false;
 
                 var ENABLE_HP_POTION = true; // true , false
                 var HP_ITEM_D_CUTOFF = 45;
@@ -4438,6 +4439,7 @@ function OnPageReload() {
                                 useItem(indexItem8);
                                 return;
                             }
+							SP_POTIONS_HAS_CD = true;
                         }
 
 
@@ -4484,7 +4486,7 @@ function OnPageReload() {
                 }
 
 
-                if ((getSelfHealth() < lowerHPAlert || (getSelfSpirit() < SP_ITEM_E_CUTOFF || (isHaveCloakOfTheFallen && getSelfSpirit() < SP_ITEM_E_CUTOFF ) )) && (!isSOL || isHaveCloakOfTheFallen)) {
+                if ((getSelfHealth() < lowerHPAlert || (getSelfSpirit() < SP_ITEM_E_CUTOFF || (isHaveCloakOfTheFallen && getSelfSpirit() < SP_ITEM_E_CUTOFF ) )) && (!isSOL || isHaveCloakOfTheFallen || SP_POTIONS_HAS_CD)) {
                     if (ENABALE_LE_POTION) {
                         var indexItemLE = nextItem('Last Elixir');
                         if (indexItemLE !== -1) {
