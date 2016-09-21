@@ -6,7 +6,7 @@
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
-// @version     1.3.3.96
+// @version     1.3.3.97
 // @grant       none
 // ==/UserScript==
 // Vanilla Reloader:
@@ -3035,14 +3035,14 @@ function OnPageReload() {
 				//var ENABLE_USE_SLOW = true;
 				var MON_TARGET_SLOW = -1;
 
-				if(settings.ENABLE_USE_SLOW){
+				if(settings.ENABLE_USE_SLOW && settings.hvStateHP){
 					try {
 						var data = {last:0, count:0, total:0, countATK:0, totalATK:0, turn:0, beginTime: Date.now(), lastTime: 0, EXP: 0,Credits: 0,Rounds: '0 / 0',Ponys: 0,Spark:0};
 						var load = localStorage.getItem("BattleStateEx");
 						if (load) data = JSON.parse(load);
 
-						var roundCurrent = listKeep.indexOf(data.Rounds.split(' / ')[0]);
-						var roundMax = listKeep.indexOf(data.Rounds.split(' / ')[1]);
+						var roundCurrent = data.Rounds.split(' / ')[0];
+						var roundMax = data.Rounds.split(' / ')[1];
 						var roundUse = Math.floor(roundMax*0.8);
 						if(roundCurrent >= roundUse){
 							MAIN_SPELL_MONSTER = ['slow','imperil'];
