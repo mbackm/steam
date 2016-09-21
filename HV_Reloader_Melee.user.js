@@ -4497,6 +4497,7 @@ function OnPageReload() {
 
                     actionBeep(false, false);
                     GM_setValue("botSS", false);
+					window.location.href = window.location.href;
                     return;
 
                 }
