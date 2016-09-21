@@ -36,7 +36,7 @@
 var settings = {
     godAuto: true, // God Mode
     enableHaveAutoCast: true, // if you already unlock auto-cast please enable and go to LIST_AUTO_CAST for config.
-		ENABLE_USE_SLOW: true, // enable use slow
+		ENABLE_USE_SLOW: false, // enable use slow
     showUsePotion: false, //#1/4# Show use potion stopWhenUseLE 
     spellControl: true, // Spell Control - use Scroll or normal buff
     stopWhenUseLE: true, // stop auto when use Last Elixir
