@@ -6,7 +6,7 @@
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
-// @version     1.3.3.97
+// @version     1.3.3.98
 // @grant       none
 // ==/UserScript==
 // Vanilla Reloader:
@@ -3113,9 +3113,9 @@ function OnPageReload() {
 						}
 					}
 
-					if(nowMon == 10){
-						nowMon = 0;
-					}
+					//if(nowMon == 10){
+					//	nowMon = 0;
+					//}
 
 					return nowMon;
 				}
@@ -3573,10 +3573,7 @@ function OnPageReload() {
                             var tb = MAIN_SPELL_MONSTER[sb];
                             console.log('decided to cast ' + tb);
 							if('slow' === tb && MON_TARGET_SLOW >= 0){
-								if(document.getElementById('mkey_'+MON_TARGET_SLOW)){
-									if(MON_TARGET_SLOW*1 === 0){
-										MON_TARGET_SLOW = 10;
-									}
+								if(!isMonDead(MON_TARGET_SLOW*1))){
 
 									if(!isMonEffect(MON_TARGET_SLOW, 'Slowed')){
 										if (castSpell('slow', MON_TARGET_SLOW)) {
