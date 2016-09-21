@@ -15,7 +15,7 @@
 // @icon 		http://g.e-hentai.org/favicon.ico
 // @updateURL       https://github.com/suvidev/hv/raw/master/HVUT_1.6.1_mod.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HVUT_1.6.1_mod.user.js
-// @version        1.6.1.0.23
+// @version        1.6.1.0.24
 // ==/UserScript==
 
 var settings = {
@@ -4768,8 +4768,7 @@ _up.data = {};
 _up.pane = $id("rightpane").children[1];
 _up.table = _up.pane.firstElementChild;
 _up.div = $element("div",_up.pane,[".hvut-up-div"]);
-_up.button = $element("input",_up.div,{type:"button",value:"Upgrade ALL",style:"margin:5px auto"},function(){_up.upgrade();});
-_up.ul = $element("ul",_up.div,[".hvut-up-ul"]);
+
 
 $id("leftpane").style.width = "450px";
 $qs("a[href*='?s=Forge&ss=up&filter=']").parentNode.style.cssText = "width:450px;margin:10px";
@@ -4781,9 +4780,10 @@ _up.table.classList.add("hvut-up-table");
 
 $qsa("tr",_up.table).forEach(function(tr){
 	var match = tr.textContent.trim().match(/(.+)\s+(\d+)\s+\/\s+(\d+)$/),
-		name = match[1],
-		data = _up.data[name] = {current:Number(match[2])};
-
+		name = match[1];
+		_up.data[name] = {current:Number(match[2])};
+		var data = _up.data[name];
+	//console.log(' _up.data['+name+'] = '+ _up.data[name]);
 	data.td = $element("td",tr);
 	data.input = $element("input",data.td,{type:"number",className:"hvut-up-input",value:data.current,min:data.current},{change:function(){_up.calc(name);}});
 	data.ul = $element("ul",data.td,[".hvut-up-sub hvut-up-ul"]);
@@ -4916,6 +4916,7 @@ _up.calc = function(name) {
 
 	for(name in _up.data) {
 		data = _up.data[name];
+		//console.log('x-- name:'+name);
 		if(!data.valid) {
 			continue;
 		}
@@ -4982,18 +4983,45 @@ _up.calc = function(name) {
 		$element("span",li,[" ("+stock+")",".hvut-up-stock"]);
 	}
 
+
+	return _up.data;
+
 };
 
-_up.upgrade = function() {
-	_up.calc();
+function up_upgrade(){
+	//console.log(xgg);
+	var up_data = _up.calc();
 
 	var eid = $qs("input[name='select_item']").value,
-		current,
-		total = 0,
-		done = 0;
+	current,
+	total = 0,
+	done = 0;
 
-	for(name in _up.data) {
-		data = _up.data[name];
+	for(xxxx in up_data) {
+		//console.log('-- xxxx:'+xxxx);
+
+		var data = up_data[xxxx];
+
+		if(typeof(data) === 'undefined') {
+			continue;
+		}
+
+		if(!data.valid){
+			continue;
+		}
+
+		total += (data.to - data.current);
+
+		for(current=data.current;current<data.to;current++) {
+			ajax(location.href,"select_item="+eid+"&upgrade_stat="+data.id,function(r){_up.button.value=++done+" / "+total;if(done===total){alert("Completed!\n\nReload the page.");}},function(r){});
+		}
+	}
+	
+
+/*
+	for(name in up_data) {
+		console.log('--'+name);
+		data = up_data[name];
 		console.log(data);
 		if(typeof(data) === 'undefined') {
 			continue;
@@ -5009,9 +5037,17 @@ _up.upgrade = function() {
 			ajax(location.href,"select_item="+eid+"&upgrade_stat="+data.id,function(r){_up.button.value=++done+" / "+total;if(done===total){alert("Completed!\n\nReload the page.");}},function(r){});
 		}
 	}
-
+*/
 	_up.button.value = "0 / " + total;
+
+}
+
+_up.upgrade = function() {
+		up_upgrade();
 };
+
+_up.button = $element("input",_up.div,{type:"button",value:"Upgrade ALL",style:"margin:5px auto"},function(){up_upgrade();});
+_up.ul = $element("ul",_up.div,[".hvut-up-ul"]);
 
 }
 
