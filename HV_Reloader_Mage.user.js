@@ -6,7 +6,7 @@
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
-// @version     1.3.3.95
+// @version     1.3.3.96
 // @grant       none
 // ==/UserScript==
 // Vanilla Reloader:
@@ -36,6 +36,7 @@
 var settings = {
     godAuto: true, // God Mode
     enableHaveAutoCast: true, // if you already unlock auto-cast please enable and go to LIST_AUTO_CAST for config.
+		ENABLE_USE_SLOW: true, // enable use slow
     showUsePotion: false, //#1/4# Show use potion stopWhenUseLE 
     spellControl: true, // Spell Control - use Scroll or normal buff
     stopWhenUseLE: true, // stop auto when use Last Elixir
@@ -61,7 +62,7 @@ var settings = {
     staminaControl: true, // Show Stamina Control
     staminaShowMainPage: true, // Show Stamina Control on Main Page
     roundCounter: true, // Show current round and rounds remaining
-    hvStateHP: false, // Show enemy HP value
+    hvStateHP: true, // Show enemy HP value
     fluidHPBar: false, // Shorten HP Bar width to easily see which monster has the most HP
 
     defaultAction: 0, // Change the default action to a T1 spell
@@ -3030,6 +3031,30 @@ function OnPageReload() {
                 }
 
                 var MAIN_SPELL_MONSTER = ['imperil']; //['weaken','slow'];
+				
+				//var ENABLE_USE_SLOW = true;
+				var MON_TARGET_SLOW = -1;
+
+				if(settings.ENABLE_USE_SLOW){
+					try {
+						var data = {last:0, count:0, total:0, countATK:0, totalATK:0, turn:0, beginTime: Date.now(), lastTime: 0, EXP: 0,Credits: 0,Rounds: '0 / 0',Ponys: 0,Spark:0};
+						var load = localStorage.getItem("BattleStateEx");
+						if (load) data = JSON.parse(load);
+
+						var roundCurrent = listKeep.indexOf(data.Rounds.split(' / ')[0]);
+						var roundMax = listKeep.indexOf(data.Rounds.split(' / ')[1]);
+						var roundUse = Math.floor(roundMax*0.8);
+						if(roundCurrent >= roundUse){
+							MAIN_SPELL_MONSTER = ['slow','imperil'];
+						}
+
+						MON_TARGET_SLOW = getMonsterMaxHP_digits();
+
+						
+					} catch (e) { }
+
+				}
+				
 
                 var DEFEND_FOR_HP = true; //true,false
                 var FOCUS_FOR_MP = true;
@@ -3076,6 +3101,24 @@ function OnPageReload() {
                         return x;
                     }
                 }
+
+				function getMonsterMaxHP_digits(){
+					var hpList = localStorage.getItem("hpList").split(';');
+					var hpMax = -1;
+					var nowMon = -1;
+					for(var n=0;n<=(hpList.length-1);n++){
+						if((hpList[n]*1) > hpMax){
+							hpMax = (hpList[n]*1);
+							nowMon = (n+1);
+						}
+					}
+
+					if(nowMon == 10){
+						nowMon = 0;
+					}
+
+					return nowMon;
+				}
 
                 //select boss max Mana  or  Have heal skill first.
                 function chooseTargetBoss() {
@@ -3529,9 +3572,23 @@ function OnPageReload() {
                         for (var sb in MAIN_SPELL_MONSTER) {
                             var tb = MAIN_SPELL_MONSTER[sb];
                             console.log('decided to cast ' + tb);
-                            if (useSpellEffToMonster(tb)) {
-                                return;
-                            }
+							if('slow' === tb && MON_TARGET_SLOW >= 0){
+								if(document.getElementById('mkey_'+MON_TARGET_SLOW)){
+									if(MON_TARGET_SLOW*1 === 0){
+										MON_TARGET_SLOW = 10;
+									}
+
+									if(!isMonEffect(MON_TARGET_SLOW, 'Slowed')){
+										if (castSpell('slow', MON_TARGET_SLOW)) {
+											return;
+										}
+									}
+								}
+							}else{
+								if (useSpellEffToMonster(tb)) {
+									return;
+								}
+							}
                         }
 
                     }
