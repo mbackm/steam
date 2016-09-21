@@ -3041,8 +3041,8 @@ function OnPageReload() {
 						var load = localStorage.getItem("BattleStateEx");
 						if (load) data = JSON.parse(load);
 
-						var roundCurrent = data.Rounds.split(' / ')[0];
-						var roundMax = data.Rounds.split(' / ')[1];
+						var roundCurrent = data.Rounds.split(' / ')[0]*1;
+						var roundMax = data.Rounds.split(' / ')[1]*1;
 						var roundUse = Math.floor(roundMax*0.8);
 						if(roundCurrent >= roundUse){
 							MAIN_SPELL_MONSTER = ['slow','imperil'];
