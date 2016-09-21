@@ -15,7 +15,7 @@
 // @icon 		http://g.e-hentai.org/favicon.ico
 // @updateURL       https://github.com/suvidev/hv/raw/master/HVUT_1.6.1_mod.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HVUT_1.6.1_mod.user.js
-// @version        1.6.1.0.22
+// @version        1.6.1.0.23
 // ==/UserScript==
 
 var settings = {
@@ -4994,7 +4994,12 @@ _up.upgrade = function() {
 
 	for(name in _up.data) {
 		data = _up.data[name];
-		if(!data.valid) {
+		console.log(data);
+		if(typeof(data) === 'undefined') {
+			continue;
+		}
+
+		if(!data.valid){
 			continue;
 		}
 
