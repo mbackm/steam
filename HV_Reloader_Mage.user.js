@@ -62,7 +62,7 @@ var settings = {
     staminaControl: true, // Show Stamina Control
     staminaShowMainPage: true, // Show Stamina Control on Main Page
     roundCounter: true, // Show current round and rounds remaining
-    hvStateHP: true, // Show enemy HP value
+    hvStateHP: false, // Show enemy HP value
     fluidHPBar: false, // Shorten HP Bar width to easily see which monster has the most HP
 
     defaultAction: 0, // Change the default action to a T1 spell
