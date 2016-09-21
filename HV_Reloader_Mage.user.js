@@ -3573,7 +3573,7 @@ function OnPageReload() {
                             var tb = MAIN_SPELL_MONSTER[sb];
                             console.log('decided to cast ' + tb);
 							if('slow' === tb && MON_TARGET_SLOW >= 0){
-								if(!isMonDead(MON_TARGET_SLOW*1))){
+								if(!isMonDead(MON_TARGET_SLOW*1)){
 
 									if(!isMonEffect(MON_TARGET_SLOW, 'Slowed')){
 										if (castSpell('slow', MON_TARGET_SLOW)) {
