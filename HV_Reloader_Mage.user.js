@@ -3035,7 +3035,7 @@ function OnPageReload() {
 				//var ENABLE_USE_SLOW = true;
 				var MON_TARGET_SLOW = -1;
 
-				if(settings.ENABLE_USE_SLOW && settings.hvStateHP){
+				if(settings.ENABLE_USE_SLOW && settings.hvStateHP && settings.trackBattleStatEX){
 					try {
 						var data = {last:0, count:0, total:0, countATK:0, totalATK:0, turn:0, beginTime: Date.now(), lastTime: 0, EXP: 0,Credits: 0,Rounds: '0 / 0',Ponys: 0,Spark:0};
 						var load = localStorage.getItem("BattleStateEx");
