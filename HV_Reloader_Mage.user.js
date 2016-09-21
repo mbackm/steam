@@ -6,7 +6,7 @@
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
-// @version     1.3.3.94
+// @version     1.3.3.95
 // @grant       none
 // ==/UserScript==
 // Vanilla Reloader:
@@ -2952,6 +2952,7 @@ function OnPageReload() {
                 // DEFINITIONS POINT - should be filled in to tell the ai how to act //
                 ///////////////////////////////////////////////////////////////////////
                 var CURE_HP_CUTOFF = 55;
+				var SP_POTIONS_HAS_CD = false;
 
                 var ENABLE_HP_POTION = true; // true , false
                 var HP_ITEM_D_CUTOFF = 50;
@@ -3989,6 +3990,7 @@ function OnPageReload() {
                                 useItem(indexItem8);
                                 return;
                             }
+							SP_POTIONS_HAS_CD = true;
                         }
 
 
@@ -4036,7 +4038,7 @@ function OnPageReload() {
                 }
 
 
-                if ((getSelfHealth() < lowerHPAlert || (getSelfSpirit() < SP_ITEM_E_CUTOFF || (isHaveCloakOfTheFallen && getSelfSpirit() < (SP_ITEM_E_CUTOFF) ) )) && (!isSOL || isHaveCloakOfTheFallen)) {
+                if ((getSelfHealth() < lowerHPAlert || (getSelfSpirit() < SP_ITEM_E_CUTOFF || (isHaveCloakOfTheFallen && getSelfSpirit() < (SP_ITEM_E_CUTOFF) ) )) && (!isSOL || isHaveCloakOfTheFallen || SP_POTIONS_HAS_CD)) {
                     if (ENABALE_LE_POTION) {
                         var indexItemLE = nextItem('Last Elixir');
                         if (indexItemLE !== -1) {
