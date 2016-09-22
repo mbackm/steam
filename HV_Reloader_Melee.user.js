@@ -2488,9 +2488,9 @@ function OnPageReload() {
             newDivShowItems.id = "divShowItems";
             newDivShowItems.style.position = "absolute";
 
-			var heiPx = 180;
+			var heiPx = 200;
 			if (document.getElementById('1111') || document.getElementById('1101')) { 
-				heiPx = 200;
+				heiPx = 220;
 			}
 
             if (document.getElementById('2501')) {
