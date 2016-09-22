@@ -2245,6 +2245,11 @@ function OnPageReload() {
 								localStorage.setItem("listBTJson", JSON.stringify(listBTJson));
 								localStorage.setItem("BattleStateExHistorySave", false);
 							}
+
+							if(listKindex === -1){
+								localStorage.removeItem("BattleStateExTrackDropLogs")
+								localStorage.setItem("BattleStateExTrackDropOtherEQ", 0);
+							}
 						}// end track battle stats history
 					}
 				}
