@@ -15,7 +15,7 @@
 // @icon 		http://g.e-hentai.org/favicon.ico
 // @updateURL       https://github.com/suvidev/hv/raw/master/HVUT_1.6.1_mod.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HVUT_1.6.1_mod.user.js
-// @version        1.6.1.0.24
+// @version        1.6.1.0.25
 // ==/UserScript==
 
 var settings = {
@@ -1061,6 +1061,7 @@ GM_addStyle(
 	".hvut-item-Material .fd2 > div {color:#f00 !important}" +
 	".hvut-item-Collectable .fd2 > div {color:#0000FF !important}" +
 
+	".hvut_sl {    z-index:8884; left: 105px; position: absolute;    top: 2px; }" +
 	".hvut_iu {    z-index:8885; left: 130px;cursor: pointer;    width: 15px;    height: 18px;    position: absolute;    top: 2px;    background-image: url(/y/equip/padlock_closed.png);}" +
 	".hvut_il {    z-index:8886; left: 130px;cursor: pointer;    width: 15px;    height: 18px;    position: absolute;    top: 2px;    background-image: url(/y/equip/padlock_open.png);}" +
 	
@@ -1093,6 +1094,8 @@ function getBold(txt){
 	return txt;
 }
 
+
+_in.isLock = false;
 _in.genTemplate = function (e,no){
 
 	//console.log(e);
@@ -1448,9 +1451,10 @@ $element("input",_in.equip_btn_tp,{type:"button",value:"Clear"},function(){var e
 //**************************//
 //== START == new logic search equip
 //**************************//
-_in.filterx = function(list,search,keep) {
+_in.filterx = function(list,search,keep,isLock) {
+
 	search = search.trim();
-	if(list.key === search) {
+	if(list.key === search && isLock) {
 		return;
 	}
 
@@ -1458,10 +1462,18 @@ _in.filterx = function(list,search,keep) {
 	if(!keep) {
 		list.input.value = search;
 	}
+
 	if(!search) {
 		list.forEach(function(item){
 			item.filtered = true;
-			if(item.dom) item.dom.classList.remove("hvut-hide");
+			var vIDdo = true;
+			if(_in.isLock && isLock && (typeof(item.lockBtn) != 'undefined')){
+				if(item.lockBtn.classList.contains('ilp')||item.lockBtn.classList.contains('il')){
+					vIDdo = false;
+				}
+			}
+			//console.log('remove----');
+			if(item.dom && vIDdo) item.dom.classList.remove("hvut-hide");
 		});
 		return;
 	}
@@ -1475,11 +1487,63 @@ _in.filterx = function(list,search,keep) {
 								return name.indexOf(v)!==-1;
 							});
 						});
-		if(item.dom) item.dom.classList[item.filtered?"remove":"add"]("hvut-hide");
+		
+		
+		var vIDdo = true;
+		if(_in.isLock && isLock && (typeof(item.lockBtn) != 'undefined')){
+			if(item.lockBtn.classList.contains('ilp')||item.lockBtn.classList.contains('il')){
+				vIDdo = false;
+			}
+		}
+
+		//console.log('remove=== : '+item.filtered);
+		if(item.dom && vIDdo) item.dom.classList[item.filtered?"remove":"add"]("hvut-hide");
 		
 	});
 };
 
+_in.showLock = $element("input",$id("rightpane"),{type:"checkbox",title:"Hide Items Locked."},function(){
+		var eid, e;
+
+		_in.isLock = this.checked;
+		if(this.checked){
+			for (eid in _in.equip) { 
+				e =_in.equip[eid];
+				if(typeof(e.lockBtn) !== 'undefined' && typeof(e.dom) !== 'undefined'){
+					if(typeof(e.dom.classList) !== 'undefined'){
+						if(!e.dom.classList.contains("hvut-hide")){
+							if(e.lockBtn.classList.contains('ilp')||e.lockBtn.classList.contains('il')){
+								e.dom.classList[e.dom.classList.contains("hvut-sl")?"remove":"add"]("hvut-sl");
+								e.dom.classList["add"]("hvut-hide");
+							}
+						}
+					}
+				}
+			}
+		}else{
+			for (eid in _in.equip) { 
+				e =_in.equip[eid];
+				if(typeof(e.lockBtn) !== 'undefined' && typeof(e.dom) !== 'undefined'){
+					if(typeof(e.dom.classList) !== 'undefined'){
+						if(e.dom.classList.contains("hvut-sl")){
+							if(e.lockBtn.classList.contains('ilp')||e.lockBtn.classList.contains('il')){
+								e.dom.classList["remove"]("hvut-sl");
+								//e.dom.classList["remove"]("hvut-hide");
+							}
+						}
+					}
+				}
+			}
+
+			var txtSearch = _in.equip.input.value;
+			_in.filterx(_in.equip,_in.equip.input.value,true,false);
+		}
+
+		//lockBtn
+		
+	});
+
+	_in.showLock.classList["add"]("hvut_sl");
 
 $element("div",$id("rightpane"),[".hvut_il"],function(){
 
@@ -1528,8 +1592,8 @@ $element("div",$id("rightpane"),[".hvut_il"],function(){
 
 _in.equip.key = "";
 _in.equip_btn = $element("div",$id("rightpane"),[".hvut-btns"]);
-_in.equip.input = $element("input",_in.equip_btn,{type:"text",placeholder:"keyword; keyword; keyword"},{keypress:function(e){e.stopPropagation();},keyup:function(e){if(e.keyCode===27){_in.filterx(_in.equip,"");}else{_in.filterx(_in.equip,_in.equip.input.value,true);}}});
-$element("input",_in.equip_btn,{type:"button",value:"Reset"},function(){_in.filterx(_in.equip,"");});
+_in.equip.input = $element("input",_in.equip_btn,{type:"text",placeholder:"keyword; keyword; keyword"},{keypress:function(e){e.stopPropagation();},keyup:function(e){if(e.keyCode===27){_in.filterx(_in.equip,"",false,true);}else{_in.filterx(_in.equip,_in.equip.input.value,true,true);}}});
+$element("input",_in.equip_btn,{type:"button",value:"Reset"},function(){_in.filterx(_in.equip,"",false,true);});
 
 
 
@@ -1545,6 +1609,7 @@ $qsa("#inv_equip > div").forEach(function(div){
 		cod : 0,
 		filtered : true,
 		dom : div,
+		div : d,
 		lockBtn : div.firstElementChild
 	};
 
