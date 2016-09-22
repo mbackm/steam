@@ -39,6 +39,7 @@ var settings = {
     enableWeaponSkill: false, // use Weapon Skills
 		monsterForUseOFCFRD: [6,1], // count monster alive, count boss alive [ for special skill OFC , FRD ]
 		chooseNumOfMonsterForOFCFRD: true, // show choose num of monster for OFC FRD
+		chooseNumOfMonList: ["8,1","6,1","4,3","4,2","4,1","1,1"], // show choose num of monster for OFC FRD
     enableBuffMon: true, // use debuff to monster
     showUsePotion: false, //#1/4# Show use poton
     spellControl: true, // Spell Control - use Scroll or normal buff
@@ -1112,42 +1113,21 @@ function initialPageLoad() {
 										GM_setValue("currentMonOFCFRD", selsmonfr.value);
 									});
 
-									var optiono1 = document.createElement("option");
-									optiono1.id = 'op61';
-									optiono1.value = '6,1';
-									if (currentMonOFCFRD === '6,1') {
-										optiono1.setAttribute("selected", "true");
-									}
-									optiono1.appendChild(document.createTextNode(' 6,1 '));
+									
+									for(var m=0;m<settings.chooseNumOfMonList.length;m++){
+										var mValue = settings.chooseNumOfMonList[m];
 
-									var optiono2 = document.createElement("option");
-									optiono2.id = 'op81';
-									optiono2.value = '8,1';
-									if (currentMonOFCFRD === '8,1') {
-										optiono2.setAttribute("selected", "true");
-									}
-									optiono2.appendChild(document.createTextNode(' 8,1 '));
+										var vOption = document.createElement("option");
+										vOption.id = 'vop'+m;
+										vOption.value = mValue;
+										if (currentMonOFCFRD === mValue) {
+											vOption.setAttribute("selected", "true");
+										}
+										vOption.appendChild(document.createTextNode(' '+mValue+' '));
 
-									var optiono3 = document.createElement("option");
-									optiono3.id = 'op43';
-									optiono3.value = '4,3';
-									if (currentMonOFCFRD === '4,3') {
-										optiono3.setAttribute("selected", "true");
-									}
-									optiono3.appendChild(document.createTextNode(' 4,3 '));
+										selsmonfr.appendChild(vOption);
 
-									var optiono4 = document.createElement("option");
-									optiono4.id = 'op11';
-									optiono4.value = '1,1';
-									if (currentMonOFCFRD === '1,1') {
-										optiono4.setAttribute("selected", "true");
 									}
-									optiono4.appendChild(document.createTextNode(' 1,1 '));
-
-									selsmonfr.appendChild(optiono1);
-									selsmonfr.appendChild(optiono2);
-									selsmonfr.appendChild(optiono3);
-									selsmonfr.appendChild(optiono4);
 
 
 									 tttr6 = document.createElement("TR");
