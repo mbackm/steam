@@ -2616,7 +2616,11 @@ function OnPageReload() {
 			}
 
 			if(settings.showImperilOnOff){
-				heiPx = heiPx+60;
+				heiPx = heiPx+30;
+			}
+
+			if(settings.chooseNumOfMonsterForOFCFRD){
+				heiPx = heiPx+40;
 			}
 
             if (document.getElementById('2501')) {
