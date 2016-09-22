@@ -1454,8 +1454,16 @@ $element("input",_in.equip_btn_tp,{type:"button",value:"Clear"},function(){var e
 //== START == new logic search equip
 //**************************//
 
-_in.label_cnt = $element("label",$id("rightpane"),[".hvut_cnt"]);
+var nowItems = 0;//document.querySelector('#rightpane div[style*="z-index:1"] div.fd2 div').textContent.match(/Slots: (\d+) \/ (\d+)/);
+if(document.querySelector('#rightpane div[style*="z-index:1"] div.fd2 div')){
+	var mItems = document.querySelector('#rightpane div[style*="z-index:1"] div.fd2 div').textContent.match(/Slots: (\d+) \/ (\d+)/);
+	if(mItems.length = 3){
+		nowItems = mItems[1];
+	}
+}
 
+_in.label_cnt = $element("label",$id("rightpane"),[".hvut_cnt"]);
+_in.label_cnt.textContent = nowItems;
 
 _in.filterx = function(list,search,keep,isLock,skip) {
 	var count_items_found = 0;
@@ -1620,7 +1628,7 @@ $element("div",$id("rightpane"),[".hvut_il"],function(){
 _in.equip.key = "";
 _in.equip_btn = $element("div",$id("rightpane"),[".hvut-btns"]);
 _in.equip.input = $element("input",_in.equip_btn,{type:"text",placeholder:"keyword; keyword; keyword"},{keypress:function(e){e.stopPropagation();},keyup:function(e){if(e.keyCode===27){_in.filterx(_in.equip,"",false,true,true);}else{_in.filterx(_in.equip,_in.equip.input.value,true,true,true);}}});
-$element("input",_in.equip_btn,{type:"button",value:"Reset"},function(){_in.filterx(_in.equip,"",false,true,true);});
+$element("input",_in.equip_btn,{type:"button",value:"Reset"},function(){_in.filterx(_in.equip,"",false,true,true); _in.label_cnt.textContent = nowItems;});
 
 
 
