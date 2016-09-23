@@ -6,7 +6,7 @@
 // @include     /^https?:\/\/(alt|www)?\.?hentaiverse\.org.*$/
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Reloader_Mage.user.js
-// @version     1.3.3.98
+// @version     1.3.3.99
 // @grant       none
 // ==/UserScript==
 // Vanilla Reloader:
@@ -588,6 +588,28 @@ function initialPageLoad() {
         })();
     }
     /* =========== ROUND COUNTER END ========== */
+
+	/* ============= MAIN DIV CONTROL ============ */
+    if (true) {
+        (function() {
+
+			var aDivMS = document.createElement('DIV');
+				aDivMS.id = "divMainShowID";
+				aDivMS.style.position = "absolute";
+				aDivMS.style.top = "8px";
+				aDivMS.style.left = "1240px";
+				aDivMS.style.backgroundColor = '#E3E0D1';
+				aDivMS.style.opacity = '1';
+				aDivMS.style.width = '80px';
+				aDivMS.style.zIndex = '9999';
+
+			if(document.getElementsByClassName('stuffbox csp')){
+				document.getElementsByClassName('stuffbox csp')[0].appendChild(aDivMS);
+			}
+
+        })();
+    }
+    /* =========== MAIN DIV CONTROL END ========== */
 
     /* ============ STAMINA CONTROL ============ */
     if (settings.staminaControl) {
@@ -1201,7 +1223,17 @@ function initialPageLoad() {
 
 
                     //document.body.appendChild(aDIscpc);
-                    document.getElementsByClassName('stuffbox csp')[0].appendChild(aDIscpc);
+					var divMainShow = document.getElementById('divMainShowID');
+					if(divMainShow){
+						aDIscpc.style.top = '';
+						aDIscpc.style.left = '';
+						aDIscpc.style.width = '';
+						aDIscpc.style.position = '';
+						divMainShow.appendChild(aDIscpc);
+						divMainShow.appendChild(document.createElement("BR"));
+					}else{
+						document.getElementsByClassName('stuffbox csp')[0].appendChild(aDIscpc);
+					}
                 }
 
             }
@@ -2492,8 +2524,17 @@ function OnPageReload() {
             }
 
             newDivShowItems.appendChild(xTableItems);
-
-            document.getElementsByClassName('stuffbox csp')[0].appendChild(newDivShowItems);
+			
+			var divMainShow = document.getElementById('divMainShowID');
+			if(divMainShow){
+				newDivShowItems.style.top = '';
+				newDivShowItems.style.left = '';
+				newDivShowItems.style.width = '100px';
+				newDivShowItems.style.position = '';
+				divMainShow.appendChild(newDivShowItems);
+			}else{
+				document.getElementsByClassName('stuffbox csp')[0].appendChild(newDivShowItems);
+			}
 
         })();
     }
