@@ -1,23 +1,29 @@
 // ==UserScript==
 // @name         HV Monster up stat
 // @namespace    ??-??
-// @version      0.4
+// @version      0.5
 // @description  Enjoy :P
 // @author       BB-04
+// @run-at         document-end
 // @match        http://hentaiverse.org/?s=Bazaar&ss=ml*
 // @icon			http://g.e-hentai.org/favicon.ico
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_Monster_up_stats.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_Monster_up_stats.user.js
-// @grant        none
+// @grant          GM_addStyle
 // ==/UserScript==
-/* jshint -W097 */
-// Your code here...
+
+/*  Read Me.
+1.) This script not do anything in monster number 1
+2.) ...
+
+*/
 
 //====== Setting Zone ======//
 
 var MAX_PRIMARY = 10; // max=25
 var MAX_ELEMENTAL = 23; // max=50
 var MAX_CHAOS = 0; // max=20
+var ENABLE_AUTO_NEXT_MONSTER = true; // true , false
 
 // if have value on this,  it use this first, if not go to default;
             //["pa_str", "pa_dex", "pa_agi", "pa_end", "pa_int", "pa_wis"];
@@ -54,6 +60,47 @@ var chaos = {value:["affect", "damage", "atkspd", "accur", "cevbl", "cpare", "he
              max:20};
 
 
+
+function reload_data(){
+	var ml_data = {};
+	var ml_load = localStorage.getItem("MS_monsterSetting");
+	if (ml_load){
+		ml_data = JSON.parse(ml_load);
+		vPri = [];
+		var zInd = 0;
+		for(zInd=0;zInd<pri.value.length;zInd++){
+			if(ml_data[pri.value[zInd]]){
+				vPri.push(pri.value[zInd]);
+			}
+		}
+
+		vElem = [];
+		for(zInd=0;zInd<elem.value.length;zInd++){
+			if(ml_data[elem.value[zInd]]){
+				vElem.push(elem.value[zInd]);
+			}
+		}
+
+		vChaos = [];
+		for(zInd=0;zInd<chaos.value.length;zInd++){
+			if(ml_data[chaos.value[zInd]]){
+				vChaos.push(chaos.value[zInd]);
+			}
+		}
+
+		MAX_PRIMARY = ml_data["MAX_PRIMARY"]*1; // max=25
+		MAX_ELEMENTAL = ml_data["MAX_ELEMENTAL"]*1; // max=50
+		MAX_CHAOS = ml_data["MAX_CHAOS"]*1; // max=20
+
+		ENABLE_AUTO_NEXT_MONSTER = ml_data["next_monster"];
+
+	}
+
+
+}
+
+reload_data();
+
 var Upgrade = {
 	pa: {
 		caption: "Primary Crystal",
@@ -86,6 +133,14 @@ var Upgrade = {
 		value: ["Check State", "Check Skill", "Happy Pills", "Win => 0"]
 	}
 };
+
+function $id(id){return document.getElementById(id);}
+function $qs(q,n){return (n||document).querySelector(q);}
+function $qsa(q,n){var r=(n||document).querySelectorAll(q),a=[],i=0,l=r.length;for(i;i<l;i++){a.push(r[i]);}return a;}
+function $element(t,p,a,f){var e;if(!t){if(arguments.length>1){e=document.createTextNode(a);a=null;}else{return document.createDocumentFragment();}}else{e=document.createElement(t);}if(a!==null&&a!==undefined){switch(a.constructor){case Number:e.textContent=a;break;case String:e.textContent=a;break;case Array:var a1;a.forEach(function(a0){a1=a0.substr(1);switch(a0[0]){case "#":e.id=a1;break;case ".":e.className=a1;break;case "/":e.innerHTML=a1;break;case " ":e.textContent=a1;break;}});break;case Object:var ai,av,es,esi;for(ai in a){av=a[ai];if(av&&av.constructor===Object){if(ai in e){es=e[ai];}else{es=e[ai]={};}for(esi in av){es[esi]=av[esi];}}else{if(ai==="style"){e.style.cssText=av;}else if(ai in e){e[ai]=av;}else{e.setAttribute(ai,av);}}}break;}}if(f){if(f.constructor===Function){e.addEventListener("click",f,false);}else if(f.constructor===Object){var fi;for(fi in f){e.addEventListener(fi,f[fi],false);}}}if(p){var p0,p1;if(p.nodeType===1||p.nodeType===11){p0=p;p1=null;}else if(p.constructor===Array){p0=p[0];p1=p[1];if(!isNaN(p1)){p1=p0.childNodes[parseInt(p1,10)];}}p0.insertBefore(e,p1);}return e;}
+function time_format(t){t=parseInt(t/1000);return parseInt(t/3600)+":"+(100+parseInt(t%3600/60)).toString().substr(1)+":"+(100+t%60).toString().substr(1);}
+function date_format(t){t=new Date(t);return t.getFullYear().toString().substr(2)+"-"+(t.getMonth()+101).toString().substr(1)+"-"+(t.getDate()+100).toString().substr(1)+" "+(t.getHours()+100).toString().substr(1)+":"+(t.getMinutes()+100).toString().substr(1);}
+
 
 
 
@@ -566,35 +621,225 @@ function upStatChaos(vMainData, vMaxSetting, vSlot){
     return rt_value;
 }
 
+
+GM_addStyle(
+	".ml_st {position:absolute;top:22px;left:1244px;cursor:pointer;}"+
+	".ml_mst {z-index:1100;outline:opx; zIndex:1002; height:324px; width:480px; top:13px; display:none; left:760px; position:absolute; background-color:#C8CA8C}"
+);
+
+
 function genLetGoMonBtn(){
+
+	//console.log(vPri);
+	//console.log(vElem);
+	//console.log(vChaos);
+	//console.log('ENABLE_AUTO_NEXT_MONSTER : '+ENABLE_AUTO_NEXT_MONSTER);
+
+	var data = {MAX_PRIMARY:10, MAX_ELEMENTAL:23, MAX_CHAOS:0};
+	var load = localStorage.getItem("MS_monsterSetting");
+	if (load) data = JSON.parse(load);
+
 
     var linkx = document.createElement("a");
     linkx.href = "javascript:void(0)";
     var linkText = document.createTextNode("Pri["+MAX_PRIMARY+"] Ele["+MAX_ELEMENTAL+"] Chos["+MAX_CHAOS+"]");
     linkx.appendChild(linkText);
     linkx.id = "ltmon";
-    linkx.style.position = "absolute";
-    linkx.style.top = "22px";
-    linkx.style.left = "1244px";
-    linkx.style.cursor = "pointer";
+    //linkx.style.position = "absolute";
+    //linkx.style.top = "22px";
+    //linkx.style.left = "1244px";
+    //linkx.style.cursor = "pointer";
 
     linkx.addEventListener('click', function() {
-        localStorage.setItem("monsterLetGo", true);
+        localStorage.setItem("MS_monsterLetGo", true);
         window.location.href = window.location.href;
     });
 
-    document.getElementsByClassName('stuffbox csp')[0].appendChild(linkx);
+    //var dpc = document.getElementsByClassName('stuffbox csp')[0].appendChild(linkx);
+
+	var _div_main = $element("div",document.getElementsByClassName('stuffbox csp')[0],[".ml_st"]);
+		_div_main.appendChild(linkx);
+
+	var _div_setting = $element("div",document.getElementsByClassName('stuffbox csp')[0],[".ml_mst"]);
+
+	var _div_setting_btn = $element("div",_div_main,{style:"padding-top: 10px;"});
+
+		$element("input",_div_setting_btn,{type:"button",value:"..."},function(){
+			
+            _div_setting.style.display = "block";
+
+            // divOverlay
+            var nDivOlay = document.createElement("div");
+            nDivOlay.id = "divOptionsOverlayTHV";
+            nDivOlay.style.width = window.outerWidth + "px"; //"100%";
+            nDivOlay.style.height = window.outerHeight + "px"; //"100%";
+            nDivOlay.style.zIndex = "1001";
+
+            nDivOlay.style.position = "absolute";
+            nDivOlay.style.top = "0";
+            nDivOlay.style.left = "0";
+            nDivOlay.style.background = "black";
+            nDivOlay.style.opacity = "0.5";
+
+            document.body.appendChild(nDivOlay);
+			
+		});
+
+	var mTable =  $element("TABLE",_div_setting);
+	var mTR =  $element("tr",mTable);
+
+	var mTDLeft =  $element("td",mTR,{valign:"top"});
+	var mTDRight = $element("td",mTR,{valign:"top"});
+	var mTDRight2 = $element("td",mTR,{valign:"top"});
+	var mTDRight3 = $element("td",mTR,{valign:"top"});
+
+	var	pri_type = ["pa_str", "pa_dex", "pa_agi", "pa_end", "pa_int", "pa_wis"];
+	var elem_type = ["er_fire", "er_cold", "er_elec", "er_wind", "er_holy", "er_dark"];
+	var chaos_type = ["affect", "damage", "atkspd", "accur", "cevbl", "cpare", "health", "parry", "resist", "evade", "phymit", "magmit"];
+
+	//pri stat Zone
+	var mLPriTable = $element("TABLE",mTDLeft);//document.createElement("TABLE");
+	for(m in pri_type){
+		//console.log(m);
+		var tr = $element("tr",mLPriTable);
+		var td1 = $element("td",tr);
+			td1.innerHTML = pri_type[m];
+
+		var td2 = $element("td",tr);
+		var chkb = $element("input",td2,{type:"checkbox",value:pri_type[m]},function(){
+			data[this.value] = this.checked;
+			localStorage.setItem("MS_monsterSetting", JSON.stringify(data));
+		});
+
+		if(data[pri_type[m]]) chkb.checked = data[pri_type[m]];
+
+		mLPriTable.appendChild(tr);
+	}
+
+	//mTDLeft.appendChild(mLPriTable);
+
+
+
+	//elem stat Zone
+	var mRElemTable = $element("TABLE",mTDRight);//document.createElement("TABLE");
+	for(m in elem_type){
+		//console.log(m);
+		var tr = $element("tr",mRElemTable);
+		var td1 = $element("td",tr);
+			td1.innerHTML = elem_type[m];
+
+		var td2 = $element("td",tr);
+		var chkb = $element("input",td2,{type:"checkbox",value:elem_type[m]},function(){
+			data[this.value] = this.checked;
+			localStorage.setItem("MS_monsterSetting", JSON.stringify(data));
+		});
+
+		if(data[elem_type[m]]) chkb.checked = data[elem_type[m]];
+
+		mRElemTable.appendChild(tr);
+	}
+
+	//mTDRight.appendChild(mRElemTable);
+
+	//chaos stat Zone
+	var mRChaosTable = $element("TABLE",mTDRight2);//document.createElement("TABLE");
+	for(m in chaos_type){
+		//console.log(m);
+		var tr = $element("tr",mRChaosTable);
+		var td1 = $element("td",tr);
+			td1.innerHTML = chaos_type[m];
+
+		var td2 = $element("td",tr);
+		var chkb = $element("input",td2,{type:"checkbox",value:chaos_type[m]},function(){
+			data[this.value] = this.checked;
+			localStorage.setItem("MS_monsterSetting", JSON.stringify(data));
+		});
+
+		if(data[chaos_type[m]]) chkb.checked = data[chaos_type[m]];
+
+		mRChaosTable.appendChild(tr);
+	}
+
+	//mTDRight2.appendChild(mRChaosTable);
+
+	/*var MAX_PRIMARY = 10; // max=25
+		var MAX_ELEMENTAL = 23; // max=50
+		var MAX_CHAOS = 0; // max=20 */
+	var parameter_settings = ["MAX_PRIMARY", "MAX_ELEMENTAL", "MAX_CHAOS"];
+
+	var mRParaTable = $element("TABLE",mTDRight3);//document.createElement("TABLE");
+	for(m in parameter_settings){
+		//console.log(m);
+		var tr = $element("tr",mRParaTable);
+		var td1 = $element("td",tr);
+			td1.innerHTML = parameter_settings[m];
+
+		var td2 = $element("td",tr);
+		var max = 20;
+		if("MAX_PRIMARY" === parameter_settings[m]){
+			max = 10;
+		}else if("MAX_ELEMENTAL" === parameter_settings[m]){
+			max = 50;
+		}
+
+		$element("input",td2,{type:"number",min:0,max:max,id:parameter_settings[m],value:data[parameter_settings[m]],style:"width: 40px;"},{keyup:function(){
+			data[this.id] = this.value;
+			localStorage.setItem("MS_monsterSetting", JSON.stringify(data));
+		},click:function(){
+			data[this.id] = this.value;
+			localStorage.setItem("MS_monsterSetting", JSON.stringify(data));
+		}});
+
+		mRParaTable.appendChild(tr);
+	}
+
+
+	//var mR3Table = $element("TABLE",mTDRight3);
+	var ttr = $element("tr",mRParaTable);
+	var tdd1 = $element("td",ttr);
+	    tdd1.innerHTML = "Auto next monster";
+	var tdd2 = $element("td",ttr);
+
+	var chkNM = $element("input",tdd2,{type:"checkbox",value:"next_monster"},function(){
+			data[this.value] = this.checked;
+			localStorage.setItem("MS_monsterSetting", JSON.stringify(data));
+		});
+
+	if(data["next_monster"]) chkNM.checked = data["next_monster"];
+
+	
+
+	var ttrSave = $element("tr",mRParaTable);
+	var tddSave = $element("td",ttrSave);
+	$element("input",tddSave,{type:"button",value:"..Close.."},function(){
+		reload_data();
+
+		linkx.textContent = "Pri["+MAX_PRIMARY+"] Ele["+MAX_ELEMENTAL+"] Chos["+MAX_CHAOS+"]";
+
+	    _div_setting.style.display = "none";
+			
+	    var elementDel = $id("divOptionsOverlayTHV");
+	    elementDel.parentNode.removeChild(elementDel);
+			
+	});
+
 
 
 }
 
+/*
+function saveSetting(){
+
+
+}
+*/
 
 var letGo = "false";
 
-if(!localStorage.getItem("monsterLetGo")){
-    localStorage.setItem("monsterLetGo", false);
+if(!localStorage.getItem("MS_monsterLetGo")){
+    localStorage.setItem("MS_monsterLetGo", false);
 }else{
-    letGo = localStorage.getItem("monsterLetGo");
+    letGo = localStorage.getItem("MS_monsterLetGo");
 }
 
 if(letGo === "false"){
@@ -607,7 +852,7 @@ if(letGo === "false"){
 
     if(nowMon !== '1'){
 
-		localStorage.setItem("monsterLetGo", false);
+		localStorage.setItem("MS_monsterLetGo", false);
 
         //pri--zone
         if(vPri.length > 0){
@@ -653,16 +898,22 @@ if(letGo === "false"){
 				var TotalDoing = document.querySelectorAll('div.doing').length;
 
 				if(TotalDoing === 0){
-					localStorage.setItem("monsterLetGo", true);
+					if(ENABLE_AUTO_NEXT_MONSTER){
+						localStorage.setItem("MS_monsterLetGo", true);
+					}
+
 					location.href = location.href;
+					
 				}
 
 			}, 1*1000);
 			
 
 		}else{
-			localStorage.setItem("monsterLetGo", true);
-			document.querySelector('img[src="/y/monster/next.png"]').click();
+			if(ENABLE_AUTO_NEXT_MONSTER){
+				localStorage.setItem("MS_monsterLetGo", true);
+				document.querySelector('img[src="/y/monster/next.png"]').click();
+			}
 		}
 
         
@@ -690,7 +941,7 @@ if(letGo === "false"){
 		*/
 
     }else{
-        localStorage.setItem("monsterLetGo", false);
+        localStorage.setItem("MS_monsterLetGo", false);
 
 		genLetGoMonBtn();
     }
