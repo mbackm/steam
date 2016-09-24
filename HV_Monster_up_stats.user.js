@@ -913,6 +913,8 @@ if(letGo === "false"){
 			if(ENABLE_AUTO_NEXT_MONSTER){
 				localStorage.setItem("MS_monsterLetGo", true);
 				document.querySelector('img[src="/y/monster/next.png"]').click();
+			}else{
+				location.href = location.href;
 			}
 		}
 
