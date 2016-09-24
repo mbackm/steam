@@ -12,11 +12,6 @@
 // @grant          GM_addStyle
 // ==/UserScript==
 
-/*  Read Me.
-1.) This script not do anything in monster number 1
-2.) ...
-
-*/
 
 //====== Setting Zone ======//
 
