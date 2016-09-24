@@ -635,6 +635,9 @@ function genLetGoMonBtn(){
 	//console.log(vChaos);
 	//console.log('ENABLE_AUTO_NEXT_MONSTER : '+ENABLE_AUTO_NEXT_MONSTER);
 
+
+	if(document.querySelectorAll("#left_pane table").length < 1) return;
+
 	var data = {MAX_PRIMARY:10, MAX_ELEMENTAL:23, MAX_CHAOS:0};
 	var load = localStorage.getItem("MS_monsterSetting");
 	if (load) data = JSON.parse(load);
@@ -652,6 +655,10 @@ function genLetGoMonBtn(){
 
     linkx.addEventListener('click', function() {
         localStorage.setItem("MS_monsterLetGo", true);
+
+		var nowMon = document.querySelector('#mainpane div.fd4').textContent;
+
+		localStorage.setItem("MS_monster_start", nowMon);
         window.location.href = window.location.href;
     });
 
@@ -848,9 +855,12 @@ if(letGo === "false"){
 
     var nowMon = document.querySelector('#mainpane div.fd4').textContent;
 
+	var nowMonStart = localStorage.getItem("MS_monster_start");
 
+	if(nowMon == nowMonStart) localStorage.setItem("MS_monster_start", nowMonStart+'x');
 
-    if(nowMon !== '1'){
+    if( (nowMon+'x') !== nowMonStart){
+		
 
 		localStorage.setItem("MS_monsterLetGo", false);
 
@@ -886,6 +896,7 @@ if(letGo === "false"){
 		}
 
         //document.title = '-Wait '+vTimeout+' sec.';
+		//console.log('( '+nowMon+' ) Time = '+vTimeout);
 
 		if(vTimeout > 0){
 			/*
