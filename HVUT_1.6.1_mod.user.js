@@ -15,12 +15,13 @@
 // @icon 		http://g.e-hentai.org/favicon.ico
 // @updateURL       https://github.com/suvidev/hv/raw/master/HVUT_1.6.1_mod.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HVUT_1.6.1_mod.user.js
-// @version        1.6.1.0.26
+// @version        1.6.1.0.27
 // ==/UserScript==
 
 var settings = {
 
-template : '$no $name Level $lvl', // $no = [Hea01] $name =  Legendary Onyx Power Helmet of Slaughter <<< [url]...[/url] $lvl = show level required.
+template : '$no $name Level $lvl (seller: )<br/>Current bid:', // $no = [Hea01] $name =  Legendary Onyx Power Helmet of Slaughter <<< [url]...[/url] $lvl = show level required.
+head_template : true,
 
 minimize : false,
 scrollbar : true,
@@ -1234,13 +1235,13 @@ _in.template = function() {
 
         }
     }
-	if(rtOne!=='') nDocument.body.appendChild(document.createElement("BR")); nDocument.body.appendChild(document.createElement("div")).innerHTML = rtOne;
-	if(rtTwo!=='') nDocument.body.appendChild(document.createElement("BR")); nDocument.body.appendChild(document.createElement("div")).innerHTML = rtTwo;
-	if(rtSta!=='') nDocument.body.appendChild(document.createElement("BR")); nDocument.body.appendChild(document.createElement("div")).innerHTML = rtSta;
-	if(rtShd!=='') nDocument.body.appendChild(document.createElement("BR")); nDocument.body.appendChild(document.createElement("div")).innerHTML = rtShd;
-	if(rtClo!=='') nDocument.body.appendChild(document.createElement("BR")); nDocument.body.appendChild(document.createElement("div")).innerHTML = rtClo;
-	if(rtLig!=='') nDocument.body.appendChild(document.createElement("BR")); nDocument.body.appendChild(document.createElement("div")).innerHTML = rtLig;
-	if(rtHea!=='') nDocument.body.appendChild(document.createElement("BR")); nDocument.body.appendChild(document.createElement("div")).innerHTML = rtHea;
+	if(rtOne!=='') nDocument.body.appendChild(document.createElement("BR")); if(settings.head_template){nDocument.body.appendChild(document.createElement("div")).innerHTML = "[b][size=4]One-Handed[/size][/b]<br/><br/>";} nDocument.body.appendChild(document.createElement("div")).innerHTML = rtOne;
+	if(rtTwo!=='') nDocument.body.appendChild(document.createElement("BR")); if(settings.head_template){nDocument.body.appendChild(document.createElement("div")).innerHTML = "[b][size=4]Two-Handed[/size][/b]<br/><br/>";} nDocument.body.appendChild(document.createElement("div")).innerHTML = rtTwo;
+	if(rtSta!=='') nDocument.body.appendChild(document.createElement("BR")); if(settings.head_template){nDocument.body.appendChild(document.createElement("div")).innerHTML = "[b][size=4]Staff[/size][/b]<br/><br/>";} nDocument.body.appendChild(document.createElement("div")).innerHTML = rtSta;
+	if(rtShd!=='') nDocument.body.appendChild(document.createElement("BR")); if(settings.head_template){nDocument.body.appendChild(document.createElement("div")).innerHTML = "[b][size=4]Shield[/size][/b]<br/><br/>";} nDocument.body.appendChild(document.createElement("div")).innerHTML = rtShd;
+	if(rtClo!=='') nDocument.body.appendChild(document.createElement("BR")); if(settings.head_template){nDocument.body.appendChild(document.createElement("div")).innerHTML = "[b][size=4]Cloth[/size][/b]<br/><br/>";} nDocument.body.appendChild(document.createElement("div")).innerHTML = rtClo;
+	if(rtLig!=='') nDocument.body.appendChild(document.createElement("BR")); if(settings.head_template){nDocument.body.appendChild(document.createElement("div")).innerHTML = "[b][size=4]Light[/size][/b]<br/><br/>";} nDocument.body.appendChild(document.createElement("div")).innerHTML = rtLig;
+	if(rtHea!=='') nDocument.body.appendChild(document.createElement("BR")); if(settings.head_template){nDocument.body.appendChild(document.createElement("div")).innerHTML = "[b][size=4]Heavy[/size][/b]<br/><br/>";} nDocument.body.appendChild(document.createElement("div")).innerHTML = rtHea;
 	
 	nDocument.title = "Result [ "+count+" ]";
 };
