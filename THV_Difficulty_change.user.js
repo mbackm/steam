@@ -195,7 +195,7 @@
             }
 
 
-
+			//arena page-2
             var divPSX = document.createElement("DIV");
             var lbPSX = document.createElement("LABEL");
             lbPSX.style.cursor = 'pointer';
@@ -216,6 +216,29 @@
             divPSX.appendChild(lbPSX);
 
             document.body.appendChild(divPSX);
+
+
+			//ring of blood
+			var divROB = document.createElement("DIV");
+            var lbROB = document.createElement("LABEL");
+            lbROB.style.cursor = 'pointer';
+
+            lbROB.addEventListener('click', function() {
+                window.location.href = 'http://hentaiverse.org/?s=Battle&ss=rb';
+            });
+
+            divROB.style.backgroundColor = 'rgb(255, 162, 162)';
+            divROB.style.position = 'fixed';
+            divROB.style.bottom = (topCllBotm+35+30)+'px';
+            divROB.style.right = '15px';
+            divROB.style.boxShadow = '-1px -1px 9px #888888';
+            divROB.id='robID';
+
+            lbROB.appendChild(document.createTextNode('Ring of Blood'));
+
+            divROB.appendChild(lbROB);
+
+            document.body.appendChild(divROB);
 
         }
 
