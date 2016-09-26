@@ -3,10 +3,12 @@
 // @namespace    ??-??
 // @updateURL       https://github.com/suvidev/hv/raw/master/THV_Difficulty_change.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/THV_Difficulty_change.user.js
-// @version      0.2
+// @version      0.3
 // @description  ??-??
 // @author       ??-??
 // @match        http://hentaiverse.org/*
+// @match        http://alt.hentaiverse.org/*
+// @icon http://g.e-hentai.org/favicon.ico
 // @grant        none
 // ==/UserScript==
 
