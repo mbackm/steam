@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         HV Monster up stat
 // @namespace    ??-??
-// @version      0.5
+// @version      0.6
 // @description  Enjoy :P
-// @author       BB-04
+// @author       BB-05
 // @run-at         document-end
 // @match        http://hentaiverse.org/?s=Bazaar&ss=ml*
 // @icon			http://g.e-hentai.org/favicon.ico
@@ -15,8 +15,8 @@
 
 //====== Setting Zone ======//
 
-var MAX_PRIMARY = 10; // max=25
-var MAX_ELEMENTAL = 23; // max=50
+var MAX_PRIMARY = 1; // max=25
+var MAX_ELEMENTAL = 1; // max=50
 var MAX_CHAOS = 0; // max=20
 var ENABLE_AUTO_NEXT_MONSTER = true; // true , false
 
@@ -846,6 +846,8 @@ if(!localStorage.getItem("MS_monsterLetGo")){
 
 if(letGo === "false"){
     genLetGoMonBtn();
+}else if(document.querySelector('#slot_pane')){
+	localStorage.setItem("MS_monsterLetGo", false);
 }else if(document.querySelector('#mainpane div.fd4')){
 
     var nowMon = document.querySelector('#mainpane div.fd4').textContent;
