@@ -15,7 +15,7 @@
 // @icon 		http://g.e-hentai.org/favicon.ico
 // @updateURL       https://github.com/suvidev/hv/raw/master/HVUT_1.6.1_mod.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HVUT_1.6.1_mod.user.js
-// @version        1.6.1.0.27
+// @version        1.6.1.0.28
 // ==/UserScript==
 
 var settings = {
@@ -1688,8 +1688,16 @@ _in.alert_price = function(name) {
 	}
 
 	log.push("==========","Total: "+total.toLocaleString());
+	_trophies_out = log.join("\n");
 
-	alert(log.join("\n"));
+	var nDoc = window.open("", "List").document;
+	nDoc.body.innerHTML = "" + _trophies_out.replace(/\n/g,"<br/>");;
+	nDoc.title = "Trophies";
+	nDoc.body.style.fontSize = '10pt';
+	nDoc.body.style.fontFamily = 'arial,helvetica,sans-serif';
+	nDoc.body.style.color = '#5C0D11';
+
+	//alert(_trophies_out);
 };
 
 _in.set_price = function() {
@@ -1775,7 +1783,7 @@ _in.crystal = function() {
 		}
 	});
 
-	alert([
+	var _crystal_out = [
 		"[Primary attributes]","",
 		"[I have]",
 		pa_surplus.join("\n"),"",
@@ -1786,7 +1794,15 @@ _in.crystal = function() {
 		em_surplus.join("\n"),"",
 		"[I need]",
 		em_shortage.join("\n"),
-	].join("\n"));
+	].join("\n");
+
+	var nDoc = window.open("", "List").document;
+	nDoc.body.innerHTML = "" + _crystal_out.replace(/\n/g,"<br/>");;
+	nDoc.title = "Ctrstal";
+	nDoc.body.style.fontSize = '10pt';
+	nDoc.body.style.fontFamily = 'arial,helvetica,sans-serif';
+
+	//alert(_crystal_out);
 };
 
 _in.figurine = function(k) {
@@ -1797,7 +1813,16 @@ _in.figurine = function(k) {
 			msg.push(item+" ("+(_in.items[item]-k)+")");
 		}
 	}
-	alert("[Figurines]\n\n"+msg.join("\n"));
+	_figurines_out = "[Figurines]\n\n"+msg.join("\n");
+
+	var nDoc = window.open("", "List").document;
+	nDoc.body.innerHTML = "" + _figurines_out.replace(/\n/g,"<br/>");;
+	nDoc.title = "Figurines";
+	nDoc.body.style.fontSize = '10pt';
+	nDoc.body.style.fontFamily = 'arial,helvetica,sans-serif';
+	
+	
+	//alert(_figurines_out);
 };
 
 
