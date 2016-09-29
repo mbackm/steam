@@ -1913,7 +1913,7 @@ if ((location.href + "").indexOf('g.e-hentai.org/s/') === -1 && (location.href +
     vRLLB.style.fontWeight = 'bold';
     vRLLB.appendChild(document.createTextNode('Wait reload ? min.'));
 
-    divZone.appendChild(document.createElement("BR"));
+    //divZone.appendChild(document.createElement("BR"));
     divZone.appendChild(vRLLB);
 
     divChannelingTHV.appendChild(divZone);
