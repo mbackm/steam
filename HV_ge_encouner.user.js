@@ -1867,7 +1867,7 @@ if ((location.href + "").indexOf('g.e-hentai.org/s/') === -1 && (location.href +
 			var vITVId =  setInterval(function() {
                 var gull = document.getElementById('lastBtnIdx').href+'';
                 window.open(gull,'_blank');
-            }, (30*60*1000));
+            }, (15*60*1000));
 
 			this.textContent = vITVId;
 		}else{
