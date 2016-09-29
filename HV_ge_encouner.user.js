@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         GE encounter Countdown
 // @namespace    BB-04
-// @version      0.1.35
+// @version      0.1.36
 // @description  Enjoy :)
 // @author       BB-04
 // @match        http://g.e-hentai.org/g/*
@@ -1819,7 +1819,9 @@ if ((location.href + "").indexOf('g.e-hentai.org/s/') === -1 && (location.href +
         this.select();
     });
 
-    divZone.appendChild(vInputTZ);
+    
+
+
     //divZone.appendChild(document.createElement("BR"));
 
     var btnRL = document.createElement("BUTTON");
@@ -1849,7 +1851,62 @@ if ((location.href + "").indexOf('g.e-hentai.org/s/') === -1 && (location.href +
 
     });
 
-    divZone.appendChild(btnRL);
+
+	//reload 30min zone
+	var divRL = document.createElement("DIV");
+    divRL.id = "div30RLId";
+    divRL.style.width = "30px";
+	divRL.style.backgroundColor = "#a6ffc5";
+    divRL.style.cursor = "pointer";
+    divRL.style.paddingLeft = "0.8px";
+	divRL.textContent = "LOOP";
+
+    divRL.addEventListener('click', function() {
+		
+		if(this.textContent === "LOOP"){
+			var vITVId =  setInterval(function() {
+                var gull = document.getElementById('lastBtnIdx').href+'';
+                window.open(gull,'_blank');
+            }, (30*60*1000));
+
+			this.textContent = vITVId;
+		}else{
+			var vLoopID = this.textContent*1;
+			this.textContent = "LOOP";
+
+			clearInterval(vLoopID);
+		}
+
+    });
+
+
+	//divZone.appendChild(vInputTZ);
+	//divZone.appendChild(btnRL);
+    //divZone.appendChild(divRL);
+
+	var vZZTable = document.createElement("TABLE");
+	var vZZTR = document.createElement("TR");
+
+	var vZZTD1 = document.createElement("TD");
+	var vZZTD2 = document.createElement("TD");
+	var vZZTD3 = document.createElement("TD");
+
+
+	vZZTD1.appendChild(vInputTZ);
+	vZZTD2.appendChild(btnRL);
+
+	vZZTD3.appendChild(divRL);
+	vZZTD3.style.paddingLeft = "10px";
+
+	vZZTR.appendChild(vZZTD1);
+	vZZTR.appendChild(vZZTD2);
+	vZZTR.appendChild(vZZTD3);
+
+	vZZTable.appendChild(vZZTR);
+
+	divZone.appendChild(vZZTable);
+
+
 
     var vRLLB = document.createElement("label");
     vRLLB.id = 'vrllbId';
