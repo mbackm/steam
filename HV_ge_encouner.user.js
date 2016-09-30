@@ -1670,6 +1670,8 @@ if ((location.href + "").indexOf('g.e-hentai.org/s/') === -1 && (location.href +
     btnRun.addEventListener('click', function() {
 
         startCountdownA();
+
+		if(audio) audio.pause();
 		
         // btnRunId.disabled = true;
         // btnStopId.disabled = false;
@@ -1700,6 +1702,7 @@ if ((location.href + "").indexOf('g.e-hentai.org/s/') === -1 && (location.href +
         stopCountdownA();
 
 		if(audio) audio.pause();
+
         // btnRunId.disabled = false;
         // btnStopId.disabled = true;
         btnRun.style.display = "block";
