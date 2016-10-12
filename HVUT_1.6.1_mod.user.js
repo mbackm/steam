@@ -126,7 +126,7 @@ price : {
 
 		"Low-Grade Metal":200,
 		"Mid-Grade Metal":600,
-		"High-Grade Metal":3000,
+		"High-Grade Metal":2000,
 
 		"Low-Grade Wood":200,
 		"Mid-Grade Wood":600,
