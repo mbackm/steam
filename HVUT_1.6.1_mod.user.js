@@ -1805,18 +1805,45 @@ _in.crystal = function() {
 	//alert(_crystal_out);
 };
 
+var listFigurine = ['Twilight Sparkle Figurine','Rainbow Dash Figurine','Applejack Figurine'
+					,'Fluttershy Figurine','Pinkie Pie Figurine','Rarity Figurine'
+					,'Trixie Figurine','Princess Celestia Figurine','Princess Luna Figurine'
+					,'Apple Bloom Figurine','Scootaloo Figurine','Sweetie Belle Figurine'
+					,'Big Macintosh Figurine','Spitfire Figurine','Derpy Hooves Figurine'
+					,'Lyra Heartstrings Figurine','Octavia Figurine','Zecora Figurine'
+					,'Cheerilee Figurine','Vinyl Scratch Figurine','Daring Do Figurine'
+					,'Doctor Whooves Figurine','Berry Punch Figurine','Bon-Bon Figurine'
+					,'Fluffle Puff Figurine','Angel Bunny Figurine','Gummy Figurine'];
+					
 _in.figurine = function(k) {
 	k = k || 0;
 	var msg = [];
+	var msgFull = [];
+	var rollList = listFigurine.join(",");
+	
 	for(var item in _in.items) {
-		if(item.indexOf("Figurine")!==-1 && _in.items[item]-k>0) {
+		if(listFigurine.indexOf(item)!==-1 && _in.items[item]-k>0) {
 			msg.push(item+" ("+(_in.items[item]-k)+")");
+		}
+		
+		if(listFigurine.indexOf(item)!==-1){
+			msgFull.push("<li>"+item+" ("+(_in.items[item])+")</li>");
+			rollList = rollList.replace(item,'');
 		}
 	}
 	_figurines_out = "[Figurines]\n\n"+msg.join("\n");
-
+	_figurines_out2 = ""+msgFull.join("\n");
+	
+	var rSPL = rollList.split(',');
+	var outDontHave = "[Don't have figurines]<br/><ol>";
+	for(var lin in rSPL){
+		if(rSPL[lin] !== ''){
+			outDontHave += '<li>'+rSPL[lin] + '</li>';
+		}
+	}
+	outDontHave += '</ol>';
 	var nDoc = window.open("", "List").document;
-	nDoc.body.innerHTML = "" + _figurines_out.replace(/\n/g,"<br/>");;
+	nDoc.body.innerHTML = "<table style='font-size: 10pt;'><tr><td style='vertical-align: top;border: 1px solid black;'>" + _figurines_out.replace(/\n/g,"<br/>") +"</td><td style='vertical-align: top;border: 1px solid black;'>[Figurines-Have All]<br/><ol>"+_figurines_out2.replace(/\n/g,"<br/>")+"</ol></td><td style='vertical-align: top;border: 1px solid black;'>"+outDontHave+'</td></tr></table>';
 	nDoc.title = "Figurines";
 	nDoc.body.style.fontSize = '10pt';
 	nDoc.body.style.fontFamily = 'arial,helvetica,sans-serif';
