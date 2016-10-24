@@ -2328,6 +2328,8 @@ if ((location.href + "").indexOf('g.e-hentai.org/s/') === -1 && (location.href +
 
     function stopCountdownA() {
         //console.log('stop'+timerId);
+        
+        document.title = (document.title+'').replace('EH','[ STOP ]');
 
         var timerIdKeepX = GM_getValue("timerIdKeep");
 
