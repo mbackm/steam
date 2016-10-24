@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         GE encounter Countdown
 // @namespace    BB-04
-// @version      0.1.38
+// @version      0.1.39
 // @description  Enjoy :)
 // @author       BB-04
 // @match        http://g.e-hentai.org/g/*
@@ -2201,7 +2201,7 @@ if ((location.href + "").indexOf('g.e-hentai.org/s/') === -1 && (location.href +
 
                         //alert('End Timer  --> ' + hrx + ':' + mnx);
                         //var ddTime = new Date();
-                        if(enableNewTabBeep){
+                        if(enableNewTabBeep && !GM_getValue("goAutoFight")){
                             //playAudio();
                             openNewTabNotification();
                         }
