@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         GE encounter Countdown
 // @namespace    BB-04
-// @version      0.1.37
+// @version      0.1.38
 // @description  Enjoy :)
 // @author       BB-04
 // @match        http://g.e-hentai.org/g/*
@@ -65,6 +65,10 @@ function playAudio() {
 	 audio.loop = "true";
   }
   audio.play();
+}
+var songURLPlease = 'http://www.soundsnap.com/themes/soundsnap2/assets/mp3/please-refresh.mp3';
+function openNewTabNotification(){
+    window.open(songURLPlease,'_blank');   
 }
 
 
@@ -2153,6 +2157,7 @@ if ((location.href + "").indexOf('g.e-hentai.org/s/') === -1 && (location.href +
 
                 //console.log(strMin+":"+strSec);
                 document.getElementById('newDivShowTimerID').innerHTML = "<strong>" + strMin + ":" + strSec + "</strong>";
+                document.title = 'EH '+strMin+':'+strSec+' ('+(GM_getValue("goAutoFight")?'AUTO':'-')+')';
                 //document.getElementById('newDivShowTimerID').innerHTML = ts.toHTML("strong");
 
                 //if("<strong>1 second</strong>" === document.getElementById('newDivShowTimerID').innerHTML){
@@ -2197,7 +2202,8 @@ if ((location.href + "").indexOf('g.e-hentai.org/s/') === -1 && (location.href +
                         //alert('End Timer  --> ' + hrx + ':' + mnx);
                         //var ddTime = new Date();
                         if(enableNewTabBeep){
-                            playAudio();
+                            //playAudio();
+                            openNewTabNotification();
                         }
 
                         idGodX  = setInterval(function(){
