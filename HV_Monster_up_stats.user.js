@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         HV Monster up stat
 // @namespace    ??-??
-// @version      0.6
+// @version      0.7
 // @description  Enjoy :P
 // @author       BB-05
 // @run-at         document-end
@@ -909,8 +909,15 @@ if(letGo === "false"){
 					if(ENABLE_AUTO_NEXT_MONSTER){
 						localStorage.setItem("MS_monsterLetGo", true);
 					}
+					
+					if((nowMon == nowMonStart) && ENABLE_AUTO_NEXT_MONSTER){
+						localStorage.setItem("MS_monsterLetGo", true);
+						document.querySelector('img[src="/y/monster/next.png"]').click();
+					}else{
+						location.href = location.href;
+					}
 
-					location.href = location.href;
+					
 					
 				}
 
