@@ -15,9 +15,9 @@
 
 //====== Setting Zone ======//
 
-var MAX_PRIMARY = 1; // max=25
-var MAX_ELEMENTAL = 1; // max=50
-var MAX_CHAOS = 0; // max=20
+var MAX_PRIMARY = 1; // max=25  recommend 10
+var MAX_ELEMENTAL = 1; // max=50 recommend 23
+var MAX_CHAOS = 0; // max=20  recommend up2u
 var ENABLE_AUTO_NEXT_MONSTER = true; // true , false
 
 // if have value on this,  it use this first, if not go to default;
