@@ -20,7 +20,10 @@
 
 var settings = {
 
-template : '$no $name Level $lvl (seller: )<br/>Current bid:', // $no = [Hea01] $name =  Legendary Onyx Power Helmet of Slaughter <<< [url]...[/url] $lvl = show level required.
+// $no = [Hea01] 
+// $name =  [url=xxxxx]Legendary Onyx Power Helmet of Slaughter[/url]
+// $lvl = show level required.
+template : '$no Level $lvl $name (seller: ) [b]Current bid:[/b] ', 
 head_template : true,
 
 minimize : false,
