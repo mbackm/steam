@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         HV Monster up stat
 // @namespace    ??-??
-// @version      0.7
+// @version      0.8
 // @description  Enjoy :P
 // @author       BB-05
 // @run-at         document-end
@@ -666,7 +666,7 @@ function genLetGoMonBtn(){
 
 	var _div_setting_btn = $element("div",_div_main,{style:"padding-top: 10px;"});
 
-		$element("input",_div_setting_btn,{type:"button",value:"..."},function(){
+		$element("input",_div_setting_btn,{type:"button",value:"Config"},function(){
 			
             _div_setting.style.display = "block";
 
@@ -701,6 +701,10 @@ function genLetGoMonBtn(){
 
 	//pri stat Zone
 	var mLPriTable = $element("TABLE",mTDLeft);//document.createElement("TABLE");
+	var trPriHead = $element("tr",mLPriTable);
+	var tdPriHead = $element("td",trPriHead,{colspan:"2"});
+		tdPriHead.innerHTML = "PRIMARY";
+		mLPriTable.appendChild(trPriHead);
 	for(m in pri_type){
 		//console.log(m);
 		var tr = $element("tr",mLPriTable);
@@ -724,6 +728,10 @@ function genLetGoMonBtn(){
 
 	//elem stat Zone
 	var mRElemTable = $element("TABLE",mTDRight);//document.createElement("TABLE");
+	var trEleHead = $element("tr",mRElemTable);
+	var tdEleHead = $element("td",trEleHead,{colspan:"2"});
+		tdEleHead.innerHTML = "ELEMENTA";
+		mRElemTable.appendChild(trEleHead);
 	for(m in elem_type){
 		//console.log(m);
 		var tr = $element("tr",mRElemTable);
@@ -745,6 +753,10 @@ function genLetGoMonBtn(){
 
 	//chaos stat Zone
 	var mRChaosTable = $element("TABLE",mTDRight2);//document.createElement("TABLE");
+	var trChaosHead = $element("tr",mRChaosTable);
+	var tdChaosHead = $element("td",trChaosHead,{colspan:"2"});
+		tdChaosHead.innerHTML = "CHAOS";
+		mRChaosTable.appendChild(trChaosHead);
 	for(m in chaos_type){
 		//console.log(m);
 		var tr = $element("tr",mRChaosTable);
