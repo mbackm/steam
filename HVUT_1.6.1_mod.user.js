@@ -515,6 +515,12 @@ var equip = {
 	value : getValue("equipment",{current:[0],list:["---"]})
 };
 
+if(equip.value.list.length === 1){
+	if(equip.value.list[0] === '---'){
+		window.location.href = 'http://hentaiverse.org/?s=Character&ss=eq';
+	}
+}
+
 if(settings.equipment && loc.s==="Character" && loc.ss==="eq" && !loc.slot) {
 
 GM_addStyle(
@@ -543,7 +549,7 @@ setValue("equipment",equip.value);
 $id("leftpane").firstElementChild.remove();
 equip.name_div = $element("div",[$id("leftpane"),0],{style:"height:30px"}),
 equip.name_input = $element("input",equip.name_div,{value:equip.value.list[equip.value.current[0]]||("Set "+equip.value.current[0]),style:"width:100px;text-align:center"});
-$element("input",equip.name_div,{type:"button",value:"Change"},function(){equip.value.list[equip.value.current[0]]=equip.name_input.value.trim();setValue("equipment",equip.value);});
+$element("input",equip.name_div,{type:"button",value:"Change"},function(){var vEquip = equip.name_input.value.trim(); if(vEquip === '---'){vEquip='-Set-';} equip.value.list[equip.value.current[0]]=vEquip; setValue("equipment",equip.value);});
 
 }
 
@@ -569,7 +575,7 @@ difficulty.td2.addEventListener("mouseenter",function(){
 			$element("iframe",difficulty.div,{src:"/?s=Character&ss=se&hvut=difficulty&difficulty="+difficulty.change_select.value,style:"position:absolute;width:0;height:0;border:0;visibility:hidden"});
 			
 			//setInterval(function(){ window.location.href = window.location.href; }, 2000);
-			setTimeout(function(){ window.location.href = window.location.href; }, 2000);
+			setTimeout(function(){ window.location.href = location.href; }, 2000);
 
 		}});
 
