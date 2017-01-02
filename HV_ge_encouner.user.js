@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         GE encounter Countdown
 // @namespace    BB-04
-// @version      0.1.39
+// @version      0.1.40
 // @description  Enjoy :)
 // @author       BB-04
 // @match        http://g.e-hentai.org/g/*
@@ -2472,7 +2472,7 @@ if ((location.href + "").indexOf('g.e-hentai.org/s/') === -1 && (location.href +
 
                 if ((location.href + "").indexOf('g.e-hentai.org/g/') === -1) {
 
-                    vH = ( (6/100)*vH );
+                    vH = ( (1/100)*vH );
                     vW = ( (80/100)*vW );
 
                     //  console.log('vH = '+vH);
