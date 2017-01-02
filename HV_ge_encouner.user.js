@@ -2472,7 +2472,7 @@ if ((location.href + "").indexOf('g.e-hentai.org/s/') === -1 && (location.href +
 
                 if ((location.href + "").indexOf('g.e-hentai.org/g/') === -1) {
 
-                    vH = ( (1/100)*vH );
+                    vH = ( (2/100)*vH );
                     vW = ( (80/100)*vW );
 
                     //  console.log('vH = '+vH);
