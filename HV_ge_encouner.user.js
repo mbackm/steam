@@ -1,11 +1,13 @@
 // ==UserScript==
 // @name         GE encounter Countdown
 // @namespace    BB-04
-// @version      0.1.40
+// @version      0.1.41
 // @description  Enjoy :)
 // @author       BB-04
 // @match        http://g.e-hentai.org/g/*
-// @match        http://e-hentai.org/
+// @match        http://e-hentai.org/*
+// @match        https://g.e-hentai.org/g/*
+// @match        https://e-hentai.org/*
 // @grant        none
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_ge_encouner.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_ge_encouner.user.js
@@ -51,7 +53,7 @@ var vMinTime = 30.1;//0.04;//30.1;
 var vOpenSound = true;
 var goAutoFight = false;
 
-var enableNewTabBeep = false;
+var enableNewTabBeep = true;
 var isBeepActive = false;
 var enableConfReload = false;
 
