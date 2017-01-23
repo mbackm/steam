@@ -86,6 +86,18 @@ if(document.querySelector('#rand img')){
     });
 }
 
+if(document.querySelector('#gd1 img')){
+    document.querySelector('#gd1 img').style.opacity = '0';
+    
+    document.querySelector('#gd1 img').addEventListener('mouseover', function() {
+        document.querySelector('#gd1 img').style.opacity = '1';
+    });
+
+    document.querySelector('#gd1 img').addEventListener('mouseout', function() {
+        document.querySelector('#gd1 img').style.opacity = '0';
+    });
+}
+
 if (GM_getValue("firstTime") === null) {
     GM_setValue("alertNowXG", false);
     GM_setValue("firstTime", "done");
