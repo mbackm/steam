@@ -75,7 +75,7 @@ function openNewTabNotification(){
     window.open(songURLPlease,'_blank');   
 }
 
-if(showImage){
+if(!showImage){
     
     if(document.querySelector('#rand img')){
         document.querySelector('#rand img').style.opacity = '0';
