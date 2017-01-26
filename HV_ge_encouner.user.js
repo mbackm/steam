@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         GE encounter Countdown
 // @namespace    BB-04
-// @version      0.1.42
+// @version      0.1.43
 // @description  Enjoy :)
 // @author       BB-04
 // @match        http://g.e-hentai.org/g/*
@@ -16,6 +16,8 @@
 //----------------------------------  [1576]   ----------------------------------
 // --@--grant    GM_setValue
 // --@--grant    GM_getValue
+
+var showImage = false;
 
 //  MID CODE
 var GBGM_KEY = "TIME_";
@@ -73,43 +75,46 @@ function openNewTabNotification(){
     window.open(songURLPlease,'_blank');   
 }
 
-
-if(document.querySelector('#rand img')){
-    document.querySelector('#rand img').style.opacity = '0';
+if(showImage){
     
-    document.querySelector('#rand img').addEventListener('mouseover', function() {
-        document.querySelector('#rand img').style.opacity = '1';
-    });
-
-    document.querySelector('#rand img').addEventListener('mouseout', function() {
+    if(document.querySelector('#rand img')){
         document.querySelector('#rand img').style.opacity = '0';
-    });
-}
 
-if(document.querySelector('#gd1 img')){
-    document.querySelector('#gd1 img').style.opacity = '0';
-    
-    document.querySelector('#gd1 img').addEventListener('mouseover', function() {
-        document.querySelector('#gd1 img').style.opacity = '1';
-    });
+        document.querySelector('#rand img').addEventListener('mouseover', function() {
+            document.querySelector('#rand img').style.opacity = '1';
+        });
 
-    document.querySelector('#gd1 img').addEventListener('mouseout', function() {
+        document.querySelector('#rand img').addEventListener('mouseout', function() {
+            document.querySelector('#rand img').style.opacity = '0';
+        });
+    }
+
+    if(document.querySelector('#gd1 img')){
         document.querySelector('#gd1 img').style.opacity = '0';
-    });
-}
+
+        document.querySelector('#gd1 img').addEventListener('mouseover', function() {
+            document.querySelector('#gd1 img').style.opacity = '1';
+        });
+
+        document.querySelector('#gd1 img').addEventListener('mouseout', function() {
+            document.querySelector('#gd1 img').style.opacity = '0';
+        });
+    }
 
 
 
-if(document.querySelector('#gdt')){
-    document.querySelector('#gdt').style.opacity = '0';
-    
-    document.querySelector('#gdt').addEventListener('mouseover', function() {
-        document.querySelector('#gdt').style.opacity = '1';
-    });
-
-    document.querySelector('#gdt').addEventListener('mouseout', function() {
+    if(document.querySelector('#gdt')){
         document.querySelector('#gdt').style.opacity = '0';
-    });
+
+        document.querySelector('#gdt').addEventListener('mouseover', function() {
+            document.querySelector('#gdt').style.opacity = '1';
+        });
+
+        document.querySelector('#gdt').addEventListener('mouseout', function() {
+            document.querySelector('#gdt').style.opacity = '0';
+        });
+    }
+    
 }
 
 if (GM_getValue("firstTime") === null) {
