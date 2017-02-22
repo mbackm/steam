@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         HV Monster up stat
 // @namespace    ??-??
-// @version      0.8
+// @version      0.9
 // @description  Enjoy :P
 // @author       BB-05
 // @run-at         document-end
@@ -212,7 +212,7 @@ function checkState(doc, param, max, type) {
 			var uText = Upgrade.pa.text[uVIndex];
 			var nowValue = mons.pa[uText];
 
-			if((max-0) === nowValue){
+			if((max-0) === nowValue*1){
 				//localStorage.setItem("monsterLetGo", true);
 				//document.getElementById('showMLPri_'+pr).textContent = document.getElementById('showMLPri_'+pr).textContent+'[X]';
 				document.getElementById('showMLPri_'+pr).classList["remove"]("doing");
@@ -225,7 +225,7 @@ function checkState(doc, param, max, type) {
 			var uText = Upgrade.er.text[uVIndex];
 			var nowValue = mons.er[uText];
 
-			if((max-0) === nowValue){
+			if((max-0) === nowValue*1){
 				//localStorage.setItem("monsterLetGo", true);
 				//document.getElementById('showMLElem_'+pr).textContent = document.getElementById('showMLElem_'+pr).textContent+'[X]';
 				document.getElementById('showMLElem_'+pr).classList["remove"]("doing");
@@ -238,11 +238,17 @@ function checkState(doc, param, max, type) {
 			var uText = Upgrade.cu.text[uVIndex];
 			var nowValue = mons.cu[uText];
 
-			if((max-0) === nowValue){
+            /*
+			if((max-0) === nowValue*1){
 				//localStorage.setItem("monsterLetGo", true);
 				//document.getElementById('showMLChaos_'+pr).textContent = document.getElementById('showMLChaos_'+pr).textContent+'[X]';
 				document.getElementById('showMLChaos_'+pr).classList["remove"]("doing");
 			}
+            */
+            
+            setTimeout(function() {
+				document.getElementById('showMLChaos_'+pr).classList["remove"]("doing");
+			}, (( (max*1) - (nowValue*1) )*1000));
 			
 			//console.log(mons.cu[uText]);
 
