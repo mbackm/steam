@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         GE encounter Countdown
 // @namespace    BB-04
-// @version      0.1.44
+// @version      0.1.45
 // @description  Enjoy :)
 // @author       BB-04
 // @match        http://g.e-hentai.org/g/*
@@ -160,7 +160,8 @@ if(chkLinkFromReload){
 }
 
 var startWhenFoundLink = false;
-if ((location.href + "").indexOf('e-hentai.org/s/') === -1 && (location.href + "").indexOf('e-hentai.org/archiver.php') === -1) {
+//if ((location.href + "").indexOf('e-hentai.org/s/') === -1 && (location.href + "").indexOf('e-hentai.org/archiver.php') === -1) {
+if ((location.href + "").indexOf('e-hentai.org/g/') !== -1 ) {
 
     var hd1 = document.createElement("INPUT");
     hd1.setAttribute("type", "hidden");
