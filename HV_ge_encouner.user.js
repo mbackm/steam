@@ -161,7 +161,7 @@ if(chkLinkFromReload){
 
 var startWhenFoundLink = false;
 //if ((location.href + "").indexOf('e-hentai.org/s/') === -1 && (location.href + "").indexOf('e-hentai.org/archiver.php') === -1) {
-if ((location.href + "").indexOf('e-hentai.org/g/') !== -1 ) {
+if ((location.href + "").indexOf('e-hentai.org/g/') !== -1 || (location.href + "").indexOf('e-hentai.org/news.php') !== -1) {
 
     var hd1 = document.createElement("INPUT");
     hd1.setAttribute("type", "hidden");
@@ -2506,7 +2506,7 @@ if ((location.href + "").indexOf('e-hentai.org/g/') !== -1 ) {
 
                 if ((location.href + "").indexOf('g.e-hentai.org/g/') === -1) {
 
-                    vH = ( (14/100)*vH );
+                    vH = 180; //( (14/100)*vH );
                     vW = ( (70/100)*vW );
 
                     //  console.log('vH = '+vH);
