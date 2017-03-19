@@ -88,6 +88,19 @@ if(!showImage){
             document.querySelector('#rand img').style.opacity = '0';
         });
     }
+    
+    if(document.querySelector('#gd1 div')){
+        document.querySelector('#gd1 div').style.opacity = '0';
+
+        document.querySelector('#gd1 div').addEventListener('mouseover', function() {
+            document.querySelector('#gd1 div').style.opacity = '1';
+        });
+
+        document.querySelector('#gd1 div').addEventListener('mouseout', function() {
+            document.querySelector('#gd1 div').style.opacity = '0';
+        });
+    }
+    
 
     if(document.querySelector('#gd1 img')){
         document.querySelector('#gd1 img').style.opacity = '0';
