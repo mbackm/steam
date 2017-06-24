@@ -2,13 +2,15 @@
 // @name         HV Items Stamp Storage
 // @namespace    GG
 // @icon         http://g.e-hentai.org/favicon.ico
-// @description  Enjoy. :P
+// @description  Enjoy. :P  HV 0.85
 // @author       BB-04
 // @match        http://hentaiverse.org/?s=Character&ss=in
 // @match        http://hentaiverse.org/?s=Character&ss=it
+// @match        https://hentaiverse.org/?s=Character&ss=in
+// @match        https://hentaiverse.org/?s=Character&ss=it
 // @updateURL       https://github.com/suvidev/hv/raw/master/HV_items_stamp.user.js
 // @downloadURL     https://github.com/suvidev/hv/raw/master/HV_items_stamp.user.js
-// @version      0.6
+// @version      0.7
 // @grant        none
 // ==/UserScript==
 
@@ -57,7 +59,7 @@ function doStampItems(){
         var itemListx = document.getElementById(gbKeyPanel).querySelectorAll('tr');
 
         for(i=0; i<itemListx.length ;i++){
-            var strTxt = itemListx[i].outerText.replace('\n','||').trim();
+            var strTxt = itemListx[i].outerText.replace('\t','||').trim();
             var strArray = strTxt.split('||');
 
             if(strArray.length === 2){
@@ -107,9 +109,9 @@ function genBtnStamp(){
     linkx.style.top = "8px";
     linkx.style.left = "1210px";
     linkx.style.cursor = "pointer";
-    linkx.style.backgroundColor = 'beige';
+    //linkx.style.backgroundColor = 'beige';
 
-    document.getElementsByClassName('stuffbox csp')[0].appendChild(linkx);
+     document.getElementById('mainpane').appendChild(linkx);
     document.getElementById('stampid').addEventListener('click', function() {
         var noDoit = doStampItems();
 
@@ -132,28 +134,28 @@ function genBtnStamp(){
 function showStampItem(){
 
     if(document.getElementById(gbKeyPanel)){
-
+console.log('cc');
         var itemListx = document.getElementById(gbKeyPanel).querySelectorAll('tr');
 
         for(i=0; i<itemListx.length ;i++){
-            var strTxt = itemListx[i].outerText.replace('\n','||').trim();
+            var strTxt = itemListx[i].outerText.replace('\t','||').trim();
             var strArray = strTxt.split('||');
 
             if(strArray.length === 2){
                // GM_setValue(strArray[0],strArray[1]);
-                var nowVl = parseInt(itemListx[i].querySelectorAll('div.fd2')[1].children[0].textContent);
+                var nowVl = parseInt(itemListx[i].querySelectorAll('td')[1].textContent);
                // console.log('1 = '+itemListx[i].querySelectorAll('div.fd2')[0].children[0].textContent);
-                var oldVl = gbStampData[itemListx[i].querySelectorAll('div.fd2')[0].children[0].textContent];// GM_getValue(itemListx[i].querySelectorAll('div.fd2')[0].children[0].textContent);
+                var oldVl = gbStampData[itemListx[i].querySelectorAll('td')[0].textContent];// GM_getValue(itemListx[i].querySelectorAll('div.fd2')[0].children[0].textContent);
 				 
-				if(isNaN(oldVl)){ gbStampData[itemListx[i].querySelectorAll('div.fd2')[0].children[0].textContent] = (nowVl-1); oldVl=0; GM_setValue("gbStampData",JSON.stringify(gbStampData));}
+				if(isNaN(oldVl)){ gbStampData[itemListx[i].querySelectorAll('td')[0].textContent] = (nowVl); oldVl=0; GM_setValue("gbStampData",JSON.stringify(gbStampData));}
 
                 var sumTotalVL = nowVl-oldVl;
                 if(sumTotalVL < 0){
-                    itemListx[i].querySelectorAll('div.fd2')[1].children[0].style.color = '#DA0000';
-                    itemListx[i].querySelectorAll('div.fd2')[1].children[0].style.fontWeight = 'bold';
+                    itemListx[i].querySelectorAll('td')[0].style.color = '#DA0000';
+                    itemListx[i].querySelectorAll('td')[1].style.fontWeight = 'bold';
                 }
-                itemListx[i].querySelectorAll('div.fd2')[1].children[0].textContent = itemListx[i].querySelectorAll('div.fd2')[1].children[0].textContent + ' [' + (sumTotalVL)+']';
-                itemListx[i].querySelectorAll('div.fd2')[1].parentNode.style.width = '130px';
+                itemListx[i].querySelectorAll('td')[1].textContent = itemListx[i].querySelectorAll('td')[1].textContent + ' [' + (sumTotalVL)+']';
+                itemListx[i].querySelectorAll('td')[1].style.width = '130px';
 
             }
 
