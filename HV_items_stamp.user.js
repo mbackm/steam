@@ -106,8 +106,8 @@ function genBtnStamp(){
     linkx.appendChild(linkText);
     linkx.id = "stampid";
     linkx.style.position = "absolute";
-    linkx.style.top = "8px";
-    linkx.style.left = "1210px";
+    linkx.style.top = "35px";
+    linkx.style.right = "4px";
     linkx.style.cursor = "pointer";
     //linkx.style.backgroundColor = 'beige';
 
