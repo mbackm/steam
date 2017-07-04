@@ -1,0 +1,52 @@
+function sleep(milliseconds) {
+    var start = new Date().getTime();
+    for (var i = 0; i < 1e7; i++) {
+        if ((new Date().getTime() - start) > milliseconds) {
+            break;
+        }
+    }
+}
+
+function steamSum2017() {
+
+    setTimeout(function() {
+
+
+
+        if (document.querySelector('div.sticker_selection_container  img[src*="summer2017/stickers_group.png"]')) {
+
+            document.querySelector('img[src*="summer2017/stickers_group.png"]').click();
+
+            steamSum2017();
+        } else {
+
+
+            [].forEach.call(document.querySelectorAll('#scene_selector div.item'), function(e) {
+                if (!e.querySelector('div.unlocked')) {
+
+                    e.childNodes[0].click();
+console.log('doing');
+                    sleep(1000);
+
+                    [].forEach.call(document.querySelectorAll('#sticker_selector div[style*="url"]'), function(e) {
+                        e.click();
+                    });
+
+                    sleep(3000);
+console.log('done');
+
+                }
+            });
+
+
+
+        }
+
+
+
+    }, 0.5 * 1000);
+
+}
+
+
+steamSum2017();
